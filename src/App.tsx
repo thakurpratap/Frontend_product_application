@@ -1,25 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';  // Bootstrap first
+import './App.css';  // Your custom styles after
 import './App.css';
+import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import Navbar from './components/Navbar.tsx/navbar';
+import Sidebar from './components/Sidebar.tsx/sidebar';
+import Dashboard from './components/Dashboard/dashboard';
+import Form from './pages/Form';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+     <BrowserRouter>
+     <Navbar/>
+   <div className='main d-flex'>
+   <div className='sidebarWrapper'>
+   <Sidebar/>
+   </div>
+   <div className='content'>
+   <Routes>
+      <Route path="/" element={<Dashboard/>} />
+      <Route path="/form"  element={<Form/>} />
+      {/* <Route path="/contacts" exact element={<Contacts/>}/> */}
+      {/* <Route path="/invoice" exact element={<Invoices/>} /> */}
+      {/* <Route path="/form" exact element={<Form/>} /> */}
+      {/* <Route path="/calender" exact element={<Calendar/>} /> */}
+     </Routes>
+   </div>
+   </div>
+   </BrowserRouter>
+   
+    </>
   );
 }
 
