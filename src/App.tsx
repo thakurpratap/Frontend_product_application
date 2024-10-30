@@ -1,3 +1,7 @@
+import React from 'react';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import AdminPanel from "./pages/adminPanel/adminpanel"
 import 'bootstrap/dist/css/bootstrap.min.css';  // Bootstrap first
 import './App.css';  // Your custom styles after
 import './App.css';
@@ -20,6 +24,9 @@ function App() {
    <Routes>
       <Route path="/" element={<Dashboard/>} />
       <Route path="/form"  element={<Form/>} />
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/" element={<SignUp/>} /> 
+        <Route path='/admin-panel' element={<AdminPanel/>}/>
       {/* <Route path="/contacts" exact element={<Contacts/>}/> */}
       {/* <Route path="/invoice" exact element={<Invoices/>} /> */}
       {/* <Route path="/form" exact element={<Form/>} /> */}
@@ -31,6 +38,6 @@ function App() {
    
     </>
   );
-}
+};
 
 export default App;
