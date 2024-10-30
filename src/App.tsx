@@ -1,18 +1,42 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import AdminPanel from "./pages/adminPanel/adminpanel"
-const App: React.FC = () => {
+import 'bootstrap/dist/css/bootstrap.min.css';  // Bootstrap first
+import './App.css';  // Your custom styles after
+import './App.css';
+import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import Navbar from './components/Navbar.tsx/navbar';
+import Sidebar from './components/Sidebar.tsx/sidebar';
+import Dashboard from './components/Dashboard/dashboard';
+import Form from './pages/Form';
+
+function App() {
   return (
-    <Router>
-      <Routes>
+    <>
+     <BrowserRouter>
+     <Navbar/>
+   <div className='main d-flex'>
+   <div className='sidebarWrapper'>
+   <Sidebar/>
+   </div>
+   <div className='content'>
+   <Routes>
+      <Route path="/" element={<Dashboard/>} />
+      <Route path="/form"  element={<Form/>} />
+      <Route path="/signin" element={<SignIn />} />
       <Route path="/" element={<SignUp/>} /> 
-        {/* <Route path="/signup" element={<SignUp />} /> */}
-        <Route path="/signin" element={<SignIn />} />
         <Route path='/admin-panel' element={<AdminPanel/>}/>
-      </Routes>
-    </Router>
+      {/* <Route path="/contacts" exact element={<Contacts/>}/> */}
+      {/* <Route path="/invoice" exact element={<Invoices/>} /> */}
+      {/* <Route path="/form" exact element={<Form/>} /> */}
+      {/* <Route path="/calender" exact element={<Calendar/>} /> */}
+     </Routes>
+   </div>
+   </div>
+   </BrowserRouter>
+   
+    </>
   );
 };
 
