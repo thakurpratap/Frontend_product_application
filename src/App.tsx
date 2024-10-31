@@ -1,9 +1,9 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import SignIn from './pages/SignIn';
+import SignIn from './pages/Signin';
 import SignUp from './pages/SignUp';
-import 'bootstrap/dist/css/bootstrap.min.css';  // Bootstrap first
-import './App.css';  // Your custom styles after
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import './App.css'; 
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import Navbar from './components/Navbar.tsx/navbar';
 import Sidebar from './components/Sidebar.tsx/sidebar';
@@ -28,11 +28,7 @@ function App() {
       <Route path="/form"  element={<Form/>} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp/>} /> 
-      {/* <Route path="/contacts" exact element={<Contacts/>}/> */}
-      {/* <Route path="/invoice" exact element={<Invoices/>} /> */}
-      {/* <Route path="/form" exact element={<Form/>} /> */}
-      {/* <Route path="/calender" exact element={<Calendar/>} /> */}
-      <Route path="/signup" element={<SignUp/>} />
+      {/* <Route path="/signup" element={<SignUp/>} /> */}
      </Routes>
    </div>
    </div>

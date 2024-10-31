@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import MenuIcon from "@mui/icons-material/Menu";
 import profile from "../../assets/profile.png";
@@ -9,11 +9,14 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import logo from '../../assets/img.png'
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -23,6 +26,14 @@ function Header() {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
+  const handleLoginClick = () => {
+    handleClose();
+    navigate("/signin");
+  };
 
 
 
@@ -67,18 +78,21 @@ function Header() {
                   transformOrigin={{ horizontal: "right", vertical: "top" }}
                   anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
-                  <MenuItem onClick={handleClose}>
+                  {/* <Link to=''> */}
+                  <MenuItem onClick={handleLoginClick}>
                     <ListItemIcon>
                       <PersonAdd fontSize="small" />
                     </ListItemIcon>
                     Login
                   </MenuItem>
+                  {/* </Link> */}
+                
                   <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                       <Settings fontSize="small" />
                     </ListItemIcon>
                     Reset Password
-                  </MenuItem> */}
+                  </MenuItem>
                   {isLoggedIn && (
                     <MenuItem onClick={handleLogout}>
                       <ListItemIcon>

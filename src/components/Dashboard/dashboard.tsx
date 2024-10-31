@@ -47,6 +47,7 @@ const Dashboard: React.FC = () => {
   });
 
   const token = localStorage.getItem("token");
+  console.log(token);
 
   const { data: products = [], refetch } = useQuery({
     queryKey: ["products"],
