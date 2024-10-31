@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-import MenuIcon from "@mui/icons-material/Menu"; // Replaced MdOutlineMenuOpen
+import MenuIcon from "@mui/icons-material/Menu";
 import profile from "../../assets/profile.png";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -9,12 +9,11 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import logo from '../../assets/img.png'
-import { useNavigate } from 'react-router-dom';
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const open = Boolean(anchorEl);
-  const navigate = useNavigate(); // Use the useNavigate hook
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -24,10 +23,7 @@ function Header() {
     setAnchorEl(null);
   };
 
-  const handleLoginClick = () => {
-    navigate("/signup"); // Navigate to the Sign Up page
-    handleClose(); // Close the menu after navigation
-  };
+
 
 
   return (
@@ -37,8 +33,7 @@ function Header() {
           <div className="row d-flex align-items-center w-100">
             {/* logo wrap */}
             <div className="col-sm-2 part-1">
-              <img src={logo} alt=""  style={{width : "60%"}}/>
-              {/* <span className="ml-2">IMAGINE</span> */}
+              <img src={logo} alt="" style={{ width: "60%" }} />
             </div>
             <div className="col-xs-3 d-flex align-items-center part-2 pl-4xss">
               <Button className="rounded-circle mr-3" variant="contained">
@@ -72,7 +67,7 @@ function Header() {
                   transformOrigin={{ horizontal: "right", vertical: "top" }}
                   anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
-                  <MenuItem onClick={handleLoginClick}>
+                  <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                       <PersonAdd fontSize="small" />
                     </ListItemIcon>
@@ -83,13 +78,15 @@ function Header() {
                       <Settings fontSize="small" />
                     </ListItemIcon>
                     Reset Password
-                  </MenuItem>
-                  <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                      <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                  </MenuItem>
+                  </MenuItem> */}
+                  {isLoggedIn && (
+                    <MenuItem onClick={handleLogout}>
+                      <ListItemIcon>
+                        <Logout fontSize="small" />
+                      </ListItemIcon>
+                      Logout
+                    </MenuItem>
+                  )}
                 </Menu>
               </div>
             </div>
