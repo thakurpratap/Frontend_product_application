@@ -8,18 +8,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import logo from '../../assets/img.png';
-import { Link } from "react-router-dom";
+import logo from '../../assets/img.png'
+
 function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const open = Boolean(anchorEl);
-
-  useEffect(() => {
-    // Check if token exists in localStorage
-    const token = localStorage.getItem("signInToken");
-    setIsLoggedIn(!!token); // Set isLoggedIn to true if token exists
-  }, []);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -29,11 +23,8 @@ function Header() {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("signInToken"); // Clear the token
-    setIsLoggedIn(false); // Update the login state
-    handleClose();
-  };
+
+
 
   return (
     <>
@@ -76,23 +67,13 @@ function Header() {
                   transformOrigin={{ horizontal: "right", vertical: "top" }}
                   anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
-                  {!isLoggedIn && (
-                    <>
-                    <MenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <PersonAdd fontSize="small" />
-                      </ListItemIcon>
-                      <Link to={"/signin"}>SignIn</Link>
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <PersonAdd fontSize="small" />
-                      </ListItemIcon>
-                      <Link to={"/signup"}>SignUp</Link>
-                    </MenuItem>
-                    </>
-                  )}
-                  {/* <MenuItem onClick={handleClose}>
+                  <MenuItem onClick={handleClose}>
+                    <ListItemIcon>
+                      <PersonAdd fontSize="small" />
+                    </ListItemIcon>
+                    Login
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                       <Settings fontSize="small" />
                     </ListItemIcon>

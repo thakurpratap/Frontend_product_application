@@ -1,4 +1,5 @@
 import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';  // Bootstrap first
@@ -9,9 +10,12 @@ import Sidebar from './components/Sidebar.tsx/sidebar';
 import Dashboard from './components/Dashboard/dashboard';
 import Form from './pages/Form';
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
     <>
+     <QueryClientProvider client={queryClient}>
      <BrowserRouter>
      <Navbar/>
    <div className='main d-flex'>
@@ -28,10 +32,12 @@ function App() {
       {/* <Route path="/invoice" exact element={<Invoices/>} /> */}
       {/* <Route path="/form" exact element={<Form/>} /> */}
       {/* <Route path="/calender" exact element={<Calendar/>} /> */}
+      <Route path="/signup" element={<SignUp/>} />
      </Routes>
    </div>
    </div>
    </BrowserRouter>
+   </QueryClientProvider>
    
     </>
   );
