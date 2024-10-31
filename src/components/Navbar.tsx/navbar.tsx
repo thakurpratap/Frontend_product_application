@@ -9,10 +9,12 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import logo from '../../assets/img.png'
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate(); // Use the useNavigate hook
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -22,7 +24,10 @@ function Header() {
     setAnchorEl(null);
   };
 
-
+  const handleLoginClick = () => {
+    navigate("/signup"); // Navigate to the Sign Up page
+    handleClose(); // Close the menu after navigation
+  };
 
 
   return (
@@ -67,7 +72,7 @@ function Header() {
                   transformOrigin={{ horizontal: "right", vertical: "top" }}
                   anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
-                  <MenuItem onClick={handleClose}>
+                  <MenuItem onClick={handleLoginClick}>
                     <ListItemIcon>
                       <PersonAdd fontSize="small" />
                     </ListItemIcon>
