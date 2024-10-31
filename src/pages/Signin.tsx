@@ -76,9 +76,9 @@ export default function SignIn() {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("signInToken",data.token)
-        
-        navigate('/dashboard');
+        localStorage.setItem("token",data.token)
+        navigate('/');
+        console.log(localStorage)
       } else {
         toast.error('Login failed. Please check your credentials.');
       }
