@@ -1,10 +1,8 @@
 import React from 'react';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
-import AdminPanel from "./pages/adminPanel/adminpanel"
 import 'bootstrap/dist/css/bootstrap.min.css';  // Bootstrap first
 import './App.css';  // Your custom styles after
-import './App.css';
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import Navbar from './components/Navbar.tsx/navbar';
 import Sidebar from './components/Sidebar.tsx/sidebar';
@@ -25,8 +23,7 @@ function App() {
       <Route path="/" element={<Dashboard/>} />
       <Route path="/form"  element={<Form/>} />
       <Route path="/signin" element={<SignIn />} />
-      <Route path="/" element={<SignUp/>} /> 
-        <Route path='/admin-panel' element={<AdminPanel/>}/>
+      <Route path="/signup" element={<SignUp/>} /> 
       {/* <Route path="/contacts" exact element={<Contacts/>}/> */}
       {/* <Route path="/invoice" exact element={<Invoices/>} /> */}
       {/* <Route path="/form" exact element={<Form/>} /> */}
