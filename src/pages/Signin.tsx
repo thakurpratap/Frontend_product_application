@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,12 +13,14 @@ import { styled } from '@mui/material/styles';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import CircularProgress from '@mui/material/CircularProgress'; // Import CircularProgress
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignSelf: 'center',
   width: '100%',
+  justifyContent:"center",
   padding: theme.spacing(4),
   gap: theme.spacing(2),
   margin: 'auto',
@@ -28,8 +31,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 const SignInContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
+    width:"100vw",
   padding: theme.spacing(2),
   [theme.breakpoints.up('sm')]: {
     padding: theme.spacing(4),
@@ -50,43 +52,49 @@ const AppTheme = ({ children }: AppThemeProps) => {
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };
 
+interface FormData {
+  email: string;
+  password: string;
+}
+
 export default function SignIn() {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false); 
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
-  // const validate = () => {
-  //   if (password.length < 8) {
-  //     toast.error('Password must be at least 8 characters long!');
-  //     return false;
-  //   }
-  //   return true;
-  // };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // if (!validate()) return; 
-
+  const onSubmit = async (data: FormData) => {
+    setLoading(true); 
     try {
       const response = await fetch('https://user-product-api-nb1x.onrender.com/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(data),
       });
-
+  
       if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("token",data.token)
+        const responseData = await response.json();
+        localStorage.setItem("token", responseData.token);
         navigate('/');
-        console.log(localStorage)
+        toast.success('Login successful!');
       } else {
-        toast.error('Login failed. Please check your credentials.');
+        const responseData = await response.json(); 
+        console.log(responseData.message);
+        
+        if (responseData.message === 'Invalid Email or Password') {
+          toast.error('Invalid Email or Password');
+          alert("Invalid Email or Password")
+        } else {
+          toast.error('Login failed. Please check your credentials.');
+        }
       }
     } catch (error) {
       console.error('An error occurred:', error);
       toast.error('An error occurred. Please try again.');
+    } finally {
+      setLoading(false); 
     }
   };
+  
 
   return (
     <AppTheme>
@@ -96,13 +104,13 @@ export default function SignIn() {
           <Typography
             component="h1"
             variant="h4"
-            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+            sx={{ width: '100vw', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
             Sign In
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
             <FormControl>
@@ -112,11 +120,11 @@ export default function SignIn() {
                 fullWidth
                 id="email"
                 placeholder="your@email.com"
-                name="email"
                 autoComplete="email"
                 variant="outlined"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+                {...register('email', { required: 'Email is required' })}
               />
             </FormControl>
             <FormControl>
@@ -124,18 +132,18 @@ export default function SignIn() {
               <TextField
                 required
                 fullWidth
-                name="password"
+                id="password"
                 placeholder="••••••"
                 type="password"
-                id="password"
                 autoComplete="current-password"
                 variant="outlined"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                error={!!errors.password}
+                helperText={errors.password?.message}
+                {...register('password', { required: 'Password is required' })}
               />
             </FormControl>
-            <Button type="submit" fullWidth variant="contained">
-              Sign In
+            <Button type="submit" fullWidth variant="contained" disabled={loading}>
+              {loading ? <CircularProgress size={24} /> : 'Sign In'} {/* Show loading indicator */}
             </Button>
             <Typography sx={{ textAlign: 'center' }}>
               Don’t have an account?{' '}

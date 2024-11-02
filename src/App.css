@@ -2,10 +2,7 @@
   margin: 0px;
   padding: 0px;
 }
-body {
-  /* font-family: "Open Sans", sans-serif !important; */
-  background: #ebe9e9;
-}
+
 header {
   width: 100%;
   height: 70px;
@@ -203,9 +200,11 @@ header button.rounded-circle svg {
   color: #0858f7;
 }
 .main .content {
-  width: 85%;
+  /* width: 85%;
   flex: 0 0 85%;
-  margin-top: 3%;
+  margin-top: 3%; */
+  width: 100vw;
+  margin-top: 3%
 }
 .right-content {
   padding: 90px 30px;
