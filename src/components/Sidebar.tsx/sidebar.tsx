@@ -29,22 +29,6 @@ function Sidebar() {
             </Button>
             </Link>
           </li>
-          <li>
-          <Link to="/">
-            <Button className={`w-100 ${activetab === 2 ? 'active' : " "}`} onClick={()=>setActivetab(2)}>
-              <span className="icon"><CalendarTodayIcon/></span>
-             calender
-            </Button>
-            </Link>
-          </li>
-          <li>
-          <Link to="/">
-            <Button className={`w-100 ${activetab === 3 ? 'active' : " "}`} onClick={()=>setActivetab(3)}>
-              <span className="icon"><NotificationsIcon/></span>
-             FAQ page
-            </Button>
-            </Link>
-          </li>
         </ul>
       </div>
     </>
