@@ -9,8 +9,11 @@ import {
   DialogTitle,
   Checkbox,
   FormControlLabel,
+  IconButton,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -37,6 +40,8 @@ const queryClient = new QueryClient();
 
 const Dashboard: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   const [newProduct, setNewProduct] = useState<NewProduct>({
     name: "",
     description: "",
@@ -45,35 +50,40 @@ const Dashboard: React.FC = () => {
     published: false,
     image: null,
   });
+  const [searchTerm, setSearchTerm] = useState("");
 
   const token = localStorage.getItem("token");
-  console.log(token);
 
   const { data: products = [], refetch } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", searchTerm],
     queryFn: async () => {
-      const response = await axios.get<Product[]>("https://user-product-api-nb1x.onrender.com/api/products/", {
-        headers: {
-          Authorization: token,
-        },
-      });
-      return response.data;
+      try {
+        const url = searchTerm
+          ? `https://user-product-api-nb1x.onrender.com/api/products/searchProduct?name=${searchTerm}`
+          : `https://user-product-api-nb1x.onrender.com/api/products`;
+
+        const response = await axios.get<Product[]>(url, {
+          headers: {
+            Authorization: token,
+          },
+        });
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        return [];
+      }
     },
   });
 
   const createProductMutation = useMutation({
     mutationFn: async (product: NewProduct) => {
-      if (!product.name || !product.description || !product.price || !product.image) {
-        throw new Error("All fields are required");
-      }
-
       const formData = new FormData();
       formData.append("name", product.name);
       formData.append("description", product.description);
       formData.append("price", product.price.toString());
       formData.append("rating", product.rating.toString());
       formData.append("published", JSON.stringify(product.published));
-      formData.append("image", product.image);
+      formData.append("image", product.image!);
 
       await axios.post("https://user-product-api-nb1x.onrender.com/api/products/add", formData, {
         headers: {
@@ -84,24 +94,63 @@ const Dashboard: React.FC = () => {
     },
     onSuccess: () => {
       refetch();
-      setOpen(false);
-      setNewProduct({
-        name: "",
-        description: "",
-        price: 0,
-        rating: 0,
-        published: false,
-        image: null,
+      handleClose();
+    },
+  });
+
+  const updateProductMutation = useMutation({
+    mutationFn: async (product: NewProduct) => {
+      const formData = new FormData();
+      formData.append("name", product.name);
+      formData.append("description", product.description);
+      formData.append("price", product.price.toString());
+      formData.append("rating", product.rating.toString());
+      formData.append("published", JSON.stringify(product.published));
+      if (product.image) formData.append("image", product.image);
+
+      await axios.put(`https://user-product-api-nb1x.onrender.com/api/products/${selectedProductId}`, formData, {
+        headers: {
+          Authorization: token,
+          "Content-Type": "multipart/form-data",
+        },
       });
+    },
+    onSuccess: () => {
+      refetch();
+      handleClose();
+    },
+  });
+
+  const deleteProductMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await axios.delete(`https://user-product-api-nb1x.onrender.com/api/products/${id}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+    onSuccess: () => {
+      refetch();
     },
   });
 
   const handleClickOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setIsEditing(false);
+    setSelectedProductId(null);
+    setNewProduct({
+      name: "",
+      description: "",
+      price: 0,
+      rating: 0,
+      published: false,
+      image: null,
+    });
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, files } = e.target;
-
     setNewProduct((prev) => ({
       ...prev,
       [name]: type === "number" ? Number(value) : name === "image" && files ? files[0] : value,
@@ -109,12 +158,35 @@ const Dashboard: React.FC = () => {
   };
 
   const handleCreateProduct = () => {
-    if (!newProduct.name || !newProduct.description || !newProduct.image || newProduct.price <= 0) {
-      alert("Please fill in all required fields with valid values.");
-      return;
-    }
-
     createProductMutation.mutate(newProduct);
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setSelectedProductId(product._id);
+    setNewProduct({
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      rating: product.rating,
+      published: product.published,
+      image: null,
+    });
+    setIsEditing(true);
+    setOpen(true);
+  };
+
+  const handleUpdateProduct = () => {
+    if (selectedProductId) {
+      updateProductMutation.mutate(newProduct);
+    }
+  };
+
+  const handleDeleteProduct = (id: number) => {
+    deleteProductMutation.mutate(id);
+  };
+
+  const handleSearch = () => {
+    refetch();
   };
 
   const columns: GridColDef<Product>[] = [
@@ -124,17 +196,44 @@ const Dashboard: React.FC = () => {
     { field: "price", headerName: "Price", type: "number", flex: 1 },
     { field: "rating", headerName: "Rating", type: "number", flex: 1 },
     { field: "published", headerName: "Published", flex: 1 },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 150,
+      renderCell: (params) => (
+        <>
+          <IconButton onClick={() => handleEditProduct(params.row)} color="primary">
+            <EditIcon />
+          </IconButton>
+          <IconButton onClick={() => handleDeleteProduct(params.row._id)} color="error">
+            <DeleteIcon />
+          </IconButton>
+        </>
+      ),
+    },
   ];
 
   return (
     <div className="card shadow border-0 p-3 mt-5 m-4">
       <Box m="20px">
+        <Box display="flex" alignItems="center" mb={2}>
+          <TextField
+            variant="outlined"
+            label="Search Products"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{ marginRight: "8px" }}
+          />
+          <Button variant="contained" color="primary" onClick={handleSearch}>
+            Search
+          </Button>
+        </Box>
         <Button variant="contained" color="primary" onClick={handleClickOpen}>
           Create Product
         </Button>
 
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Create New Product</DialogTitle>
+          <DialogTitle>{isEditing ? "Edit Product" : "Create New Product"}</DialogTitle>
           <DialogContent>
             <TextField fullWidth margin="dense" variant="filled" label="Product Name" name="name" value={newProduct.name} onChange={handleChange} />
             <TextField fullWidth margin="dense" variant="filled" label="Description" name="description" value={newProduct.description} onChange={handleChange} />
@@ -150,14 +249,14 @@ const Dashboard: React.FC = () => {
             <Button onClick={handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleCreateProduct} color="primary">
-              Create
+            <Button onClick={isEditing ? handleUpdateProduct : handleCreateProduct} color="primary">
+              {isEditing ? "Update" : "Create"}
             </Button>
           </DialogActions>
         </Dialog>
 
         <Box mt={3} sx={{ height: 400, width: "100%" }}>
-          <DataGrid rows={products} columns={columns}  checkboxSelection  getRowId={(row) => row._id} />
+          <DataGrid rows={products} columns={columns} checkboxSelection getRowId={(row) => row._id} />
         </Box>
       </Box>
     </div>
@@ -165,6 +264,471 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState } from "react";
+// import {
+//   Box,
+//   Button,
+//   TextField,
+//   Dialog,
+//   DialogActions,
+//   DialogContent,
+//   DialogTitle,
+//   Checkbox,
+//   FormControlLabel,
+//   IconButton,
+// } from "@mui/material";
+// import { DataGrid, GridColDef } from "@mui/x-data-grid";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import EditIcon from "@mui/icons-material/Edit";
+// import { QueryClient, QueryClientProvider, useQuery, useMutation } from "@tanstack/react-query";
+// import axios from "axios";
+
+// interface Product {
+//   _id: number;
+//   name: string;
+//   description: string;
+//   price: number;
+//   rating: number;
+//   published: boolean;
+//   image?: string;
+// }
+
+// interface NewProduct {
+//   name: string;
+//   description: string;
+//   price: number;
+//   rating: number;
+//   published: boolean;
+//   image: File | null;
+// }
+
+// const queryClient = new QueryClient();
+
+// const Dashboard: React.FC = () => {
+//   const [open, setOpen] = useState(false);
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
+//   const [newProduct, setNewProduct] = useState<NewProduct>({
+//     name: "",
+//     description: "",
+//     price: 0,
+//     rating: 0,
+//     published: false,
+//     image: null,
+//   });
+//   const [searchTerm, setSearchTerm] = useState("");
+//   // console.log(newProduct);
+
+//   const token = localStorage.getItem("token");
+
+//   const { data: products = [], refetch } = useQuery({
+//     queryKey: ["products"],
+//     queryFn: async () => {
+//       const response = await axios.get<Product[]>("https://user-product-api-nb1x.onrender.com/api/products/", {
+//         headers: {
+//           Authorization: token,
+//         },
+//       });
+//       return response.data;
+//     },
+//   });
+
+//   const createProductMutation = useMutation({
+//     mutationFn: async (product: NewProduct) => {
+//       const formData = new FormData();
+//       formData.append("name", product.name);
+//       formData.append("description", product.description);
+//       formData.append("price", product.price.toString());
+//       formData.append("rating", product.rating.toString());
+//       formData.append("published", JSON.stringify(product.published));
+//       formData.append("image", product.image!);
+
+//       await axios.post("https://user-product-api-nb1x.onrender.com/api/products/add", formData, {
+//         headers: {
+//           Authorization: token,
+//           "Content-Type": "multipart/form-data",
+//         },
+//       });
+//     },
+//     onSuccess: () => {
+//       refetch();
+//       handleClose();
+//     },
+//   });
+
+//   const updateProductMutation = useMutation({
+//     mutationFn: async (product: NewProduct) => {
+//       const formData = new FormData();
+//       formData.append("name", product.name);
+//       formData.append("description", product.description);
+//       formData.append("price", product.price.toString());
+//       formData.append("rating", product.rating.toString());
+//       formData.append("published", JSON.stringify(product.published));
+//       if (product.image) formData.append("image", product.image);
+
+//       await axios.put(`https://user-product-api-nb1x.onrender.com/api/products/${selectedProductId}`, formData, {
+//         headers: {
+//           Authorization: token,
+//           "Content-Type": "multipart/form-data",
+//         },
+//       });
+//     },
+//     onSuccess: () => {
+//       refetch();
+//       handleClose();
+//     },
+//   });
+
+//   const deleteProductMutation = useMutation({
+//     mutationFn: async (id: number) => {
+//       await axios.delete(`https://user-product-api-nb1x.onrender.com/api/products/${id}`, {
+//         headers: {
+//           Authorization: token,
+//         },
+//       });
+//     },
+//     onSuccess: () => {
+//       refetch();
+//     },
+//   });
+
+//   const handleClickOpen = () => setOpen(true);
+//   const handleClose = () => {
+//     setOpen(false);
+//     setIsEditing(false);
+//     setSelectedProductId(null);
+//     setNewProduct({
+//       name: "",
+//       description: "",
+//       price: 0,
+//       rating: 0,
+//       published: false,
+//       image: null,
+//     });
+//   };
+
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     const { name, value, type, files } = e.target;
+//     setNewProduct((prev) => ({
+//       ...prev,
+//       [name]: type === "number" ? Number(value) : name === "image" && files ? files[0] : value,
+//     }));
+//   };
+
+//   const handleCreateProduct = () => {
+//     setOpen(false);
+//     createProductMutation.mutate(newProduct);
+//   };
+
+//   const handleEditProduct = (product: Product) => {
+//     setSelectedProductId(product._id);
+//     setNewProduct({
+//       name: product.name,
+//       description: product.description,
+//       price: product.price,
+//       rating: product.rating,
+//       published: product.published,
+//       image: null, // Set image to null initially; new file can be selected
+//     });
+//     setIsEditing(true);
+//     setOpen(true);
+//   };
+
+//   const handleUpdateProduct = () => {
+//     if (selectedProductId) {
+//       updateProductMutation.mutate(newProduct);
+//     }
+//   };
+
+//   const handleDeleteProduct = (id: number) => {
+//     deleteProductMutation.mutate(id);
+//   };
+
+//   const handleSearch = () =>  {
+
+//   }
+
+//   const columns: GridColDef<Product>[] = [
+//     { field: "id", headerName: "ID", width: 70 },
+//     { field: "name", headerName: "Name", flex: 1 },
+//     { field: "description", headerName: "Description", flex: 1 },
+//     { field: "price", headerName: "Price", type: "number", flex: 1 },
+//     { field: "rating", headerName: "Rating", type: "number", flex: 1 },
+//     { field: "published", headerName: "Published", flex: 1 },
+//     {
+//       field: "actions",
+//       headerName: "Actions",
+//       width: 150,
+//       renderCell: (params) => (
+//         <>
+//           <IconButton onClick={() => handleEditProduct(params.row)} color="primary">
+//             <EditIcon />
+//           </IconButton>
+//           <IconButton onClick={() => handleDeleteProduct(params.row._id)} color="error">
+//             <DeleteIcon />
+//           </IconButton>
+//         </>
+//       ),
+//     },
+//   ];
+
+//   return (
+//     <div className="card shadow border-0 p-3 mt-5 m-4">
+//       <Box m="20px">
+//         <Box display="flex" justifyContent='space-between'>
+//         <Box display="flex" alignItems="center" mb={2}>
+//           <TextField
+//             variant="outlined"
+//             label="Search Products"
+//             value={searchTerm}
+//             onChange={(e) => setSearchTerm(e.target.value)}
+//             sx={{ marginRight: "8px" }}
+//           />
+//           <Button variant="contained" color="primary" onClick={handleSearch}>
+//             Search
+//           </Button>
+//         </Box>
+//         <Button variant="contained" color="primary" onClick={handleClickOpen} style={{height : "10%"}}>
+//           Create Product
+//         </Button>
+//         </Box>
+
+//         <Dialog open={open} onClose={handleClose}>
+//           <DialogTitle>{isEditing ? "Edit Product" : "Create New Product"}</DialogTitle>
+//           <DialogContent>
+//             <TextField fullWidth margin="dense" variant="filled" label="Product Name" name="name" value={newProduct.name} onChange={handleChange} />
+//             <TextField fullWidth margin="dense" variant="filled" label="Description" name="description" value={newProduct.description} onChange={handleChange} />
+//             <TextField fullWidth margin="dense" variant="filled" label="Price" name="price" type="number" value={newProduct.price} onChange={handleChange} />
+//             <TextField fullWidth margin="dense" variant="filled" label="Rating" name="rating" type="number" value={newProduct.rating} onChange={handleChange} />
+//             <TextField fullWidth margin="dense" variant="filled" type="file" name="image" onChange={handleChange} />
+//             <FormControlLabel
+//               control={<Checkbox checked={newProduct.published} onChange={(e) => setNewProduct({ ...newProduct, published: e.target.checked })} />}
+//               label="Published"
+//             />
+//           </DialogContent>
+//           <DialogActions>
+//             <Button onClick={handleClose} color="primary">
+//               Cancel
+//             </Button>
+//             <Button onClick={isEditing ? handleUpdateProduct : handleCreateProduct} color="primary">
+//               {isEditing ? "Update" : "Create"}
+//             </Button>
+//           </DialogActions>
+//         </Dialog>
+
+//         <Box mt={3} sx={{ height: 400, width: "100%" }}>
+//           <DataGrid rows={products} columns={columns} checkboxSelection getRowId={(row) => row._id} />
+//         </Box>
+//       </Box>
+//     </div>
+//   );
+// };
+
+// export default Dashboard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState } from "react";
+// import {
+//   Box,
+//   Button,
+//   TextField,
+//   Dialog,
+//   DialogActions,
+//   DialogContent,
+//   DialogTitle,
+//   Checkbox,
+//   FormControlLabel,
+// } from "@mui/material";
+// import { DataGrid, GridColDef } from "@mui/x-data-grid";
+// import { QueryClient, QueryClientProvider, useQuery, useMutation } from "@tanstack/react-query";
+// import axios from "axios";
+
+// interface Product {
+//   _id: number;
+//   name: string;
+//   description: string;
+//   price: number;
+//   rating: number;
+//   published: boolean;
+//   image?: string;
+// }
+
+// interface NewProduct {
+//   name: string;
+//   description: string;
+//   price: number;
+//   rating: number;
+//   published: boolean;
+//   image: File | null;
+// }
+
+// const queryClient = new QueryClient();
+
+// const Dashboard: React.FC = () => {
+//   const [open, setOpen] = useState(false);
+//   const [newProduct, setNewProduct] = useState<NewProduct>({
+//     name: "",
+//     description: "",
+//     price: 0,
+//     rating: 0,
+//     published: false,
+//     image: null,
+//   });
+
+//   const token = localStorage.getItem("token");
+//   console.log(token);
+
+//   const { data: products = [], refetch } = useQuery({
+//     queryKey: ["products"],
+//     queryFn: async () => {
+//       const response = await axios.get<Product[]>("https://user-product-api-nb1x.onrender.com/api/products/", {
+//         headers: {
+//           Authorization: token,
+//         },
+//       });
+//       return response.data;
+//     },
+//   });
+
+//   const createProductMutation = useMutation({
+//     mutationFn: async (product: NewProduct) => {
+//       if (!product.name || !product.description || !product.price || !product.image) {
+//         throw new Error("All fields are required");
+//       }
+
+//       const formData = new FormData();
+//       formData.append("name", product.name);
+//       formData.append("description", product.description);
+//       formData.append("price", product.price.toString());
+//       formData.append("rating", product.rating.toString());
+//       formData.append("published", JSON.stringify(product.published));
+//       formData.append("image", product.image);
+
+//       await axios.post("https://user-product-api-nb1x.onrender.com/api/products/add", formData, {
+//         headers: {
+//           Authorization: token,
+//           "Content-Type": "multipart/form-data",
+//         },
+//       });
+//     },
+//     onSuccess: () => {
+//       refetch();
+//       setOpen(false);
+//       setNewProduct({
+//         name: "",
+//         description: "",
+//         price: 0,
+//         rating: 0,
+//         published: false,
+//         image: null,
+//       });
+//     },
+//   });
+
+//   const handleClickOpen = () => setOpen(true);
+//   const handleClose = () => setOpen(false);
+
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     const { name, value, type, files } = e.target;
+
+//     setNewProduct((prev) => ({
+//       ...prev,
+//       [name]: type === "number" ? Number(value) : name === "image" && files ? files[0] : value,
+//     }));
+//   };
+
+//   const handleCreateProduct = () => {
+//     if (!newProduct.name || !newProduct.description || !newProduct.image || newProduct.price <= 0) {
+//       alert("Please fill in all required fields with valid values.");
+//       return;
+//     }
+
+//     createProductMutation.mutate(newProduct);
+//   };
+
+//   const columns: GridColDef<Product>[] = [
+//     { field: "id", headerName: "ID", width: 70 },
+//     { field: "name", headerName: "Name", flex: 1 },
+//     { field: "description", headerName: "Description", flex: 1 },
+//     { field: "price", headerName: "Price", type: "number", flex: 1 },
+//     { field: "rating", headerName: "Rating", type: "number", flex: 1 },
+//     { field: "published", headerName: "Published", flex: 1 },
+//   ];
+
+//   return (
+//     <div className="card shadow border-0 p-3 mt-5 m-4">
+//       <Box m="20px">
+//         <Button variant="contained" color="primary" onClick={handleClickOpen}>
+//           Create Product
+//         </Button>
+
+//         <Dialog open={open} onClose={handleClose}>
+//           <DialogTitle>Create New Product</DialogTitle>
+//           <DialogContent>
+//             <TextField fullWidth margin="dense" variant="filled" label="Product Name" name="name" value={newProduct.name} onChange={handleChange} />
+//             <TextField fullWidth margin="dense" variant="filled" label="Description" name="description" value={newProduct.description} onChange={handleChange} />
+//             <TextField fullWidth margin="dense" variant="filled" label="Price" name="price" type="number" value={newProduct.price} onChange={handleChange} />
+//             <TextField fullWidth margin="dense" variant="filled" label="Rating" name="rating" type="number" value={newProduct.rating} onChange={handleChange} />
+//             <TextField fullWidth margin="dense" variant="filled" type="file" name="image" onChange={handleChange} />
+//             <FormControlLabel
+//               control={<Checkbox checked={newProduct.published} onChange={(e) => setNewProduct({ ...newProduct, published: e.target.checked })} />}
+//               label="Published"
+//             />
+//           </DialogContent>
+//           <DialogActions>
+//             <Button onClick={handleClose} color="primary">
+//               Cancel
+//             </Button>
+//             <Button onClick={handleCreateProduct} color="primary">
+//               Create
+//             </Button>
+//           </DialogActions>
+//         </Dialog>
+
+//         <Box mt={3} sx={{ height: 400, width: "100%" }}>
+//           <DataGrid rows={products} columns={columns}  checkboxSelection  getRowId={(row) => row._id} />
+//         </Box>
+//       </Box>
+//     </div>
+//   );
+// };
+
+// export default Dashboard;
 
 
 
