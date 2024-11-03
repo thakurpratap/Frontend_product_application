@@ -4,7 +4,7 @@ import SignIn from './pages/Signin';
 import SignUp from './pages/SignUp';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import './App.css'; 
-import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.tsx/navbar';
 import Sidebar from './components/Sidebar.tsx/sidebar';
 import Dashboard from './components/Dashboard/dashboard';
@@ -12,31 +12,40 @@ import Form from './pages/Form';
 
 const queryClient = new QueryClient();
 
-function App() {
+const Layout = () => {
+  const location = useLocation();
+  const noHeaderFooterPaths = ['/signin', '/signup']; // Add paths here
+
   return (
     <>
-     <QueryClientProvider client={queryClient}>
-     <BrowserRouter>
-     <Navbar/>
-   <div className='main d-flex'>
-   <div className='sidebarWrapper'>
-   <Sidebar/>
-   </div>
-   <div className='content'>
-   <Routes>
-      <Route path="/" element={<Dashboard/>} />
-      <Route path="/form"  element={<Form/>} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/signup" element={<SignUp/>} /> 
-      {/* <Route path="/signup" element={<SignUp/>} /> */}
-     </Routes>
-   </div>
-   </div>
-   </BrowserRouter>
-   </QueryClientProvider>
-   
+      {!noHeaderFooterPaths.includes(location.pathname) && <Navbar />}
+      <div className='main d-flex'>
+        {!noHeaderFooterPaths.includes(location.pathname) && (
+          <div className='sidebarWrapper'>
+            <Sidebar />
+          </div>
+        )}
+        <div className='content'>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/form" element={<Form />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Routes>
+        </div>
+      </div>
     </>
   );
 };
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
+    </QueryClientProvider>
+  );
+}
 
 export default App;

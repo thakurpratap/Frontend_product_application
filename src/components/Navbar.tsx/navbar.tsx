@@ -1,22 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import MenuIcon from "@mui/icons-material/Menu";
 import profile from "../../assets/profile.png";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import PersonAdd from "@mui/icons-material/PersonAdd";
-import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import logo from '../../assets/img.png'
-import { useNavigate } from "react-router-dom";
+import logo from '../../assets/img.png';
+import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [name, setName] = useState("");
+  console.log(name);
+  
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+      fetchUserData(token);
+    }
+  }, []);
+
+  const fetchUserData = async (token: string) => {
+    try {
+      const response = await fetch("https://user-product-api-nb1x.onrender.com/api/users/", {
+        method: "GET",
+        headers: {
+          "authorization": `Bearer ${token}`, 
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        
+        setName(data.name); // Set user's name from the response data
+      } else {
+        console.error("Failed to fetch user data");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -27,15 +57,12 @@ function Header() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("token"); // Remove token on logout
     setIsLoggedIn(false);
+    setName(""); // Clear the user name on logout
+    navigate("/signin"); // Redirect to signin page after logout
+    handleClose(); // Close the menu
   };
-
-  const handleLoginClick = () => {
-    handleClose();
-    navigate("/signin");
-  };
-
-
 
   return (
     <>
@@ -63,10 +90,9 @@ function Header() {
                       <img src={profile} alt="img" />
                     </span>
                   </div>
-
                   <div className="userInfo">
-                    <h4>Pratap Singh</h4>
-                    <p className="mb-0">@pratap888</p>
+                    <h4>{name || "Pratap Singh"}</h4>
+                    {/* <p className="mb-0">@pratap888</p> */}
                   </div>
                 </Button>
                 <Menu
@@ -78,28 +104,22 @@ function Header() {
                   transformOrigin={{ horizontal: "right", vertical: "top" }}
                   anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
-                  {/* <Link to=''> */}
-                  <MenuItem onClick={handleLoginClick}>
-                    <ListItemIcon>
-                      <PersonAdd fontSize="small" />
-                    </ListItemIcon>
-                    Login
-                  </MenuItem>
-                  {/* </Link> */}
-                
-                  <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                      <Settings fontSize="small" />
-                    </ListItemIcon>
-                    Reset Password
-                  </MenuItem>
-                  {isLoggedIn && (
+                  {isLoggedIn ? (
                     <MenuItem onClick={handleLogout}>
                       <ListItemIcon>
                         <Logout fontSize="small" />
                       </ListItemIcon>
                       Logout
                     </MenuItem>
+                  ) : (
+                    <>
+                      <MenuItem>
+                        <Link to={"signin"}> SignIn</Link>
+                      </MenuItem>
+                      <MenuItem>
+                        <Link to={"signup"}> SignUp</Link>
+                      </MenuItem>
+                    </>
                   )}
                 </Menu>
               </div>
