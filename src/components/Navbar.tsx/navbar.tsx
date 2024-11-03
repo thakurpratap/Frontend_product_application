@@ -39,7 +39,7 @@ function Header() {
         const data = await response.json();
         console.log(data);
         
-        setName(data.name); // Set user's name from the response data
+        setName(data.name); 
       } else {
         console.error("Failed to fetch user data");
       }
@@ -57,11 +57,11 @@ function Header() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove token on logout
+    localStorage.removeItem("token"); 
     setIsLoggedIn(false);
-    setName(""); // Clear the user name on logout
-    navigate("/signin"); // Redirect to signin page after logout
-    handleClose(); // Close the menu
+    setName(""); 
+    navigate("/signin"); 
+    handleClose(); 
   };
 
   return (
@@ -69,7 +69,6 @@ function Header() {
       <header className="d-flex align-items-center">
         <div className="container-fluid w-100">
           <div className="row d-flex align-items-center w-100">
-            {/* logo wrap */}
             <div className="col-sm-2 part-1">
               <img src={logo} alt="" style={{ width: "60%" }} />
             </div>
@@ -92,7 +91,6 @@ function Header() {
                   </div>
                   <div className="userInfo">
                     <h4>{name || "Pratap Singh"}</h4>
-                    {/* <p className="mb-0">@pratap888</p> */}
                   </div>
                 </Button>
                 <Menu
@@ -105,12 +103,18 @@ function Header() {
                   anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
                   {isLoggedIn ? (
+                    <>
+                    
                     <MenuItem onClick={handleLogout}>
-                      <ListItemIcon>
-                        <Logout fontSize="small" />
-                      </ListItemIcon>
-                      Logout
+                      Logout   
                     </MenuItem>
+                    <MenuItem onClick={()=>{
+                      navigate("landing-page")
+                    }} >
+                    Landing Page
+                    </MenuItem>
+                    </>
+
                   ) : (
                     <>
                       <MenuItem>

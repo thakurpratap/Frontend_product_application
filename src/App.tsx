@@ -9,12 +9,12 @@ import Navbar from './components/Navbar.tsx/navbar';
 import Sidebar from './components/Sidebar.tsx/sidebar';
 import Dashboard from './components/Dashboard/dashboard';
 import Form from './pages/Form';
-
+import LandingPage from './pages/LandingPage';
 const queryClient = new QueryClient();
 
 const Layout = () => {
   const location = useLocation();
-  const noHeaderFooterPaths = ['/signin', '/signup']; // Add paths here
+  const noHeaderFooterPaths = ['/signin', '/signup',"/landing-page"]; // Add paths here
 
   return (
     <>
@@ -31,6 +31,7 @@ const Layout = () => {
             <Route path="/form" element={<Form />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route  path="/landing-page" element={<LandingPage/>}/>
           </Routes>
         </div>
       </div>
