@@ -82,7 +82,7 @@ export default function SignIn() {
         
         if (responseData.message === 'Invalid Email or Password') {
           toast.error('Invalid Email or Password');
-          alert("Invalid Email or Password")
+          toast("Invalid Email or Password")
         } else {
           toast.error('Login failed. Please check your credentials.');
         }
