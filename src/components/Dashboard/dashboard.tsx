@@ -212,7 +212,7 @@ const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="card shadow border-0 p-3 mt-5 m-4">
+    <div className="card shadow border-0 p-3 mt-5 m-4" style={{marginTop:"20px"}}>
       <Box m="20px">
         <Box display="flex" alignItems="center" mb={2}>
           <TextField

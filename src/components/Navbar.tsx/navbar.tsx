@@ -4,8 +4,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import profile from "../../assets/profile.png";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Logout from "@mui/icons-material/Logout";
+// import ListItemIcon from "@mui/material/ListItemIcon";
+// import Logout from "@mui/icons-material/Logout";
 import logo from '../../assets/img.png';
 import { Link, useNavigate } from "react-router-dom";
 
@@ -13,8 +13,9 @@ function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [name, setName] = useState("");
-  console.log(name);
-  
+   console.log("name",name);
+   
+   
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
 
@@ -31,7 +32,7 @@ function Header() {
       const response = await fetch("https://user-product-api-nb1x.onrender.com/api/users/", {
         method: "GET",
         headers: {
-          "authorization": `Bearer ${token}`, 
+          "authorization": ` ${token}`, 
           "Content-Type": "application/json",
         },
       });
@@ -66,7 +67,7 @@ function Header() {
 
   return (
     <>
-      <header className="d-flex align-items-center">
+      <header className="d-flex align-items-center" >
         <div className="container-fluid w-100">
           <div className="row d-flex align-items-center w-100">
             <div className="col-sm-2 part-1">
@@ -90,7 +91,7 @@ function Header() {
                     </span>
                   </div>
                   <div className="userInfo">
-                    <h4>{name || "Pratap Singh"}</h4>
+                    <h4>{name || ""}</h4>
                   </div>
                 </Button>
                 <Menu
@@ -108,11 +109,11 @@ function Header() {
                     <MenuItem onClick={handleLogout}>
                       Logout   
                     </MenuItem>
-                    <MenuItem onClick={()=>{
+                    {/* <MenuItem onClick={()=>{
                       navigate("landing-page")
                     }} >
                     Landing Page
-                    </MenuItem>
+                    </MenuItem> */}
                     </>
 
                   ) : (

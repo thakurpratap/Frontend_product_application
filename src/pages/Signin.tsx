@@ -13,7 +13,7 @@ import { styled } from '@mui/material/styles';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import CircularProgress from '@mui/material/CircularProgress'; // Import CircularProgress
+import CircularProgress from '@mui/material/CircularProgress'; 
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -74,7 +74,7 @@ export default function SignIn() {
       if (response.ok) {
         const responseData = await response.json();
         localStorage.setItem("token", responseData.token);
-        navigate('/');
+        navigate('/dashboard');
         toast.success('Login successful!');
       } else {
         const responseData = await response.json(); 
@@ -143,11 +143,11 @@ export default function SignIn() {
               />
             </FormControl>
             <Button type="submit" fullWidth variant="contained" disabled={loading}>
-              {loading ? <CircularProgress size={24} /> : 'Sign In'} {/* Show loading indicator */}
+              {loading ? <CircularProgress size={24} /> : 'Sign In'} 
             </Button>
             <Typography sx={{ textAlign: 'center' }}>
               Don’t have an account?{' '}
-              <Link to="/signup" style={{ textDecoration: 'none', color: '#1976d2' }}>
+              <Link to="/" style={{ textDecoration: 'none', color: '#1976d2' }}>
                 Sign Up
               </Link>
             </Typography>
