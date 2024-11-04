@@ -2,10 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import DashboardIcon from '@mui/icons-material/Dashboard'; 
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import QuizIcon from '@mui/icons-material/Quiz';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import LoginIcon from '@mui/icons-material/Login';
 import { Button } from "@mui/material";
 function Sidebar() {
   const [activetab , setActivetab ] = useState(0)
