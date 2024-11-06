@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Container,
   TextField,
@@ -8,75 +8,107 @@ import {
   Grid,
   Paper,
   CircularProgress,
-} from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignUp: React.FC = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm();
-  const [loading, setLoading] = useState(false); 
-  const navigate=useNavigate()
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: "onChange" });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const onSubmit = async (data: any) => {
-    setLoading(true); 
+    setLoading(true);
     try {
-      const response = await fetch('https://user-product-api-nb1x.onrender.com/api/users/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "https://user-product-api-nb1x.onrender.com/api/users/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const result = await response.json();
       console.log(result);
 
       if (response.ok) {
-        
-          toast.success('Signup successful! Please SignIn Again');
-          navigate("/signin")
-        
+        toast.success("Signup successful! Please SignIn Again");
+        navigate("/signin");
       } else {
-        const message=result.message;
+        const message = result.message;
         toast.error(`Signup failed: ${message}`);
         console.error(`Signup failed: ${message}`);
       }
     } catch (error) {
-      toast.error('Error during signup: ' + error);
-      console.error('Error during signup:', error);
+      toast.error("Error during signup: " + error);
+      console.error("Error during signup:", error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   return (
-    <Container component="main" maxWidth="xs" sx={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center',
-      
-    }}>
-      <Paper elevation={3} sx={{ padding: 3, borderRadius: 2, width: '100%', margin:"0 auto " }}>
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{ padding: 3, borderRadius: 2, width: "100%", margin: "0 auto " }}
+      >
         <Typography variant="h4" align="center" gutterBottom>
           Sign Up
         </Typography>
-        <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+        <Box
+          component="form"
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Controller
-            name="name"
+            name="firstname"
             control={control}
             defaultValue=""
-            rules={{ required: 'Name is required' }}
+            rules={{
+              required: "Firstname is required",
+              pattern: {
+                value: /^[a-zA-Z ]*$/,
+                message: "Only alphabets are allowed",
+              },
+              minLength: {
+                value: 4,
+                message: "Firstname must be more than 4 characters",
+              },
+              maxLength: {
+                value: 20,
+                message: "Firstname cannot exceed more than 20 characters",
+              },
+            }}
             render={({ field }) => (
               <TextField
                 {...field}
                 fullWidth
-                label="Name"
+                label="First Name"
                 margin="normal"
-                error={!!errors.name}
-                helperText={errors.name?.message as string || ''}
+                error={!!errors.firstname}
+                helperText={
+                  errors.firstname ? (errors.firstname.message as string) : ""
+                }
                 sx={{
-                  '& .MuiInputBase-root': {
+                  "& .MuiInputBase-root": {
                     borderRadius: 2,
                   },
                 }}
@@ -87,7 +119,13 @@ const SignUp: React.FC = () => {
             name="email"
             control={control}
             defaultValue=""
-            rules={{ required: 'Email is required' }}
+            rules={{
+              required: "Email is required",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "This is not a valid email",
+              },
+            }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -96,9 +134,11 @@ const SignUp: React.FC = () => {
                 type="email"
                 margin="normal"
                 error={!!errors.email}
-                helperText={errors.email?.message as string || ''}
+                helperText={
+                  errors.email ? (errors.email.message as string) : ""
+                }
                 sx={{
-                  '& .MuiInputBase-root': {
+                  "& .MuiInputBase-root": {
                     borderRadius: 2,
                   },
                 }}
@@ -109,7 +149,13 @@ const SignUp: React.FC = () => {
             name="password"
             control={control}
             defaultValue=""
-            rules={{ required: 'Password is required', minLength: { value: 8, message: 'Password must be at least 8 characters long!' } }}
+            rules={{
+              required: "Password is required",
+              maxLength: {
+                value: 8,
+                message: "Password cannot exceed more than 8 characterslong!",
+              },
+            }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -118,9 +164,9 @@ const SignUp: React.FC = () => {
                 type="password"
                 margin="normal"
                 error={!!errors.password}
-                helperText={errors.password?.message as string || ''}
+                helperText={(errors.password?.message as string) || ""}
                 sx={{
-                  '& .MuiInputBase-root': {
+                  "& .MuiInputBase-root": {
                     borderRadius: 2,
                   },
                 }}
@@ -128,21 +174,35 @@ const SignUp: React.FC = () => {
             )}
           />
           <Controller
-            name="phone"
+            name="phonenumber"
             control={control}
             defaultValue=""
-            rules={{ required: 'Phone number is required', minLength: { value: 10, message: 'Phone number must be at least 10 digits long!' } }}
+            rules={{
+              required: "Phone number is required",
+              pattern: {
+                value: /^(0|[6-9]\d*)(\.\d+)?$/,
+                message: "Phone number cannot accept 0 to 5 numbers",
+              },
+              maxLength: {
+                value: 10,
+                message: "Phone number cannot exceed more than 10 digits",
+              },
+            }}
             render={({ field }) => (
               <TextField
                 {...field}
                 fullWidth
-                label="Phone"
+                label="Phone Number"
                 type="tel"
                 margin="normal"
-                error={!!errors.phone}
-                helperText={errors.phone?.message as string || ''}
+                error={!!errors.phonenumber}
+                helperText={
+                  errors.phonenumber
+                    ? (errors.phonenumber.message as string)
+                    : ""
+                }
                 sx={{
-                  '& .MuiInputBase-root': {
+                  "& .MuiInputBase-root": {
                     borderRadius: 2,
                   },
                 }}
@@ -153,7 +213,15 @@ const SignUp: React.FC = () => {
             name="address"
             control={control}
             defaultValue=""
-            rules={{ required: 'Address is required' }}
+            rules={{ 
+              required: "Address is required",
+              minLength : {
+                value: 4,
+                message : "Address is more then 5 characters"},
+                maxLength : {
+                  value: 30,
+                  message : "Address cannot exceed more than 30 characters"},
+             }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -161,9 +229,9 @@ const SignUp: React.FC = () => {
                 label="Address"
                 margin="normal"
                 error={!!errors.address}
-                helperText={errors.address?.message as string || ''}
+                helperText={(errors.address?.message as string) || ""}
                 sx={{
-                  '& .MuiInputBase-root': {
+                  "& .MuiInputBase-root": {
                     borderRadius: 2,
                   },
                 }}
@@ -176,14 +244,21 @@ const SignUp: React.FC = () => {
             color="primary"
             sx={{ mt: 2, borderRadius: 2 }}
             fullWidth
-            disabled={loading} 
+            disabled={loading}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign Up'} 
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Sign Up"
+            )}
           </Button>
           <Grid container justifyContent="center" sx={{ mt: 2 }}>
             <Grid item>
               Already have an account?
-              <Link to="/signin" style={{ textDecoration: 'none', color: '#1976d2' }}>
+              <Link
+                to="/signin"
+                style={{ textDecoration: "none", color: "#1976d2" }}
+              >
                 Sign In
               </Link>
             </Grid>
