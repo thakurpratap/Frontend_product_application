@@ -2,7 +2,9 @@
   margin: 0px;
   padding: 0px;
 }
-
+body {
+  background: #ebe9e9;
+}
 header {
   width: 100%;
   height: 70px;
@@ -196,14 +198,15 @@ header button.rounded-circle svg {
   transition: all 0.3s;
 }
 
-.sidebar ul .submenu li a:hover {
+/* .sidebar ul .submenu li a:hover {
   color: #0858f7;
-}
+} */
 .main .content {
-  /* width: 85%;
+  width: 85%;
   flex: 0 0 85%;
-  margin-top: 3%; */
+  margin-top: 3%;
   width: 100vw;
+  /* background: aliceblue; */
   /* margin-top: 3% */
 }
 .right-content {
@@ -214,3 +217,11 @@ header button.rounded-circle svg {
   width: 100%;
   flex-wrap: wrap;
 }
+.MuiDataGrid-columnHeader {
+  pointer-events: none;
+}
+
+.MuiDataGrid-columnHeader {
+  cursor: default; 
+}
+
