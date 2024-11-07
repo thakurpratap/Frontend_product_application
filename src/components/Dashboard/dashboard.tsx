@@ -36,7 +36,7 @@ interface NewProduct {
   image: File | null;
 }
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
@@ -214,7 +214,8 @@ const Dashboard: React.FC = () => {
   return (
     <div className="card shadow border-0 p-3 mt-5 m-4" style={{marginTop:"20px"}}>
       <Box m="20px">
-        <Box display="flex" alignItems="center" mb={2}>
+      <Box display="flex" alignItems="center" mb={2} justifyContent='space-between'>
+        <Box >
           <TextField
             variant="outlined"
             label="Search Products"
@@ -222,14 +223,14 @@ const Dashboard: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             sx={{ marginRight: "8px" }}
           />
-          <Button variant="contained" color="primary" onClick={handleSearch}>
+          <Button variant="contained" color="primary" onClick={handleSearch} style={{ height: "6vh" }}>
             Search
           </Button>
-        </Box>
+          </Box>
         <Button variant="contained" color="primary" onClick={handleClickOpen}>
           Create Product
         </Button>
-
+        </Box>
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>{isEditing ? "Edit Product" : "Create New Product"}</DialogTitle>
           <DialogContent>
@@ -254,7 +255,7 @@ const Dashboard: React.FC = () => {
         </Dialog>
 
         <Box mt={3} sx={{ height: 400, width: "100%" }}>
-          <DataGrid rows={products} columns={columns} checkboxSelection getRowId={(row) => row._id} />
+          <DataGrid rows={products} columns={columns} checkboxSelection getRowId={(row) => row._id}/>
         </Box>
       </Box>
     </div>

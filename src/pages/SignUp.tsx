@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -8,13 +8,13 @@ import {
   CircularProgress,
   IconButton,
   InputAdornment,
-} from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import 'react-toastify/dist/ReactToastify.css';
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import { toast } from "react-toastify";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import "react-toastify/dist/ReactToastify.css";
 
 type SignUpFormData = {
   username: string;
@@ -30,7 +30,7 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
   const onSubmit = async (data: SignUpFormData) => {
     setLoading(true);
@@ -44,19 +44,18 @@ const SignUp = () => {
       });
 
       const result = await response.json();
-      console.log(result);
 
       if (response.ok) {
         toast.success('Signup successful! Please Sign In Again');
         navigate("/signin");
       } else {
-        const message = result.message;
+        const message = result.message || 'Signup failed';
         toast.error(`Signup failed: ${message}`);
         console.error(`Signup failed: ${message}`);
       }
     } catch (error) {
-      toast.error('Error during signup: ' + error);
-      console.error('Error during signup:', error);
+      toast.error("Error during signup: " + error);
+      console.error("Error during signup:", error);
     } finally {
       setLoading(false);
     }
@@ -85,6 +84,8 @@ const SignUp = () => {
         <Typography variant="h4" align="center" gutterBottom>
           Sign Up
         </Typography>
+
+        {/* Username Field */}
         <Controller
           name="username"
           control={control}
@@ -97,7 +98,7 @@ const SignUp = () => {
               label="Name *"
               margin="normal"
               error={!!errors.username}
-              helperText={String(errors.username?.message || '')}
+              helperText={errors.username?.message || ''}
               sx={{
                 '& .MuiInputBase-root': {
                   borderRadius: 2,
@@ -106,6 +107,8 @@ const SignUp = () => {
             />
           )}
         />
+
+        {/* Email Field */}
         <Controller
           name="email"
           control={control}
@@ -119,7 +122,7 @@ const SignUp = () => {
               type="email"
               margin="normal"
               error={!!errors.email}
-              helperText={String(errors.email?.message || '')}
+              helperText={errors.email?.message || ''}
               sx={{
                 '& .MuiInputBase-root': {
                   borderRadius: 2,
@@ -128,6 +131,8 @@ const SignUp = () => {
             />
           )}
         />
+
+        {/* Password Field */}
         <Controller
           name="password"
           control={control}
@@ -141,7 +146,7 @@ const SignUp = () => {
               type={showPassword ? 'text' : 'password'}
               margin="normal"
               error={!!errors.password}
-              helperText={String(errors.password?.message || '')}
+              helperText={errors.password?.message || ''}
               sx={{
                 '& .MuiInputBase-root': {
                   borderRadius: 2,
@@ -162,6 +167,8 @@ const SignUp = () => {
             />
           )}
         />
+
+        {/* Phone Number Field */}
         <Controller
           name="phone"
           control={control}
@@ -175,7 +182,7 @@ const SignUp = () => {
               type="tel"
               margin="normal"
               error={!!errors.phone}
-              helperText={String(errors.phone?.message || '')}
+              helperText={errors.phone?.message || ''}
               sx={{
                 '& .MuiInputBase-root': {
                   borderRadius: 2,
@@ -184,6 +191,8 @@ const SignUp = () => {
             />
           )}
         />
+
+        {/* Address Field */}
         <Controller
           name="address"
           control={control}
@@ -196,7 +205,7 @@ const SignUp = () => {
               label="Address *"
               margin="normal"
               error={!!errors.address}
-              helperText={String(errors.address?.message || '')}
+              helperText={errors.address?.message || ''}
               sx={{
                 '& .MuiInputBase-root': {
                   borderRadius: 2,
@@ -205,6 +214,8 @@ const SignUp = () => {
             />
           )}
         />
+
+        {/* Submit Button */}
         <Button
           type="submit"
           variant="contained"
@@ -214,15 +225,19 @@ const SignUp = () => {
         >
           {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign Up'}
         </Button>
+
+        {/* SignIn Link */}
         <Grid container justifyContent="center" sx={{ mt: 2 }}>
           <Grid item>
-            Already have an account?
+            Already have an account? 
             <Link to="/signin" style={{ textDecoration: 'none', color: 'blue', marginLeft: "10px" }}>
               Sign In
             </Link>
           </Grid>
         </Grid>
       </Box>
+
+      {/* Image */}
       <Box
         component="img"
         src="https://images.unsplash.com/photo-1525498128493-380d1990a112?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"

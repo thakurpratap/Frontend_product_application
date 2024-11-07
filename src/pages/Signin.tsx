@@ -4,17 +4,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-interface FormData {
-  email: string;
-  password: string;
-}
-
 const SignIn = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const { control, handleSubmit, formState: { errors } } = useForm();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data:any) => {
     setLoading(true);
     try {
       const response = await fetch('https://user-product-api-nb1x.onrender.com/api/auth/login', {
@@ -24,13 +19,12 @@ const SignIn = () => {
       });
 
       const responseData = await response.json();
-      console.log(responseData)
+
       if (response.ok) {
         localStorage.setItem("token", responseData.token);
         navigate('/dashboard');
         toast.success('Login successful!');
       } else {
-        const responseData = await response.json();
         toast.error(responseData.message || 'Login failed. Please check your credentials.');
       }
     } catch (error) {
@@ -63,12 +57,8 @@ const SignIn = () => {
               type="email"
               margin="normal"
               error={!!errors.email}
-              helperText={errors.email?.message || ''}
-              sx={{
-                '& .MuiInputBase-root': {
-                  borderRadius: 2, 
-                }
-              }}
+             // helperText={errors.email?.message || ''}
+              sx={{ '& .MuiInputBase-root': { borderRadius: 2 }}}
             />
           )}
         />
@@ -86,12 +76,8 @@ const SignIn = () => {
               type="password"
               margin="normal"
               error={!!errors.password}
-              helperText={errors.password?.message || ''}
-              sx={{
-                '& .MuiInputBase-root': {
-                  borderRadius: 2,
-                }
-              }}
+             // helperText={errors.password?.message || ''}
+              sx={{ '& .MuiInputBase-root': { borderRadius: 2 }}}
             />
           )}
         />

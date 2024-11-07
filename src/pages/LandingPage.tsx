@@ -25,7 +25,7 @@ const SearchBox = styled(TextField)(({ theme }) => ({
   },
 }));
 
-const LandingPage: React.FC = () => {
+const LandingPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');

@@ -2,7 +2,9 @@
   margin: 0px;
   padding: 0px;
 }
-
+body {
+  background: #ebe9e9;
+}
 header {
   width: 100%;
   height: 70px;
@@ -28,16 +30,15 @@ header button.rounded-circle {
   width: 48px !important;
   height: 48px !important;
   background: #f0f5ff !important;
-  color: #292929 !important;
+  color: #0858F7 !important;
 }
 header button.rounded-circle svg {
   color: #292929;
-  font-size: 30px !important;
-  font-weight: 400;
+  font-size: 18px !important;
   transition: all 02s ease-in-out;
 }
 /* header button.rounded-circle:hover svg {
-  color: #0858f7;
+  color: #0858f7 !important;
 } */
 .searchbox {
   width: 300px;
@@ -52,7 +53,6 @@ header button.rounded-circle svg {
   outline: none;
   padding-left: 5px;
   font-size: 14px;
-  color: #292929;
 }
 .searchbox input::-webkit-input-placeholder {
   color: rgba(0, 0, 0, 0, 6);
@@ -61,7 +61,6 @@ header button.rounded-circle svg {
   font-size: 18px;
   color: #292929;
 }
-
 .myAcc {
   text-align: left !important;
   color: #000 !important;
@@ -89,7 +88,6 @@ header button.rounded-circle svg {
   cursor: pointer;
   position: relative;
 }
-
 .myAcc .userImg .rounded-circle img {
   object-fit: cover;
   width: 100%;
@@ -111,13 +109,18 @@ header button.rounded-circle svg {
   opacity: 0.7;
 }
 .main .sidebarWrapper {
-  width: 20%;
+  width: 15%;
+  flex:0 0 15%;
   transition: all 0.3s ease-in-out;
 }
-.sidebar {
+.main .sidebarWrapper.toggle {
+  width: 0%;
+  flex:0 0 0%;
+}
+.main .sidebarWrapper .sidebar {
   width: 15%;
   height: 100vh;
-  max-height: calc(100%-70%);
+  /* max-height: calc(100%-70%); */
   overflow-y: scroll;
   overflow-x: hidden;
   position: fixed;
@@ -125,25 +128,28 @@ header button.rounded-circle svg {
   left: 0px;
   background: #fff;
   padding-bottom: 40px;
+  transition: all 0.3s ease-in-out;
 }
-.sidebar::-webkit-scrollbar {
+.main .sidebarWrapper.toggle .sidebar{
+left: -100%;
+}
+.main .sidebarWrapper .sidebar::-webkit-scrollbar {
   width: 2px;
 }
-.sidebar::-webkit-scrollbar-thumb {
+.main .sidebarWrapper .sidebar::-webkit-scrollbar-thumb {
   background: transparent !important;
 }
-/* .sidebar::-webkit-scrollbar {
+/* .main .sidebarWrapper:hover .sidebar::-webkit-scrollbar {
   background: #0858f7 !important;
 } */
-
-.sidebar ul {
+.main .sidebarWrapper .sidebar ul {
   margin-bottom: 0px;
   padding: 10px 15px !important;
 }
-.sidebar li {
+.main .sidebarWrapper .sidebar li {
   list-style: none;
 }
-.sidebar ul li button {
+.main .sidebarWrapper .sidebar ul li button {
   color: #5e5d72 !important;
   text-align: left;
   justify-content: left;
@@ -155,7 +161,7 @@ header button.rounded-circle svg {
   border-radius: 10px;
   font-size: 15px !important;
 }
-.sidebar ul li button .icon {
+.main .sidebarWrapper .sidebar ul li button .icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -163,30 +169,30 @@ header button.rounded-circle svg {
   height: 25px;
   margin-right: 10px;
 }
-.sidebar ul li button .icon svg {
+.main .sidebarWrapper .sidebar ul li button .icon svg {
   color: #000;
   opacity: 0.8;
   font-size: 22px;
 }
-.sidebar ul li button * {
+.main .sidebarWrapper .sidebar ul li button * {
   color: #5e5d72 !important;
 }
-.sidebar ul li button:hover {
+.main .sidebarWrapper .sidebar ul li button:hover {
   background: #f1f1f1 !important;
 }
-.sidebar ul li button.active {
+.main .sidebarWrapper .sidebar ul li button.act {
   background: #f1f1f1 !important;
 }
-.sidebar ul .submenu {
+.main .sidebarWrapper .sidebar ul .submenu {
   padding-left: 45px;
 }
-.sidebar ul .submenu li {
+.main .sidebarWrapper .sidebar ul .submenu li {
   width: 100%;
   list-style: none;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
   padding-left: 25px;
 }
-.sidebar ul .submenu li a {
+.main .sidebarWrapper .sidebar ul .submenu li a {
   color: #5e5d72 !important;
   text-decoration: none;
   display: block;
@@ -196,21 +202,30 @@ header button.rounded-circle svg {
   transition: all 0.3s;
 }
 
-.sidebar ul .submenu li a:hover {
+.main .sidebarWrapper .sidebar ul .submenu li a:hover {
   color: #0858f7;
 }
 .main .content {
-  /* width: 85%;
+  width: 85%;
   flex: 0 0 85%;
-  margin-top: 3%; */
-  width: 100vw;
-  /* margin-top: 3% */
+  margin-top: 3%;
+  transition: all 0.3s ease-in-out;
+}
+.main .content.toggle {
+  width: 100%;
+  flex: 0 0 100%;
 }
 .right-content {
   padding: 90px 30px;
+  padding-bottom: 10px;
 }
 .dashboardBoxWrapper {
   gap: 20px;
   width: 100%;
   flex-wrap: wrap;
 }
+/* .MuiDataGrid-columnHeader {
+  pointer-events: none;
+} */
+
+
