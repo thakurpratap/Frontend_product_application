@@ -1,190 +1,126 @@
-import * as React from "react";
-import { useForm } from "react-hook-form";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import MuiCard from "@mui/material/Card";
-import { styled } from "@mui/material/styles";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import CircularProgress from "@mui/material/CircularProgress";
-import { json } from "stream/consumers";
+import React, { useState } from 'react';
+import { TextField, Button, Typography, Box, Grid, CircularProgress, Divider } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignSelf: "center",
-  width: "100%",
-  justifyContent: "center",
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  margin: "auto",
-  boxShadow:
-    "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-  [theme.breakpoints.up("sm")]: {
-    width: "450px",
-  },
-}));
-
-const SignInContainer = styled(Stack)(({ theme }) => ({
-  width: "100vw",
-  padding: theme.spacing(2),
-  [theme.breakpoints.up("sm")]: {
-    padding: theme.spacing(4),
-  },
-}));
-
-interface AppThemeProps {
-  children: React.ReactNode;
-}
-
-const AppTheme = ({ children }: AppThemeProps) => {
-  const theme = createTheme({
-    palette: {
-      mode: "light",
-    },
-  });
-
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
-};
-
-interface FormData {
-  email: string;
-  password: string;
-}
-
-export default function SignIn() {
+const SignIn = () => {
+  const { control, handleSubmit, formState: { errors } } = useForm();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({ mode: "onChange" });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data:any) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "https://user-product-api-nb1x.onrender.com/api/auth/login",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch('https://user-product-api-nb1x.onrender.com/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const responseData = await response.json();
 
       if (response.ok) {
-        const responseData = await response.json();
         localStorage.setItem("token", responseData.token);
         navigate('/dashboard');
         toast.success('Login successful!');
       } else {
-        const responseData = await response.json();
-        console.log(responseData.message);
-
-        if (responseData.message === "Invalid Email or Password") {
-          toast.error("Invalid Email or Password");
-          toast("Invalid Email or Password");
-        } else {
-          toast.error("Login failed. Please check your credentials.");
-        }
+        toast.error(responseData.message || 'Login failed. Please check your credentials.');
       }
     } catch (error) {
-      console.error("An error occurred:", error);
-      toast.error("An error occurred. Please try again.");
+      toast.error('An error occurred. Please try again.');
+      console.error('Error during login:', error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <AppTheme>
-      <CssBaseline enableColorScheme />
-      <SignInContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
-          <Typography
-            component="h1"
-            variant="h4"
-            sx={{ width: "100vw", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
-          >
-            Sign In
-          </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-          >
-            <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                placeholder="your@email.com"
-                autoComplete="email"
-                variant="outlined"
-                error={!!errors.email}
-                helperText={errors.email?.message}
-                {...register("email", {
-                   required: "Email is required",
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Enter a valid email address",
-                  },
-                  validate: (value) =>
-                    !/\s/.test(value) || "Email cannot contain spaces"
-                  }
-                  )}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <TextField
-                required
-                fullWidth
-                id="password"
-                placeholder="••••••"
-                type="password"
-                autoComplete="current-password"
-                variant="outlined"
-                error={!!errors.password}
-                helperText={errors.password?.message}
-                {...register("password", { required: "Password is required",
-                  pattern: {
-                    value: /^\S*$/,
-                    message: "Password cannot contain spaces",
-                  },
-                  maxLength: {
-                    value: 8,
-                    message: "Password cannot exceed more than 8 characterslong!",
-                  },
-                 })}
-              />
-            </FormControl>
-            <Button
-              type="submit"
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100vw' }}>
+      <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)} 
+        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '15%', width: '20%' }}>
+        
+        <Typography variant="h4" align="center" gutterBottom>
+          Sign In
+        </Typography>
+
+        <Controller
+          name="email"
+          control={control}
+          defaultValue=""
+          rules={{ required: 'Email is required' }}
+          render={({ field }) => (
+            <TextField
+              {...field}
               fullWidth
-              variant="contained"
-              disabled={loading}
-            >
-              {loading ? <CircularProgress size={24} /> : "Sign In"}
-            </Button>
-            <Typography sx={{ textAlign: "center" }}>
-              Don’t have an account?{" "}
-              <Link to="/" style={{ textDecoration: "none", color: "#1976d2" }}>
-                Sign Up
-              </Link>
-            </Typography>
-          </Box>
-        </Card>
-      </SignInContainer>
-    </AppTheme>
+              label="Email *"
+              type="email"
+              margin="normal"
+              error={!!errors.email}
+             // helperText={errors.email?.message || ''}
+              sx={{ '& .MuiInputBase-root': { borderRadius: 2 }}}
+            />
+          )}
+        />
+
+        <Controller
+          name="password"
+          control={control}
+          defaultValue=""
+          rules={{ required: 'Password is required' }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              label="Password *"
+              type="password"
+              margin="normal"
+              error={!!errors.password}
+             // helperText={errors.password?.message || ''}
+              sx={{ '& .MuiInputBase-root': { borderRadius: 2 }}}
+            />
+          )}
+        />
+
+        <Button type="submit" variant="contained" sx={{ mt: 2, borderRadius: 2, backgroundColor: "#3A5B22" }} fullWidth disabled={loading}>
+          {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
+        </Button>
+
+        <Grid container justifyContent="center" sx={{ mt: 2 }}>
+          <Grid item>
+            Don't have an account? 
+            <Link to="/" style={{ textDecoration: 'none', color: 'blue', marginLeft: "10px" }}>
+              Sign Up
+            </Link>
+          </Grid>
+        </Grid>
+
+        <Divider sx={{ my: 1 }}>OR</Divider>
+
+        <Grid container justifyContent="center">
+          <Grid item>
+            <Link to="/forget-password" style={{ textDecoration: 'none', color: 'blue' }}>
+              Forgot Password?
+            </Link>
+          </Grid>
+        </Grid>
+      </Box>
+
+      <Box
+        component="img"
+        src="https://images.unsplash.com/photo-1525498128493-380d1990a112?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="signInImage"
+        sx={{
+          width: '50vw',
+          height: '100vh',
+          objectFit: "cover",
+          objectPosition: 'center',
+          borderTopLeftRadius: '30px',  
+          borderBottomLeftRadius: '30px',
+        }}
+      />
+    </Box>
   );
-}
+};
+
+export default SignIn;
