@@ -19,7 +19,7 @@ interface Product {
   image?: string;
 }
 
-const Products: React.FC = () => {
+const Products = () => {
 
   const columns: GridColDef<Product>[] = [
     { field: "id", headerName: "ID", width: 70 },

@@ -66,13 +66,13 @@ export default function SignIn() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({ mode: "onChange" });
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://user-product-api-nb1x.onrender.com/api/users/login",
+        "https://user-product-api-nb1x.onrender.com/api/auth/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -132,7 +132,16 @@ export default function SignIn() {
                 variant="outlined"
                 error={!!errors.email}
                 helperText={errors.email?.message}
-                {...register("email", { required: "Email is required" })}
+                {...register("email", {
+                   required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Enter a valid email address",
+                  },
+                  validate: (value) =>
+                    !/\s/.test(value) || "Email cannot contain spaces"
+                  }
+                  )}
               />
             </FormControl>
             <FormControl>
@@ -147,7 +156,16 @@ export default function SignIn() {
                 variant="outlined"
                 error={!!errors.password}
                 helperText={errors.password?.message}
-                {...register("password", { required: "Password is required" })}
+                {...register("password", { required: "Password is required",
+                  pattern: {
+                    value: /^\S*$/,
+                    message: "Password cannot contain spaces",
+                  },
+                  maxLength: {
+                    value: 8,
+                    message: "Password cannot exceed more than 8 characterslong!",
+                  },
+                 })}
               />
             </FormControl>
             <Button

@@ -36,7 +36,7 @@ interface NewProduct {
   image: File | null;
 }
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
