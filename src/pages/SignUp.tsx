@@ -14,7 +14,7 @@ import { useForm, Controller } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const SignUp: React.FC = () => {
+const SignUp = () => {
   const {
     control,
     handleSubmit,
@@ -26,7 +26,7 @@ const SignUp: React.FC = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://user-product-api-nb1x.onrender.com/api/users/signup",
+        "https://user-product-api-nb1x.onrender.com/api/auth/signup",
         {
           method: "POST",
           headers: {
@@ -85,12 +85,10 @@ const SignUp: React.FC = () => {
             rules={{
               required: "Firstname is required",
               pattern: {
-                value: /^[a-zA-Z ]*$/,
-                message: "Only alphabets are allowed",
-              },
-              minLength: {
-                value: 4,
-                message: "Firstname must be more than 4 characters",
+                // value: /^[a-zA-Z ]*$/,
+                // message: "Only alphabets are allowed",
+                value: /^[a-zA-Z]+(?: [a-zA-Z]+)*$/,
+                message: "Only alphabets are allowed, and space is allowed only between words",
               },
               maxLength: {
                 value: 20,
@@ -125,6 +123,7 @@ const SignUp: React.FC = () => {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 message: "This is not a valid email",
               },
+              validate: (value) => !/\s/.test(value) || "Email cannot contain spaces",
             }}
             render={({ field }) => (
               <TextField
@@ -151,6 +150,10 @@ const SignUp: React.FC = () => {
             defaultValue=""
             rules={{
               required: "Password is required",
+              pattern: {
+                value: /^\S*$/,
+                message: "Password cannot contain spaces",
+              },
               maxLength: {
                 value: 8,
                 message: "Password cannot exceed more than 8 characterslong!",
@@ -181,7 +184,7 @@ const SignUp: React.FC = () => {
               required: "Phone number is required",
               pattern: {
                 value: /^(0|[6-9]\d*)(\.\d+)?$/,
-                message: "Phone number cannot accept 0 to 5 numbers",
+                message: "Phone number cannot accept 0 to 5 numbers and alphabets not allowed",
               },
               maxLength: {
                 value: 10,
@@ -215,6 +218,12 @@ const SignUp: React.FC = () => {
             defaultValue=""
             rules={{ 
               required: "Address is required",
+              pattern: {
+                // value: /^(?!\s)[a-zA-Z0-9\s]{4,30}(?<!\s)$/, 
+                // message: "Address canot allow more the one sapce",
+                value: /^(?!.*\s{2,})(?!\s)[a-zA-Z0-9\s]{4,30}(?<!\s)$/, 
+                message: "Address canot allow more the one sapce",
+              },
               minLength : {
                 value: 4,
                 message : "Address is more then 5 characters"},
