@@ -1,11 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom'; // To access the token from URL
 import { TextField, Button, Typography, Box } from '@mui/material';
 
 const UpdatePassword = () => {
+  const { token } = useParams(); // Extract token from URL
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e:any) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      setMessage("Passwords do not match!");
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://user-product-api-nb1x.onrender.com/api/auth/reset-forget-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: ` ${token}`, // Use token for authorization
+        },
+        body: JSON.stringify({ password: newPassword }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setMessage("Password updated successfully!");
+      } else {
+        setMessage(data.error || "Failed to update password.");
+      }
+    } catch (error) {
+      setMessage("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100vw' }}>
       <Box 
         component="form" 
+        onSubmit={handleSubmit}
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '15%', width: '20%' }}
       >
         <Typography variant="h4" align="center" gutterBottom>
@@ -16,6 +51,8 @@ const UpdatePassword = () => {
           fullWidth
           label="New Password *"
           type="password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
           margin="normal"
           sx={{
             '& .MuiInputBase-root': {
@@ -28,6 +65,8 @@ const UpdatePassword = () => {
           fullWidth
           label="Confirm Password *"
           type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           margin="normal"
           sx={{
             '& .MuiInputBase-root': {
@@ -37,12 +76,19 @@ const UpdatePassword = () => {
         />
 
         <Button 
+          type="submit"
           variant="contained" 
           sx={{ mt: 2, borderRadius: 2, backgroundColor: "#3A5B22" }} 
           fullWidth
         >
           Update Password
         </Button>
+
+        {message && (
+          <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+            {message}
+          </Typography>
+        )}
       </Box>
 
       <Box
