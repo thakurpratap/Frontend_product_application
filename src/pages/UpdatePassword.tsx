@@ -22,7 +22,7 @@ const UpdatePassword = () => {
           'Content-Type': 'application/json',
           Authorization: ` ${localStorage.getItem("emailToken")}`, 
         },
-        body: JSON.stringify({ password: newPassword }),
+        body: JSON.stringify({ newPassword: newPassword }),
       });
 
       const data = await response.json();
