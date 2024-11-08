@@ -41,7 +41,7 @@ const ForgetPassword = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100vw' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100vw',   background: "white", marginTop :"-4%"}}>
       
       <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)} 
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '15%', width: '20%' }}>

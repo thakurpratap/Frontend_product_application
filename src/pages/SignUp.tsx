@@ -329,7 +329,9 @@ const SignUp = () => {
       display: "flex",
       width: "100vw",
       justifyContent: "space-between",
-      alignItems: "center"
+      alignItems: "center",
+        background: "white",
+         marginTop :"-4%"
     }}>
       <Box
         component="form"
