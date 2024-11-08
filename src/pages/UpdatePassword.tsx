@@ -7,7 +7,8 @@ const UpdatePassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-  const navigate=useNavigate()
+  const navigate = useNavigate();
+
   const handleSubmit = async (e:any) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
@@ -20,25 +21,25 @@ const UpdatePassword = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: ` ${localStorage.getItem("emailToken")}`, 
+          Authorization: `${localStorage.getItem("emailToken")}`, 
         },
-        body: JSON.stringify({ password: newPassword }),
+        body: JSON.stringify({ newPassword: newPassword }),
       });
 
       const data = await response.json();
-        console.log(data)
-     
+      console.log(data);
+
       if (response.ok) {
         setMessage("Password updated successfully!");
-        toast.success("Password updated successfully!")
-        navigate("/signin")
+        toast.success("Password updated successfully!");
+        navigate("/signin");
       } else {
         setMessage(data.error || "Failed to update password.");
-        toast.error("Failed to update password.")
+        toast.error("Failed to update password.");
       }
     } catch (error) {
       setMessage("An error occurred. Please try again.");
-      toast.error("Please try again ")
+      toast.error("Please try again.");
     }
   };
 
