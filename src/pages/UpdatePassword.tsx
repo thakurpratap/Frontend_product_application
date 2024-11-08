@@ -26,7 +26,8 @@ const UpdatePassword = () => {
       });
 
       const data = await response.json();
-      console.log(data);
+        console.log(data)
+     
       if (response.ok) {
         setMessage("Password updated successfully!");
         toast.success("Password updated successfully!")
