@@ -10,7 +10,7 @@ interface ForgetPasswordData {
 const ForgetPassword = () => {
   const { control, handleSubmit, formState: { errors } } = useForm<ForgetPasswordData>();
   const [loading, setLoading] = React.useState(false);
-  const navigate=useNavigate();
+  // const navigate=useNavigate();
   const onSubmit =async (data: ForgetPasswordData) => {
     setLoading(true);
        try{
