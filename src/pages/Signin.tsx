@@ -5,7 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 const SignIn = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm();
+  const { control, handleSubmit, formState: { errors } } = useForm({ mode: "onChange" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -48,7 +48,15 @@ const SignIn = () => {
           name="email"
           control={control}
           defaultValue=""
-          rules={{ required: 'Email is required' }}
+          rules={{ 
+            required: "Email is required",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Enter a valid email address",
+            },
+            validate: (value) =>
+              !/\s/.test(value) || "Email cannot contain spaces"
+            }}
           render={({ field }) => (
             <TextField
               {...field}
@@ -57,7 +65,8 @@ const SignIn = () => {
               type="email"
               margin="normal"
               error={!!errors.email}
-             // helperText={errors.email?.message || ''}
+            //  helperText={errors.email?.message || ''}
+            helperText={errors.email ? (errors.email.message as string) : "" }
               sx={{ '& .MuiInputBase-root': { borderRadius: 2 }}}
             />
           )}
@@ -67,7 +76,16 @@ const SignIn = () => {
           name="password"
           control={control}
           defaultValue=""
-          rules={{ required: 'Password is required' }}
+          rules={{ required: 'Password is required',
+            pattern: {
+              value: /^\S*$/,
+              message: "Password cannot contain spaces",
+            },
+            maxLength: {
+              value: 8,
+              message: "Password cannot exceed more than 8 characterslong!",
+            },
+           }}
           render={({ field }) => (
             <TextField
               {...field}
@@ -76,7 +94,9 @@ const SignIn = () => {
               type="password"
               margin="normal"
               error={!!errors.password}
-             // helperText={errors.password?.message || ''}
+            //  helperText={errors.password?.message || ''}
+            helperText={errors.password ? (errors.password.message as string) : "" }
+
               sx={{ '& .MuiInputBase-root': { borderRadius: 2 }}}
             />
           )}
