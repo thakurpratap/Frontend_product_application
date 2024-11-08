@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField, Button, Typography, Box, Grid, CircularProgress } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import {toast} from "react-toastify"
 interface ForgetPasswordData {
