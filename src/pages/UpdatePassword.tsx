@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom'; // To access the token from URL
 import { TextField, Button, Typography, Box } from '@mui/material';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const UpdatePassword = () => {
-  const { token } = useParams(); // Extract token from URL
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-
+  const navigate=useNavigate()
   const handleSubmit = async (e:any) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
@@ -20,7 +20,7 @@ const UpdatePassword = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: ` ${token}`, // Use token for authorization
+          Authorization: ` ${localStorage.getItem("emailToken")}`, 
         },
         body: JSON.stringify({ password: newPassword }),
       });
@@ -28,11 +28,15 @@ const UpdatePassword = () => {
       const data = await response.json();
       if (response.ok) {
         setMessage("Password updated successfully!");
+        toast.success("Password updated successfully!")
+        navigate("/signin")
       } else {
         setMessage(data.error || "Failed to update password.");
+        toast.error("Failed to update password.")
       }
     } catch (error) {
       setMessage("An error occurred. Please try again.");
+      toast.error("Please try again ")
     }
   };
 

@@ -22,10 +22,13 @@ const ForgetPassword = () => {
            body:JSON.stringify(data)
          })
         const result=await response.json();
+         console.log("result",result)
+         console.log("result.token",result.token)
+        localStorage.setItem("emailToken",result.token)
         console.log(result)
         if(response.ok){
           toast.success("Email sent Successfull. Please check your inbox")
-          navigate("/update-password")
+          // navigate("/update-password")
           console.log("Email sent Successfull. Please check your inbox")
         }else{
             toast.error(result.message || "Email is Not Registred")
