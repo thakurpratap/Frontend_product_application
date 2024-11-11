@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
+import { useParams } from 'react-router-dom';
 const UpdatePassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const navigate=useNavigate()
+  const {token}=useParams();
   const handleSubmit = async (e:any) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
@@ -20,7 +21,7 @@ const UpdatePassword = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: ` ${localStorage.getItem("emailToken")}`, 
+          Authorization: ` ${token}`, 
         },
         body: JSON.stringify({ newPassword: newPassword }),
       });

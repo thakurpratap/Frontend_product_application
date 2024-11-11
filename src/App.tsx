@@ -32,7 +32,7 @@ const MyContext = createContext<ContextProps | undefined>(undefined);
 
 const Layout = () => {
   const location = useLocation();
-  const noHeaderFooterPaths = ['/signin', '/',"/landing-page", "/forget-password","/update-password"]; 
+  const noHeaderFooterPaths = ['/signin', '/',"/user-landing-page", "/forget-password","/update-password"]; 
 
   
   const [isToggleSidebar, setIsToggleSidebar] = useState(false);

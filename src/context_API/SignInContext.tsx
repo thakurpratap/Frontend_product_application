@@ -28,7 +28,7 @@ export const SignInProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return response.data;
     },
     onSuccess: (responseData) => {
-      localStorage.setItem('token', responseData.token);
+      localStorage.setItem('signInToken', responseData.token);
       navigate('/dashboard');
       if(responseData.user.role.role_type==="CUSTOMER"){
         navigate('/user-landing-page');
