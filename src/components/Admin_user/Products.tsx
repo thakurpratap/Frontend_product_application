@@ -17,7 +17,7 @@ interface Product {
   image?: string;
 }
 
-const Partner = () => {
+const Admin_Products = () => {
 
   const columns: GridColDef<Product>[] = [
     { field: "id", headerName: "ID", width: 70 },
@@ -52,4 +52,4 @@ const Partner = () => {
   );
 };
 
-export default Partner;
+export default Admin_Products;

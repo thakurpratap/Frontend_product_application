@@ -3,11 +3,9 @@ import {
   Box,
   Button,
   TextField,
-  IconButton,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+
 
 interface Product {
   _id: number;
@@ -29,21 +27,6 @@ const Products = () => {
     { field: "price", headerName: "Price", type: "number", flex: 1 },
     { field: "rating", headerName: "Rating", type: "number", flex: 1 },
     { field: "published", headerName: "Published", flex: 1 },
-    {
-      field: "actions",
-      headerName: "Actions",
-      width: 150,
-      renderCell: () => (
-        <>
-          <IconButton color="primary">
-            <EditIcon />
-          </IconButton>
-          <IconButton  color="error">
-            <DeleteIcon />
-          </IconButton>
-        </>
-      ),
-    },
   ];
 
   return (
