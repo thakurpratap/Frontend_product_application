@@ -27,15 +27,17 @@ const SignIn = () => {
           name="email"
           control={control}
           defaultValue=""
-          rules={{ 
+          rules={{
             required: "Email is required",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Enter a valid email address",
+            validate: {
+              noSpaces: (value) =>
+                // !/^\s|\s$|\s{2,}/.test(value)  || "Email cannot contain spaces",
+              !/\s/.test(value) || "Email cannot contain spaces",
+              validEmail: (value) =>
+                /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value) || "This is not a valid email",
             },
-            validate: (value) =>
-              !/\s/.test(value) || "Email cannot contain spaces"
-            }}
+          }}
+       
           render={({ field }) => (
             <TextField
               {...field}

@@ -16,7 +16,7 @@ function Sidebar() {
           <Link to="/dashboard">
             <Button className={`w-100 ${activetab === 0 ? 'active' : " "}`} onClick={()=>setActivetab(0)}>
               <span className="icon"><DashboardIcon/></span>
-              Dashboard
+              Partner_Dashboard
             </Button>
             </Link>
           </li>
@@ -95,10 +95,10 @@ export default Sidebar;
 // import { Button } from "@mui/material";
 
 // interface SidebarProps {
-//   role: 'super_admin' | 'admin_user'; // Specify the possible roles
+//   role: 'super_admin' | 'admin_user';
 // }
 
-// function Sidebar({ role }: SidebarProps) {
+// function Sidebar() {
 //   const [activetab, setActivetab] = useState(0);
 //   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -129,14 +129,30 @@ export default Sidebar;
 //     let urlList = url.split('//')
 //     let getName = urlList[1].split('.');
 //     switch(getName[0]){
-//       case 'admin':
+//       case 'supperadmin':
 //         links  =  [
-//           { path: "/dashboard", icon: <DashboardIcon />, label: "Dashboard" },
 //           { path: "/products", icon: <ProductionQuantityLimitsIcon />, label: "Products" },
+//           { path: "/user", icon: <ManageAccountsIcon />, label: "User Management" },
 //           { path: "/partner", icon: <HandshakeIcon />, label: "Partners" },
 //           { path: "/customer", icon: <SupportAgentIcon />, label: "Customers" },
 //         ]
 //         break;
+
+//         case 'admin':
+//           links  =  [
+//             { path: "/products", icon: <ProductionQuantityLimitsIcon />, label: "Products" },
+//             { path: "/user", icon: <ManageAccountsIcon />, label: "User Management" },
+//             { path: "/partner", icon: <HandshakeIcon />, label: "Partners" },
+//             { path: "/customer", icon: <SupportAgentIcon />, label: "Customers" },
+//           ]
+//           break;
+
+//         case 'partner':
+//           links  =  [
+//             { path: "/products", icon: <ProductionQuantityLimitsIcon />, label: "Products" },
+//           ]
+  
+//           break;
 
 //       case 'customer':
 //         links  = [
@@ -145,22 +161,9 @@ export default Sidebar;
 
 //         break;
 
-//       case 'partner':
-//         links  =  [
-//           { path: "/products", icon: <ProductionQuantityLimitsIcon />, label: "Products" },
-//           { path: "/user", icon: <ManageAccountsIcon />, label: "User Management" },
-//           { path: "/customer", icon: <SupportAgentIcon />, label: "Customers" },
-//         ]
-
-//         break;
-
 //       default:
 //         links  =  [
 //           { path: "/dashboard", icon: <DashboardIcon />, label: "Dashboard" },
-//           { path: "/products", icon: <ProductionQuantityLimitsIcon />, label: "Products" },
-//           { path: "/user", icon: <ManageAccountsIcon />, label: "User Management" },
-//           { path: "/partner", icon: <HandshakeIcon />, label: "Partners" },
-//           { path: "/customer", icon: <SupportAgentIcon />, label: "Customers" },
 //         ]
 //   }
 //     // [

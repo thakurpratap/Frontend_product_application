@@ -68,7 +68,8 @@ function Header() {
         <div className="container-fluid w-100">
           <div className="row d-flex align-items-center w-100">
             <div className="col-sm-2 part-1">
-              <img src={logo} alt="Logo" style={{ width: "60%" }} />
+              {/* <img src={logo} alt="Logo" style={{ width: "60%" }} /> */}
+              {/* <h1>imagine</h1> */}
             </div>
             <div className="col-xs-3 d-flex align-items-center part-2 pl-4xss">
               <Button 
