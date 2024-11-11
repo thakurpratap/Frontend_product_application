@@ -10,7 +10,7 @@ interface ForgetPasswordData {
 const ForgetPassword = () => {
   const { control, handleSubmit, formState: { errors } } = useForm<ForgetPasswordData>();
   const [loading, setLoading] = React.useState(false);
-
+  // const navigate=useNavigate();
   const onSubmit =async (data: ForgetPasswordData) => {
     setLoading(true);
        try{
@@ -22,9 +22,13 @@ const ForgetPassword = () => {
            body:JSON.stringify(data)
          })
         const result=await response.json();
+         console.log("result",result)
+         console.log("result.token",result.token)
+        localStorage.setItem("emailToken",result.token)
         console.log(result)
         if(response.ok){
           toast.success("Email sent Successfull. Please check your inbox")
+          // navigate("/update-password")
           console.log("Email sent Successfull. Please check your inbox")
         }else{
             toast.error(result.message || "Email is Not Registred")

@@ -257,6 +257,7 @@
 
 // export default SignUp;
 
+
 import React, { useState } from "react";
 import {
   TextField,
@@ -268,13 +269,13 @@ import {
   IconButton,
   InputAdornment,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-toastify";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useSignUp } from "../context_API/SignUpContext";
 type SignUpFormData = {
   username: string;
   email: string;
@@ -291,36 +292,17 @@ const SignUp = () => {
   } = useForm<SignUpFormData>({ mode: "onChange" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  
+  const { signUp } = useSignUp(); 
 
   const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
   const onSubmit = async (data: SignUpFormData) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "https://user-product-api-nb1x.onrender.com/api/auth/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      const result = await response.json();
-
-      if (response.ok) {
-        toast.success("Signup successful! Please Sign In Again");
-        navigate("/signin");
-      } else {
-        const message = result.message || "Signup failed";
-        toast.error(`Signup failed: ${message}`);
-        console.error(`Signup failed: ${message}`);
-      }
+      await signUp(data);  
     } catch (error) {
-      toast.error("Error during signup: " + error);
+      toast.error("Error during signup");
       console.error("Error during signup:", error);
     } finally {
       setLoading(false);
@@ -328,16 +310,14 @@ const SignUp = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        width: "100vw",
-        justifyContent: "space-between",
-        alignItems: "center",
-        background: "white",
-        marginTop: "-4%",
-      }}
-    >
+    <Box sx={{
+      display: "flex",
+      width: "100vw",
+      justifyContent: "space-between",
+      alignItems: "center",
+      background: "white",
+      marginTop: "-4%"
+    }}>
       <Box
         component="form"
         noValidate
@@ -408,6 +388,7 @@ const SignUp = () => {
               validEmail: (value) =>
                 /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value) || "This is not a valid email",
             },
+            // validate: (value) => !/\s/.test(value) || "Email cannot contain spaces",
           }}
           render={({ field }) => (
             <TextField
@@ -437,8 +418,12 @@ const SignUp = () => {
               message: "Password cannot contain spaces",
             },
             maxLength: {
+              value: 20,
+              message: "Password cannot exceed more than 20 characterslong!",
+            },
+            minLength: {
               value: 8,
-              message: "Password cannot exceed more than 8 characterslong!",
+              message: " minimum Password 8 ",
             },
           }}
           render={({ field }) => (
@@ -517,7 +502,7 @@ const SignUp = () => {
             },
             minLength: {
               value: 4,
-              message: "Address is more then 5 characters",
+              message: "Address is more then 4 characters",
             },
             maxLength: {
               value: 30,
@@ -559,7 +544,8 @@ const SignUp = () => {
                 color: "blue",
                 marginLeft: "10px",
               }}
-            >
+            />
+            <Link to="/signin" style={{ textDecoration: 'none', color: 'blue', marginLeft: "10px" }}>
               Sign In
             </Link>
           </Grid>
