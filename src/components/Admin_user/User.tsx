@@ -30,7 +30,7 @@ interface UserFormInputs {
   phone: string;
 }
 
-const User = () => {
+const Admin_Usermanagement = () => {
   const [open, setOpen] = useState(false);
   const { control, handleSubmit, reset } = useForm<UserFormInputs>();
 
@@ -131,5 +131,4 @@ const User = () => {
   );
 };
 
-export default User;
-
+export default Admin_Usermanagement;
