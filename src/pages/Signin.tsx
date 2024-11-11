@@ -1,42 +1,21 @@
-import React, { useState } from 'react';
+// SignIn.tsx
+import React from 'react';
 import { TextField, Button, Typography, Box, Grid, CircularProgress, Divider } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { toast } from 'react-toastify';
-
+//import { toast } from 'react-toastify';
+//import { useSignIn } from './SignInContext';  // Import the context hook
+import { useSignIn } from '../context_API/SignInContext';
 const SignIn = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm({ mode: "onChange" });
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const { control, handleSubmit, formState: { errors } } = useForm({ mode: 'onChange' });
+  const { signIn, loading } = useSignIn();  // Destructure the signIn function and loading state
 
-  const onSubmit = async (data:any) => {
-    setLoading(true);
-    try {
-      const response = await fetch('https://user-product-api-nb1x.onrender.com/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      const responseData = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("token", responseData.token);
-        navigate('/dashboard');
-        toast.success('Login successful!');
-      } else {
-        toast.error(responseData.message || 'Login failed. Please check your credentials.');
-      }
-    } catch (error) {
-      toast.error('An error occurred. Please try again.');
-      console.error('Error during login:', error);
-    } finally {
-      setLoading(false);
-    }
+  const onSubmit = async (data: any) => {
+    await signIn(data);  // Use the signIn function from context
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100vw', background: "white", marginTop :"-4%" }}>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100vw', background: 'white', marginTop: '-4%' }}>
       <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)} 
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '15%', width: '20%' }}>
         
@@ -65,8 +44,7 @@ const SignIn = () => {
               type="email"
               margin="normal"
               error={!!errors.email}
-            //  helperText={errors.email?.message || ''}
-            helperText={errors.email ? (errors.email.message as string) : "" }
+              helperText={errors.email ? (errors.email.message as string) : ""}
               sx={{ '& .MuiInputBase-root': { borderRadius: 2 }}}
             />
           )}
@@ -76,16 +54,17 @@ const SignIn = () => {
           name="password"
           control={control}
           defaultValue=""
-          rules={{ required: 'Password is required',
+          rules={{
+            required: 'Password is required',
             pattern: {
               value: /^\S*$/,
               message: "Password cannot contain spaces",
             },
             maxLength: {
               value: 8,
-              message: "Password cannot exceed more than 8 characterslong!",
+              message: "Password cannot exceed more than 8 characters",
             },
-           }}
+          }}
           render={({ field }) => (
             <TextField
               {...field}
@@ -94,9 +73,7 @@ const SignIn = () => {
               type="password"
               margin="normal"
               error={!!errors.password}
-            //  helperText={errors.password?.message || ''}
-            helperText={errors.password ? (errors.password.message as string) : "" }
-
+              helperText={errors.password ? (errors.password.message as string) : ""}
               sx={{ '& .MuiInputBase-root': { borderRadius: 2 }}}
             />
           )}
@@ -109,7 +86,7 @@ const SignIn = () => {
         <Grid container justifyContent="center" sx={{ mt: 2 }}>
           <Grid item>
             Don't have an account? 
-            <Link to="/" style={{ textDecoration: 'none', color: 'blue', marginLeft: "10px" }}>
+            <Link to="/" style={{ textDecoration: 'none', color: 'blue', marginLeft: '10px' }}>
               Sign Up
             </Link>
           </Grid>
