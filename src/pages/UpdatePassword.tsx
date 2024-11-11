@@ -9,6 +9,7 @@ const UpdatePassword = () => {
   const [message, setMessage] = useState('');
   const navigate=useNavigate()
   const {token}=useParams();
+  console.log(token)
   const handleSubmit = async (e:any) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
