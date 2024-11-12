@@ -30,10 +30,11 @@
    const mutation: UseMutationResult<ResponseData, Error, SignInData> = useMutation({
      mutationFn: async (data: SignInData) => {
        const response = await axios.post<ResponseData>('https://user-product-api-nb1x.onrender.com/api/auth/login', data);
+       
        return response.data;
      },
      onSuccess: (responseData) => {
-       localStorage.setItem('signInToken', responseData.token);
+       localStorage.setItem('token', responseData.token);
        localStorage.setItem('roleType', responseData.user.role.role_type); // Store roleType
        setRoleType(responseData.user.role.role_type);
  

@@ -48,9 +48,7 @@ const UserLandingNavbar = () => {
       localStorage.removeItem('token');         
       toast.success('Logout successful');             
       navigate('/signin');                           
-    } else {
-      toast.error('No active session found');         
-    }
+    } 
   };
   return (
     <>
