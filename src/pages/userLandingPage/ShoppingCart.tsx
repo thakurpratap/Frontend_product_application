@@ -23,9 +23,8 @@ const ShoppingCart = () => {
         <>
           {cart.map((product) => (
             <Box key={product._id} sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-              <Box component="img" src={`https://user-product-api-nb1x.onrender.com/${product.image}`} alt={product.name} width="100" height="100" sx={{ borderRadius: '8px' }}
-                width:"50px"
-                height:"70px"
+              <Box component="img" src={`https://user-product-api-nb1x.onrender.com/${product.image}`} alt={product.name} width="50" height="70" sx={{ borderRadius: '8px' }}
+                
               style={{ borderRadius: '4px' }}
                 />
               <Box sx={{ flexGrow: 1, marginLeft: '20px' }}>
