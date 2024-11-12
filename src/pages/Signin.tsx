@@ -3,8 +3,6 @@ import React from 'react';
 import { TextField, Button, Typography, Box, Grid, CircularProgress, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-//import { toast } from 'react-toastify';
-//import { useSignIn } from './SignInContext';  // Import the context hook
 import { useSignIn } from '../context_API/SignInContext';
 const SignIn = () => {
   const { control, handleSubmit, formState: { errors } } = useForm({ mode: 'onChange' });
