@@ -13,17 +13,17 @@ interface Product {
   image?: string;
 }
 
-const Products = () => {
+const Admin_Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const token = localStorage.getItem("token");
   const apiUrl = "https://user-product-api-nb1x.onrender.com/api/admin";
-  const imageBaseUrl = "https://user-product-api-nb1x.onrender.com"; // Server's base URL
+  const imageBaseUrl = "https://user-product-api-nb1x.onrender.com"; 
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${apiUrl}/all-products`, {
+      const response = await axios.get(`${apiUrl}/verfyingproducts`, {
         headers: {
           Authorization: token,
         },
@@ -41,7 +41,6 @@ const Products = () => {
   }, []);
 
   const columns: GridColDef<Product>[] = [
-    // { field: "image", headerName: "Image", width: 70 },
     {
       field: "image",
       headerName: "Image",
@@ -58,9 +57,7 @@ const Products = () => {
     { field: "description", headerName: "Description", flex: 1 },
     { field: "price", headerName: "Price", type: "number", flex: 1 },
     { field: "rating", headerName: "Rating", type: "number", flex: 1 },
-    { field: "published", headerName: "Published", flex: 1 },
   ];
-
   return (
     <div className="card shadow border-0 p-3 mt-5 m-4" style={{ marginTop: "20px", height: "85vh" }}>
       <Box m="20px">
@@ -94,4 +91,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Admin_Products;
