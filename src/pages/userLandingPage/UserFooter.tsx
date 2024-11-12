@@ -10,15 +10,15 @@ const UserFooter = () => {
           <Typography variant="h6" gutterBottom>
             About
           </Typography>
-          <Link href="#" color="inherit" underline="hover">Contact Us</Link>
+          <Link  color="inherit" underline="hover">Contact Us</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">About Us</Link>
+          <Link  color="inherit" underline="hover">About Us</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Careers</Link>
+          <Link  color="inherit" underline="hover">Careers</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Imagine Stories</Link>
+          <Link  color="inherit" underline="hover">Imagine Stories</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Press</Link>
+          <Link  color="inherit" underline="hover">Press</Link>
         </Grid>
 
        
@@ -26,30 +26,30 @@ const UserFooter = () => {
           <Typography variant="h6" gutterBottom>
             Help
           </Typography>
-          <Link href="#" color="inherit" underline="hover">Payments</Link>
+          <Link  color="inherit" underline="hover">Payments</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Shipping</Link>
+          <Link  color="inherit" underline="hover">Shipping</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Cancellation & Returns</Link>
+          <Link  color="inherit" underline="hover">Cancellation & Returns</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">FAQ</Link>
+          <Link  color="inherit" underline="hover">FAQ</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Report Infringement</Link>
+          <Link  color="inherit" underline="hover">Report Infringement</Link>
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
           <Typography variant="h6" gutterBottom>
             Policy
           </Typography>
-          <Link href="#" color="inherit" underline="hover">Return Policy</Link>
+          <Link  color="inherit" underline="hover">Return Policy</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Terms Of Use</Link>
+          <Link  color="inherit" underline="hover">Terms Of Use</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Security</Link>
+          <Link  color="inherit" underline="hover">Security</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Privacy</Link>
+          <Link  color="inherit" underline="hover">Privacy</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Sitemap</Link>
+          <Link  color="inherit" underline="hover">Sitemap</Link>
         </Grid>
 
         
@@ -57,13 +57,13 @@ const UserFooter = () => {
           <Typography variant="h6" gutterBottom>
             Social
           </Typography>
-          <Link href="#" color="inherit" underline="hover">Facebook</Link>
+          <Link  color="inherit" underline="hover">Facebook</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Twitter</Link>
+          <Link  color="inherit" underline="hover">Twitter</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">YouTube</Link>
+          <Link  color="inherit" underline="hover">YouTube</Link>
           <br />
-          <Link href="#" color="inherit" underline="hover">Instagram</Link>
+          <Link  color="inherit" underline="hover">Instagram</Link>
         </Grid>
       </Grid>
 

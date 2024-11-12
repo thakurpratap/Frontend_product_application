@@ -1,46 +1,71 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Typography, TextField, Button, Box, Badge, Menu, MenuItem, ListItemText, ListItemIcon } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { AppBar, Toolbar, IconButton, Typography, TextField, Box, Badge, MenuList, MenuItem, ListItemText, ListItemIcon, Popper, Paper, Grow } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import UserHome from './UserHome';
-import UserFooter from './UserFooter';
 import { useUserProductData } from '../../context_API/UserProductDataContext';
 import { useCart } from '../../context_API/CartContext';
+import { OrbitProgress } from 'react-loading-indicators';
+import { useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { toast } from 'react-toastify';
 
 const UserLandingNavbar = () => {
   const { cart } = useCart();
   const { products, isLoading, isError } = useUserProductData();
   const [searchTerm, setSearchTerm] = useState('');
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null); 
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const navigate = useNavigate(); 
 
+ 
   const filteredProducts = products?.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+ 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-    setAnchorEl(event.currentTarget); 
+    const value = event.target.value;
+    setSearchTerm(value);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget); 
+  
+  useEffect(() => {
+    if (searchTerm) {
+      setAnchorEl(document.getElementById('search-field'));
+    } else {
+      setAnchorEl(null);
+    }
+  }, [searchTerm]);
+
+  
+  const handleImageClick = (product: any) => {
+    setSearchTerm('');  
+    navigate('/cart-details', { state: { product } }); 
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-    setSearchTerm(''); 
+  const handleLogOut = () => {
+    const token = localStorage.getItem('signInToken'); 
+    if (token) {
+      localStorage.removeItem('signInToken');         
+      toast.success('Logout successful');             
+      navigate('/signin');                           
+    } else {
+      toast.error('No active session found');         
+    }
   };
-
   return (
     <>
-      <AppBar position="static" color="primary" sx={{ width: "100vw" }}>
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <AppBar position="static" color="primary" sx={{ width: "100vw",marginTop:"-4%"  }}>
+        <Toolbar >
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1,cursor: 'pointer' }}
+          onClick={()=> navigate("/user-landing-page")}  
+        
+          >
             Imagine
           </Typography>
 
           <Box sx={{ flexGrow: 1, maxWidth: '600px', mx: 2, backgroundColor: "white" }}>
             <TextField
+              id="search-field"
               variant="outlined"
               placeholder="Search for products, brands, and more"
               fullWidth
@@ -50,44 +75,52 @@ const UserLandingNavbar = () => {
               size="small"
               value={searchTerm}
               onChange={handleSearchChange}
-              onClick={handleClick} 
+              autoComplete="off"
+              autoFocus
             />
 
-            {/* Dropdown menu for search results */}
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl) && searchTerm.length > 0}
-              onClose={handleClose}
-              PaperProps={{
-                style: { maxHeight: 300, width: '250px' },
-              }}
-            >
-              {isLoading && <MenuItem>Loading...</MenuItem>}
-              {isError && <MenuItem>Error loading products</MenuItem>}
-              {filteredProducts?.length === 0 && <MenuItem>No results found</MenuItem>}
-              {filteredProducts?.map((product) => (
-                <MenuItem key={product._id} onClick={handleClose}>
-                  <ListItemIcon>
-                    <img src={product.image} alt={product.name} width="40" height="40" style={{ borderRadius: '4px' }} />
-                  </ListItemIcon>
-                  <ListItemText primary={product.name} />
-                </MenuItem>
-              ))}
-            </Menu>
+            
+            <Popper open={Boolean(anchorEl) && searchTerm.length > 0} anchorEl={anchorEl} placement="bottom-start" transition>
+              {({ TransitionProps, placement }) => (
+                <Grow {...TransitionProps} style={{ transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom' }}>
+                  <Paper>
+                    <MenuList>
+                      {isLoading && <OrbitProgress color="#32cd32" size="medium" />}
+                      {isError && <MenuItem>Error loading products</MenuItem>}
+                      {filteredProducts?.length === 0 && searchTerm && <MenuItem>No results found</MenuItem>}
+                      {filteredProducts?.map((product) => (
+                        <MenuItem key={product._id} onClick={() => handleImageClick(product)}>
+                          <ListItemIcon>
+                            <img
+                              src={`https://user-product-api-nb1x.onrender.com/${product.image}`}
+                              alt={product.name}
+                              width="40"
+                              height="40"
+                              style={{ borderRadius: '4px' }}
+                            />
+                          </ListItemIcon>
+                          <ListItemText primary={product.name} />
+                        </MenuItem>
+                      ))}
+                    </MenuList>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
           </Box>
 
-          <Button color="inherit">Login</Button>
-          <IconButton color="inherit">
+          <IconButton color="inherit" sx={{marginRight:"20px" , marginLeft:"10px"}}>
             <Badge badgeContent={cart.length} color="error" showZero>
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
+          <IconButton onClick={()=>handleLogOut()}>
+          <LogoutIcon color="inherit"  sx={{marginRight:"10px" , marginLeft:"10px" ,color:"white"}}/>
+          </IconButton>
         </Toolbar>
       </AppBar>
 
-      {/* Main content sections */}
-      <UserHome />
-      <UserFooter />
+      
     </>
   );
 };
