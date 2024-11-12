@@ -33,7 +33,7 @@
        return response.data;
      },
      onSuccess: (responseData) => {
-       localStorage.setItem('token', responseData.token);
+       localStorage.setItem('signInToken', responseData.token);
        localStorage.setItem('roleType', responseData.user.role.role_type); // Store roleType
        setRoleType(responseData.user.role.role_type);
  
