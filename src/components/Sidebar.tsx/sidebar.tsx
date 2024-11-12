@@ -65,14 +65,14 @@ function Sidebar() {
                 </Button>
               </Link>
             </li>
-             <li>
+             {/* <li>
              <Link to="admin_products">
                <Button className={`w-100 ${activeTab === 1 ? 'active' : ''}`} onClick={() => setActiveTab(1)}>
                  <span className="icon"><ProductionQuantityLimitsIcon /></span>
                 verifyed Products List
                </Button>
              </Link>
-           </li>
+           </li> */}
           <li>
             <Link to="/admin_verifyed_products">
               <Button className={`w-100 ${activeTab === 2 ? 'active' : ''}`} onClick={() => setActiveTab(2)}>
