@@ -20,6 +20,9 @@ import User from "./components/Super_admin/User";
 
 import UserLandingNavbar from './pages/userLandingPage/UserLandingNavbar';
 import StoreContext from "./context_API/StoreContext";
+import Admin_Products from "./components/Admin_user/ToverifyProducts";
+import Admin_Verifyed_Products from "./components/Admin_user/VerifyedProducts";
+import Admin_Usermanagement from "./components/Admin_user/User";
 // Create a type for the context value
 interface ContextProps {
   isToggleSidebar: boolean;
@@ -50,16 +53,19 @@ const Layout = () => {
           )}
           <div className={`content ${isToggleSidebar ? 'toggle' : ''}`}>
             <Routes>
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/partner_dashboard" element={<Dashboard />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/" element={<SignUp />} />
               <Route path="/forget-password" element={<ForgetPassword />} />
               <Route path="/update-password" element={<UpdatePassword />} />
               <Route path='/user-landing-page' element={<UserLandingNavbar />} />
-              <Route path="/customer" element={<Customer />} />
-              <Route path="/partner" element={<Partner />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/user" element={<User />} />
+              <Route path="/super_admin_customer" element={<Customer />} />
+              <Route path="/super_admin_partner" element={<Partner />} />
+              <Route path="/super_admin_products" element={<Products />} />
+              <Route path="/super_admin_user" element={<User />} />
+              <Route path="/admin_products" element={<Admin_Products />} />
+              <Route path="/admin_verifyed_products" element={<Admin_Verifyed_Products />} />
+              <Route path="/admin_usermanagement" element={<Admin_Usermanagement />} />
             </Routes>
           </div>
         </div>
