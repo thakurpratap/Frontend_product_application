@@ -23,10 +23,13 @@ const ShoppingCart = () => {
         <>
           {cart.map((product) => (
             <Box key={product._id} sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-              <Box component="img" src={product.image} alt={product.name} width="100" height="100" sx={{ borderRadius: '8px' }} />
+              <Box component="img" src={`https://user-product-api-nb1x.onrender.com/${product.image}`} alt={product.name} width="50" height="70" sx={{ borderRadius: '8px', width: 40,height:50  }}
+                
+              style={{ borderRadius: '4px' }}
+                />
               <Box sx={{ flexGrow: 1, marginLeft: '20px' }}>
                 <Typography variant="h6">{product.name}</Typography>
-                <Typography variant="subtitle1">Price: ${product.price.toFixed(2)}</Typography>
+                <Typography variant="subtitle1">Price: ₹{product.price.toFixed(2)}</Typography>
               </Box>
               <IconButton onClick={() => removeFromCart(product._id)} color="error">
                 <DeleteIcon />
@@ -36,7 +39,7 @@ const ShoppingCart = () => {
           <Divider sx={{ my: 2 }} />
 
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
-            <Typography variant="h5">Total: ${totalPrice.toFixed(2)}</Typography>
+            <Typography variant="h5">Total: ₹{totalPrice.toFixed(2)}</Typography>
             {/* <Button variant="contained" color="primary" onClick={clearCart}>
               Clear Cart
             </Button> */}
