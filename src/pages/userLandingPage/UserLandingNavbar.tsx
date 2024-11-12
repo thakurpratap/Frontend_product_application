@@ -96,7 +96,7 @@ const UserLandingNavbar = () => {
                               alt={product.name}
                               width="40"
                               height="40"
-                              style={{ borderRadius: '4px' }}
+                              style={{ borderRadius: '4px' , width:40, }}
                             />
                           </ListItemIcon>
                           <ListItemText primary={product.name} />
