@@ -43,9 +43,9 @@ const UserLandingNavbar = () => {
   };
 
   const handleLogOut = () => {
-    const token = localStorage.getItem('signInToken'); 
+    const token = localStorage.getItem('token'); 
     if (token) {
-      localStorage.removeItem('signInToken');         
+      localStorage.removeItem('token');         
       toast.success('Logout successful');             
       navigate('/signin');                           
     } else {
@@ -111,11 +111,12 @@ const UserLandingNavbar = () => {
 
           <IconButton color="inherit" sx={{marginRight:"20px" , marginLeft:"10px"}}>
             <Badge badgeContent={cart.length} color="error" showZero>
-              <ShoppingCartIcon />
+              <ShoppingCartIcon onClick={()=>navigate("/shopping-cart")} />
             </Badge>
           </IconButton>
           <IconButton onClick={()=>handleLogOut()}>
-          <LogoutIcon color="inherit"  sx={{marginRight:"10px" , marginLeft:"10px" ,color:"white"}}/>
+          <LogoutIcon color="inherit"  sx={{marginRight:"10px" , marginLeft:"10px" ,color:"white"}}
+          />
           </IconButton>
         </Toolbar>
       </AppBar>
