@@ -17,8 +17,9 @@ import Customer from "./components/Super_admin/Customer";
 import Partner from "./components/Super_admin/Partner";
 import Products from "./components/Super_admin/Products";
 import User from "./components/Super_admin/User";
-
-import UserLandingNavbar from './pages/userLandingPage/UserLandingNavbar';
+import NoteFound from "./pages/NotFound"
+import CartDetails from "./pages/userLandingPage/CartDetails";
+import UserLandingPage from './pages/userLandingPage/UserLandingPage';
 import StoreContext from "./context_API/StoreContext";
 import Admin_Products from "./components/Admin_user/ToverifyProducts";
 import Admin_Verifyed_Products from "./components/Admin_user/VerifyedProducts";
@@ -35,7 +36,7 @@ const MyContext = createContext<ContextProps | undefined>(undefined);
 
 const Layout = () => {
   const location = useLocation();
-  const noHeaderFooterPaths = ['/signin', '/',"/user-landing-page", "/forget-password","/update-password"]; 
+  const noHeaderFooterPaths = ["/cart-details",'/signin', '/',"/user-landing-page", "/forget-password","/update-password", "/not-found"]; 
 
   
   const [isToggleSidebar, setIsToggleSidebar] = useState(false);
@@ -58,7 +59,14 @@ const Layout = () => {
               <Route path="/" element={<SignUp />} />
               <Route path="/forget-password" element={<ForgetPassword />} />
               <Route path="/update-password" element={<UpdatePassword />} />
-              <Route path='/user-landing-page' element={<UserLandingNavbar />} />
+              <Route path='/user-landing-page' element={<UserLandingPage />} />
+              <Route path='/cart-details' element={<CartDetails/>} />
+              <Route path="/customer" element={<Customer />} />
+              <Route path="/partner" element={<Partner />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/user" element={<User />} />
+              <Route path="*" element={<NoteFound/>} />
+              <Route path='/user-landing-page' element={<UserLandingPage />} />
               <Route path="/super_admin_customer" element={<Customer />} />
               <Route path="/super_admin_partner" element={<Partner />} />
               <Route path="/super_admin_products" element={<Products />} />

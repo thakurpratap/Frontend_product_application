@@ -2,6 +2,9 @@
   margin: 0px;
   padding: 0px;
 }
+::-webkit-scrollbar{
+  display: none;
+}
 body {
   background: #ebe9e9;
 }
@@ -30,7 +33,7 @@ header button.rounded-circle {
   width: 48px !important;
   height: 48px !important;
   background: #f0f5ff !important;
-  color: #0858F7 !important;
+  color: #0858f7 !important;
 }
 header button.rounded-circle svg {
   color: #292929;
@@ -110,12 +113,12 @@ header button.rounded-circle svg {
 }
 .main .sidebarWrapper {
   width: 15%;
-  flex:0 0 15%;
+  flex: 0 0 15%;
   transition: all 0.3s ease-in-out;
 }
 .main .sidebarWrapper.toggle {
   width: 0%;
-  flex:0 0 0%;
+  flex: 0 0 0%;
 }
 .main .sidebarWrapper .sidebar {
   width: 15%;
@@ -130,8 +133,8 @@ header button.rounded-circle svg {
   padding-bottom: 40px;
   transition: all 0.3s ease-in-out;
 }
-.main .sidebarWrapper.toggle .sidebar{
-left: -100%;
+.main .sidebarWrapper.toggle .sidebar {
+  left: -100%;
 }
 .main .sidebarWrapper .sidebar::-webkit-scrollbar {
   width: 2px;
@@ -227,5 +230,3 @@ left: -100%;
 /* .MuiDataGrid-columnHeader {
   pointer-events: none;
 } */
-
-

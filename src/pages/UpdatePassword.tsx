@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Box } from '@mui/material';
 import { toast } from 'react-toastify';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 
 const UpdatePassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const navigate=useNavigate()
-    const location = useLocation();
   
+    const location = useLocation();
   const token = new URLSearchParams(location.search).get('token');
   console.log("Token:", token);
   const handleSubmit = async (e:any) => {
