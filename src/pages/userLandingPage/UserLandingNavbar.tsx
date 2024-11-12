@@ -48,9 +48,7 @@ const UserLandingNavbar = () => {
       localStorage.removeItem('token');         
       toast.success('Logout successful');             
       navigate('/signin');                           
-    } else {
-      toast.error('No active session found');         
-    }
+    } 
   };
   return (
     <>
@@ -96,7 +94,7 @@ const UserLandingNavbar = () => {
                               alt={product.name}
                               width="40"
                               height="40"
-                              style={{ borderRadius: '4px' }}
+                              style={{ borderRadius: '4px' , width:40, }}
                             />
                           </ListItemIcon>
                           <ListItemText primary={product.name} />
