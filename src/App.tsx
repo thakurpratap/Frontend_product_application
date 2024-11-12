@@ -24,6 +24,7 @@ import StoreContext from "./context_API/StoreContext";
 import Admin_Products from "./components/Admin_user/ToverifyProducts";
 import Admin_Verifyed_Products from "./components/Admin_user/VerifyedProducts";
 import Admin_Usermanagement from "./components/Admin_user/User";
+import ShoppingCart from "./pages/userLandingPage/ShoppingCart";
 // Create a type for the context value
 interface ContextProps {
   isToggleSidebar: boolean;
@@ -36,7 +37,7 @@ const MyContext = createContext<ContextProps | undefined>(undefined);
 
 const Layout = () => {
   const location = useLocation();
-  const noHeaderFooterPaths = ["/cart-details",'/signin', '/',"/user-landing-page", "/forget-password","/update-password", "/not-found"]; 
+  const noHeaderFooterPaths = ["/cart-details",'/signin', '/',"/user-landing-page", "/forget-password","/update-password", "/not-found","/shopping-cart"]; 
 
   
   const [isToggleSidebar, setIsToggleSidebar] = useState(false);
@@ -65,7 +66,6 @@ const Layout = () => {
               <Route path="/partner" element={<Partner />} />
               <Route path="/products" element={<Products />} />
               <Route path="/user" element={<User />} />
-              <Route path="*" element={<NoteFound/>} />
               <Route path='/user-landing-page' element={<UserLandingPage />} />
               <Route path="/super_admin_customer" element={<Customer />} />
               <Route path="/super_admin_partner" element={<Partner />} />
@@ -74,6 +74,8 @@ const Layout = () => {
               <Route path="/admin_products" element={<Admin_Products />} />
               <Route path="/admin_verifyed_products" element={<Admin_Verifyed_Products />} />
               <Route path="/admin_usermanagement" element={<Admin_Usermanagement />} />
+              <Route path="/shopping-cart" element={<ShoppingCart/>}/>
+              <Route path="*" element={<NoteFound/>} />
             </Routes>
           </div>
         </div>

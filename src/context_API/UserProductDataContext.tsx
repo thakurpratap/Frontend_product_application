@@ -27,7 +27,7 @@ export const UserProductDataProvider: React.FC<{ children: React.ReactNode }> = 
     queryFn: async () => {
       const response = await axios.get<{ published: Product[] }>('https://user-product-api-nb1x.onrender.com/api/customer/products',{
         headers:{
-          Authorization:`${localStorage.getItem("signInToken")}`
+          Authorization:`${localStorage.getItem("token")}`
         }
       });
       console.log(response)
