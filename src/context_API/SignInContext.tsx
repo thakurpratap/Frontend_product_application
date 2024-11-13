@@ -15,14 +15,13 @@
  
  const SignInContext = createContext<SignInContextType | undefined>(undefined);
  
- export const SignInProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+ export const SignInProvider  = ({ children }: { children: React.ReactNode }) => {
    const navigate = useNavigate();
    const [roleType, setRoleType] = useState<string | null>(
-     localStorage.getItem('roleType') // Retrieve role type from localStorage on load
+     localStorage.getItem('roleType') 
    );
  
    useEffect(() => {
-     // Retrieve roleType from localStorage in case of a page reload
      const storedRoleType = localStorage.getItem('roleType');
      if (storedRoleType) setRoleType(storedRoleType);
    }, []);
@@ -30,7 +29,6 @@
    const mutation: UseMutationResult<ResponseData, Error, SignInData> = useMutation({
      mutationFn: async (data: SignInData) => {
        const response = await axios.post<ResponseData>('https://user-product-api-nb1x.onrender.com/api/auth/login', data);
-       console.log(response.data.user.username)
        return response.data;
      },
      onSuccess: (responseData) => {

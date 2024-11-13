@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { TextField, Button, Typography, Box, Grid, CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
@@ -8,9 +8,10 @@ interface ForgetPasswordData {
 }
 
 const ForgetPassword = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm<ForgetPasswordData>();
-  const [loading, setLoading] = React.useState(false);
-  // const navigate=useNavigate();
+  const { control, handleSubmit, formState: { errors } } = useForm<ForgetPasswordData>({
+    mode:"onChange"
+  });
+  const [loading, setLoading] = useState(false);
   const onSubmit =async (data: ForgetPasswordData) => {
     setLoading(true);
        try{
@@ -28,15 +29,11 @@ const ForgetPassword = () => {
         console.log(result)
         if(response.ok){
           toast.success("Email sent Successfull. Please check your inbox")
-          // navigate("/update-password")
           console.log("Email sent Successfull. Please check your inbox")
         }else{
             toast.error(result.message || "Email is Not Registred")
             console.log(result.message || "Email is Not Registred")
-
         }
-
-
        }catch(error){
           toast.error("SomeThing Wrong")
        }finally{
@@ -58,7 +55,15 @@ const ForgetPassword = () => {
           name="email"
           control={control}
           defaultValue=""
-          rules={{ required: 'Email is required' }}
+          rules={{
+            required: "Email is required",
+            validate: {
+              noSpaces: (value) =>
+                !/\s/.test(value) || "Email cannot contain spaces",
+              validEmail: (value) =>
+                /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value) || "This is not a valid email",
+            },
+          }}
           render={({ field }) => (
             <TextField
               {...field}
@@ -67,11 +72,11 @@ const ForgetPassword = () => {
               type="email"
               margin="normal"
               error={!!errors.email}
-              helperText={errors.email?.message || ''}
+              helperText={errors.email?.message || ""}
               sx={{
-                '& .MuiInputBase-root': {
+                "& .MuiInputBase-root": {
                   borderRadius: 2,
-                }
+                },
               }}
             />
           )}
@@ -83,7 +88,7 @@ const ForgetPassword = () => {
 
         <Grid container justifyContent="center" sx={{ mt: 2 }}>
           <Grid item>
-            <Link to="/signin" style={{ textDecoration: 'none', color: 'blue', marginLeft: "10px" }}>
+            <Link to="/" style={{ textDecoration: 'none', color: 'blue', marginLeft: "10px" }}>
               Back to Sign In
             </Link>
           </Grid>
