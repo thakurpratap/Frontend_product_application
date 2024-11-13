@@ -39,7 +39,7 @@ function Header() {
     localStorage.removeItem("username");
     setIsLoggedIn(false);
     setName("");
-    navigate("/signin");
+    navigate("/");
     handleClose();
   };
 
@@ -90,7 +90,7 @@ function Header() {
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   ) : (
                     <>
-                      <MenuItem onClick={() => navigate("/signin")}>
+                      <MenuItem onClick={() => navigate("/")}>
                         SignIn
                       </MenuItem>
                       <MenuItem onClick={() => navigate("/signup")}>

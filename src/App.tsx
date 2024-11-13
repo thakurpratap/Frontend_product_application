@@ -56,8 +56,8 @@ const Layout = () => {
           <div className={`content ${isToggleSidebar ? 'toggle' : ''}`}>
             <Routes>
               <Route path="/partner/dashboard" element={<Dashboard />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/" element={<SignUp />} />
+              <Route path="/" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
               <Route path="/forget-password" element={<ForgetPassword />} />
               <Route path="/update-password" element={<UpdatePassword />} />
               <Route path='/user-landing-page' element={<UserLandingPage />} />

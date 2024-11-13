@@ -32,7 +32,7 @@ export const SignUpProvider = ({ children } :{children:React.ReactNode}) => {
     },
     onSuccess: () => {
       toast.success("Signup successful! Please Sign In Again");
-      navigate("/signin");
+      navigate("/");
     },
     onError: (error: any) => {
       const message = error?.response?.data?.message || "Signup failed";
