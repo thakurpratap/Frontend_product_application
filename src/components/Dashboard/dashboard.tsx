@@ -208,13 +208,16 @@ const Dashboard = () => {
   const handleSearch = () => {
     refetch();
   };
+  
 
   const columns: GridColDef<Product>[] = [
-    { field: "id", headerName: "ID", width: 70 },
+    // { field: "id", headerName: "ID", width: 70 },
+    { field: "image", headerName: "Image", type: "number", flex: 1 },
     { field: "name", headerName: "Name", flex: 1 },
     { field: "description", headerName: "Description", flex: 1 },
     { field: "price", headerName: "Price", type: "number", flex: 1 },
     { field: "rating", headerName: "Rating", type: "number", flex: 1 },
+
     // { field: "published", headerName: "Published", flex: 1 },
     {
       field: "actions",
@@ -356,7 +359,7 @@ const Dashboard = () => {
               style={{ height: "70vh" }}
               rows={products}
               columns={columns}
-              checkboxSelection
+              // checkboxSelection
               getRowId={(row) => row._id}
             />
           )}
