@@ -22,7 +22,7 @@ const api = axios.create({
   baseURL: "https://user-product-api-nb1x.onrender.com/api",
 });
 
-export const SignUpProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const SignUpProvider = ({ children } :{children:React.ReactNode}) => {
   const navigate = useNavigate();
 
   const { mutate: signUp } = useMutation<any, unknown, SignUpFormData, unknown>({

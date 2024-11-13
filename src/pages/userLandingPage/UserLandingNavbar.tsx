@@ -47,8 +47,11 @@ const UserLandingNavbar = () => {
     if (token) {
       localStorage.removeItem('token');         
       toast.success('Logout successful');             
-      navigate('/signin');                           
-    } 
+      navigate('/');                           
+    } else{
+      toast.success('please SignIn');  
+      navigate('/');
+    }
   };
   return (
     <>

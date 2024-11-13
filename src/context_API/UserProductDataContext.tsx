@@ -19,8 +19,7 @@ type UserProductDataContextType = {
 
 const UserProductDataContext = createContext<UserProductDataContextType | undefined>(undefined);
 
-export const UserProductDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Fetch product data using React Query
+export const UserProductDataProvider = ({ children }:{children:React.ReactNode}) => {
   
   const { data, isLoading, isError }: UseQueryResult<{ published: Product[] }, Error> = useQuery({
     queryKey: ['userProducts'],
@@ -35,6 +34,7 @@ export const UserProductDataProvider: React.FC<{ children: React.ReactNode }> = 
     },
   });
 
+
   return (
     <UserProductDataContext.Provider value={{ products: data?.published, isLoading, isError }}>
       {children}
@@ -42,7 +42,6 @@ export const UserProductDataProvider: React.FC<{ children: React.ReactNode }> = 
   );
 };
 
-// Custom hook to use the UserProductDataContext
 export const useUserProductData = (): UserProductDataContextType => {
   const context = useContext(UserProductDataContext);
   if (!context) {

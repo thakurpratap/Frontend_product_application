@@ -1,4 +1,3 @@
-// store.tsx
 import React from "react";
 import { SignUpProvider } from "./SignUpContext"; 
 import { SignInProvider } from "./SignInContext";
