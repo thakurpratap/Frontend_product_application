@@ -5,7 +5,7 @@
  import { useMutation, UseMutationResult } from '@tanstack/react-query';
  
  type SignInData = { email: string; password: string };
- type ResponseData = { token: string; user: { role: { role_type: string } } };
+ type ResponseData = { token: string; user: { role: { role_type: string },username: string } };
  
  type SignInContextType = {
    loading: boolean;
@@ -30,22 +30,24 @@
    const mutation: UseMutationResult<ResponseData, Error, SignInData> = useMutation({
      mutationFn: async (data: SignInData) => {
        const response = await axios.post<ResponseData>('https://user-product-api-nb1x.onrender.com/api/auth/login', data);
+       console.log(response.data.user.username)
        return response.data;
      },
      onSuccess: (responseData) => {
-       localStorage.setItem('signInToken', responseData.token);
-       localStorage.setItem('roleType', responseData.user.role.role_type); // Store roleType
+       localStorage.setItem('token', responseData.token);
+       localStorage.setItem('roleType', responseData.user.role.role_type); 
+       localStorage.setItem('username', responseData.user.username);
        setRoleType(responseData.user.role.role_type);
  
        // Navigate based on role_type
        if (responseData.user.role.role_type === "CUSTOMER") {
          navigate('/user-landing-page');
        } else if (responseData.user.role.role_type === "SUPER_ADMIN") {
-         navigate('/super_admin_products');
+         navigate('/super/admin/products');
        } else if (responseData.user.role.role_type === "PARTNER") {
-         navigate('/partner_dashboard');
+         navigate('/partner/dashboard');
        } else if (responseData.user.role.role_type === "ADMIN") {
-         navigate('/admin_usermanagement');
+         navigate('/admin/usermanagement');
        }
  
        toast.success('Login successful!');

@@ -97,7 +97,7 @@ const Partner = () => {
       style={{height : "70vh"}}
         rows={rows} 
         columns={columns}
-        checkboxSelection
+        // checkboxSelection
         getRowId={(row) => row.id}
       />
       </Box>

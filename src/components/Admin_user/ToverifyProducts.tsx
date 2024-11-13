@@ -9,11 +9,11 @@ interface Product {
   description: string;
   price: number;
   rating: number;
-  published: boolean;
+  isActive: boolean;
   image?: string;
 }
 
-const Admin_Products = () => {
+const Admin_verifyed_Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const token = localStorage.getItem("token");
@@ -23,12 +23,12 @@ const Admin_Products = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${apiUrl}/verfyingproducts`, {
+      const response = await axios.get(`${apiUrl}/verfiedproducts`, {
         headers: {
           Authorization: token,
         },
       });
-      setProducts(response.data);
+      setProducts(response.data.data);
     } catch (error) {
       console.error("Error fetching products:", error);
     }finally {
@@ -57,6 +57,15 @@ const Admin_Products = () => {
     { field: "description", headerName: "Description", flex: 1 },
     { field: "price", headerName: "Price", type: "number", flex: 1 },
     { field: "rating", headerName: "Rating", type: "number", flex: 1 },
+    {
+      field: "isVerified",
+      headerName: "Active",
+      flex: 1,
+      renderCell: (params) => (
+        <span>{params.value ? "True" : "False"}</span>
+      ),
+    },
+
   ];
   return (
     <div className="card shadow border-0 p-3 mt-5 m-4" style={{ marginTop: "20px", height: "85vh" }}>
@@ -82,7 +91,7 @@ const Admin_Products = () => {
             <DataGrid style={{ height: "70vh" }} 
             rows={products}
             columns={columns}
-            checkboxSelection
+            // checkboxSelection
             getRowId={(row) => row._id} />
           )}
         </Box>
@@ -91,4 +100,4 @@ const Admin_Products = () => {
   );
 };
 
-export default Admin_Products;
+export default Admin_verifyed_Products;

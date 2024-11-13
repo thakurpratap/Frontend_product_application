@@ -85,7 +85,7 @@ const Products = () => {
             <DataGrid style={{ height: "70vh" }} 
             rows={products}
             columns={columns}
-            checkboxSelection
+            // checkboxSelection
             getRowId={(row) => row._id} />
           )}
         </Box>
