@@ -1,15 +1,21 @@
-// SignIn.tsx
-import React from 'react';
-import { TextField, Button, Typography, Box, Grid, CircularProgress, Divider } from '@mui/material';
+import React, { useState } from 'react';
+import { TextField, Button, Typography, Box, Grid, CircularProgress, Divider, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { useSignIn } from '../context_API/SignInContext';
+import { Visibility, VisibilityOff } from '@mui/icons-material'; 
+
 const SignIn = () => {
   const { control, handleSubmit, formState: { errors } } = useForm({ mode: 'onChange' });
-  const { signIn, loading } = useSignIn();  // Destructure the signIn function and loading state
+  const { signIn, loading } = useSignIn();  
 
+  const [showPassword, setShowPassword] = useState(false); 
   const onSubmit = async (data: any) => {
-    await signIn(data);  // Use the signIn function from context
+    await signIn(data);  
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -29,13 +35,11 @@ const SignIn = () => {
             required: "Email is required",
             validate: {
               noSpaces: (value) =>
-                // !/^\s|\s$|\s{2,}/.test(value)  || "Email cannot contain spaces",
               !/\s/.test(value) || "Email cannot contain spaces",
               validEmail: (value) =>
                 /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value) || "This is not a valid email",
             },
           }}
-       
           render={({ field }) => (
             <TextField
               {...field}
@@ -55,14 +59,18 @@ const SignIn = () => {
           control={control}
           defaultValue=""
           rules={{
-            required: 'Password is required',
+            required: "Password is required",
             pattern: {
               value: /^\S*$/,
               message: "Password cannot contain spaces",
             },
             maxLength: {
+              value: 20,
+              message: "Password cannot exceed more than 20 ",
+            },
+            minLength: {
               value: 8,
-              message: "Password cannot exceed more than 8 characters",
+              message: " minimum Password 8 ",
             },
           }}
           render={({ field }) => (
@@ -70,11 +78,23 @@ const SignIn = () => {
               {...field}
               fullWidth
               label="Password *"
-              type="password"
+              type={showPassword ? 'text' : 'password'} 
               margin="normal"
               error={!!errors.password}
               helperText={errors.password ? (errors.password.message as string) : ""}
               sx={{ '& .MuiInputBase-root': { borderRadius: 2 }}}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    edge="end"
+                    onClick={togglePasswordVisibility}
+                    aria-label="toggle password visibility"
+                    sx={{ color: 'gray' }}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}  
+                  </IconButton>
+                ),
+              }}
             />
           )}
         />
@@ -86,7 +106,7 @@ const SignIn = () => {
         <Grid container justifyContent="center" sx={{ mt: 2 }}>
           <Grid item>
             Don't have an account? 
-            <Link to="/" style={{ textDecoration: 'none', color: 'blue', marginLeft: '10px' }}>
+            <Link to="/signup" style={{ textDecoration: 'none', color: 'blue', marginLeft: '10px' }}>
               Sign Up
             </Link>
           </Grid>

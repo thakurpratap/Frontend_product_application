@@ -58,7 +58,7 @@ function Header() {
     localStorage.removeItem("token"); 
     setIsLoggedIn(false);
     setName(""); 
-    navigate("/signin"); 
+    navigate("/"); 
     handleClose(); 
   };
 
@@ -105,7 +105,7 @@ function Header() {
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   ) : (
                     <>
-                      <MenuItem onClick={() => navigate("/signin")}>SignIn</MenuItem>
+                      <MenuItem onClick={() => navigate("/")}>SignIn</MenuItem>
                       <MenuItem onClick={() => navigate("/signup")}>SignUp</MenuItem>
                     </>
                   )}

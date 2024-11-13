@@ -37,7 +37,7 @@ const MyContext = createContext<ContextProps | undefined>(undefined);
 
 const Layout = () => {
   const location = useLocation();
-  const noHeaderFooterPaths = ["/cart-details",'/signin', '/',"/user-landing-page", "/forget-password","/update-password", "/not-found","/shopping-cart"]; 
+  const noHeaderFooterPaths = ["/cart-details",'/signup', '/',"/user-landing-page", "/forget-password","/update-password", "/not-found","/shopping-cart","/*"]; 
 
   
   const [isToggleSidebar, setIsToggleSidebar] = useState(false);
@@ -56,8 +56,8 @@ const Layout = () => {
           <div className={`content ${isToggleSidebar ? 'toggle' : ''}`}>
             <Routes>
               <Route path="/partner_dashboard" element={<Dashboard />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/" element={<SignUp />} />
+              <Route path="/" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
               <Route path="/forget-password" element={<ForgetPassword />} />
               <Route path="/update-password" element={<UpdatePassword />} />
               <Route path='/user-landing-page' element={<UserLandingPage />} />

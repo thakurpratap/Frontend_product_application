@@ -1,94 +1,153 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Box } from '@mui/material';
+import { TextField, Button, Typography, Box, IconButton } from '@mui/material';
 import { toast } from 'react-toastify';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const UpdatePassword = () => {
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-  const navigate=useNavigate()
-  
-    const location = useLocation();
+  const [showPassword, setShowPassword] = useState(false); 
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
+  const navigate = useNavigate();
+  const location = useLocation();
   const token = new URLSearchParams(location.search).get('token');
-  console.log("Token:", token);
-  const handleSubmit = async (e:any) => {
-    e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      setMessage("Passwords do not match!");
+
+  const { control, handleSubmit, formState: { errors }, setError, watch } = useForm({
+    mode: 'onChange'
+  });
+
+  const onSubmit = async (data: any) => {
+    if (data.newPassword !== data.confirmPassword) {
+      setMessage('Passwords do not match!');
+      setError('confirmPassword', {
+        type: 'manual',
+        message: 'Passwords do not match!',
+      });
+      toast.error('Passwords do not match!');
       return;
     }
 
     try {
-      const response = await fetch(`https://user-product-api-nb1x.onrender.com/api/auth/reset-forget-password`, {
+      const response = await fetch('https://user-product-api-nb1x.onrender.com/api/auth/reset-forget-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: ` ${token}`, 
+          Authorization: ` ${token}`,
         },
-        body: JSON.stringify({ newPassword: newPassword }),
+        body: JSON.stringify({ newPassword: data.newPassword }),
       });
 
-      const data = await response.json();
-        console.log(data)
-     
+      const result = await response.json();
       if (response.ok) {
-        setMessage("Password updated successfully!");
-        toast.success("Password updated successfully!")
-        navigate("/signin")
+        setMessage('Password updated successfully!');
+        toast.success('Password updated successfully!');
+        navigate('/');
       } else {
-        setMessage(data.error || "Failed to update password.");
-        toast.error("Failed to update password.")
+        setMessage(result.error || 'Failed to update password.');
+        toast.error('Failed to update password.');
       }
     } catch (error) {
-      setMessage("An error occurred. Please try again.");
-      toast.error("Please try again ")
+      setMessage('An error occurred. Please try again.');
+      toast.error('Please try again.');
     }
   };
 
+  
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
+
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100vw' }}>
-      <Box 
-        component="form" 
-        onSubmit={handleSubmit}
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '15%', width: '20%' }}
       >
         <Typography variant="h4" align="center" gutterBottom>
           Update Password
         </Typography>
 
-        <TextField
-          fullWidth
-          label="New Password *"
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          margin="normal"
-          sx={{
-            '& .MuiInputBase-root': {
-              borderRadius: 2,
-            },
+        
+        <Controller
+          name="newPassword"
+          control={control}
+          rules={{
+            required: 'New password is required',
+            minLength: { value: 8, message: 'Password must be at least 8 characters long' },
+            maxLength: { value: 20, message: 'Password must not exceed 20 characters' }
           }}
+          render={({ field }) => (
+            <TextField
+              fullWidth
+              label="New Password *"
+              type={showPassword ? 'text' : 'password'} 
+              {...field}
+              margin="normal"
+              sx={{
+                '& .MuiInputBase-root': {
+                  borderRadius: 2,
+                },
+              }}
+              error={!!errors.newPassword}
+              helperText={errors.newPassword?.message as string || ''}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                ),
+              }}
+            />
+          )}
         />
 
-        <TextField
-          fullWidth
-          label="Confirm Password *"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          margin="normal"
-          sx={{
-            '& .MuiInputBase-root': {
-              borderRadius: 2,
-            },
+        <Controller
+          name="confirmPassword"
+          control={control}
+          rules={{
+            required: 'Please confirm your password',
+            validate: (value) =>
+              value === watch('newPassword') || 'Passwords do not match', 
           }}
+          render={({ field }) => (
+            <TextField
+              fullWidth
+              label="Confirm Password *"
+              type={showConfirmPassword ? 'text' : 'password'} 
+              {...field}
+              margin="normal"
+              sx={{
+                '& .MuiInputBase-root': {
+                  borderRadius: 2,
+                },
+              }}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword?.message as string || ''}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowConfirmPassword}
+                    edge="end"
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                ),
+              }}
+            />
+          )}
         />
 
-        <Button 
+        <Button
           type="submit"
-          variant="contained" 
-          sx={{ mt: 2, borderRadius: 2, backgroundColor: "#3A5B22" }} 
+          variant="contained"
+          sx={{ mt: 2, borderRadius: 2, backgroundColor: '#3A5B22' }}
           fullWidth
         >
           Update Password
@@ -108,7 +167,7 @@ const UpdatePassword = () => {
         sx={{
           width: '50vw',
           height: '100vh',
-          objectFit: "cover",
+          objectFit: 'cover',
           objectPosition: 'center',
           borderTopLeftRadius: '30px',
           borderBottomLeftRadius: '30px',

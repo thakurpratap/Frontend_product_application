@@ -11,9 +11,11 @@ const UserHome = () => {
   const navigate = useNavigate(); 
 
   if (isLoading) {
-    return <Box sx={{ textAlign: "center" }}>
-         <OrbitProgress color="blue" size="medium" text="" textColor="" />
-    </Box>;
+    return (
+      <Box sx={{ textAlign: "center" }}>
+        <OrbitProgress color="blue" size="medium" text="" textColor="" />
+      </Box>
+    );
   }
 
   if (isError) {
@@ -35,7 +37,7 @@ const UserHome = () => {
       <Grid container spacing={1} style={{ display: "flex", justifyContent: "space-evenly" }}>
         {products.map((product) => (
           <Grid item key={product._id}>
-            <Card sx={{ width: '285px', height: '370px' ,marginTop:"5px" }}>
+            <Card sx={{ width: '285px', height: '370px', marginTop: "5px" }}>
               <CardMedia
                 component="img"
                 height="200"
