@@ -27,7 +27,7 @@ const CartDetails = () => {
         <Grid item xs={12} md={6}>
           <CardMedia
             component="img"
-            image={`https://user-product-api-nb1x.onrender.com/${product.image}`}
+            image={`${product.image.image}`}
             alt={product.name}
             sx={{height:"90vh",objectFit:"contain",borderRadius:"20px"}}
           />

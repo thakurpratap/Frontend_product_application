@@ -6,7 +6,9 @@ type Product = {
   _id: string;
   name: string;
   description: string;
-  image: string;
+  image: {
+    image:string
+  };
   price: number;
   rating: number;
 };
@@ -29,7 +31,7 @@ export const UserProductDataProvider = ({ children }:{children:React.ReactNode})
           Authorization:`${localStorage.getItem("token")}`
         }
       });
-      console.log(response)
+   console.log(response)
       return response.data;
     },
   });
