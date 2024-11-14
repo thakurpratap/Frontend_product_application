@@ -5,15 +5,17 @@ import { useForm, Controller } from 'react-hook-form';
 import { useCart } from '../../context_API/CartContext';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import { useNavigate } from 'react-router-dom';
 const ShoppingCart = () => {
-  const { cart, removeFromCart } = useCart();
-  const totalPrice = cart.reduce((total, item) => total + item.price, 0); 
+  const { cart, removeFromCart, incrementQty, decrementQty, clearCart } = useCart();
+  const totalPrice = cart.reduce((total, item) => total + item.price * item.qty, 0); 
   const [open, setOpen] = useState(false);
+  const navigate=useNavigate()
   const { control, handleSubmit, formState: { errors } } = useForm({
     mode: "onChange"
-  });
-
+  }); 
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -22,7 +24,7 @@ const ShoppingCart = () => {
     setOpen(false);
   };
 
-  const onSubmit = async (data:any) => {
+  const onSubmit = async (data: any) => {
     const addressData = {
       street: data.street,
       city: data.city,
@@ -36,6 +38,7 @@ const ShoppingCart = () => {
         name: item.name,
         price: item.price,
         image: item.image,
+        qty: item.qty 
       })),
       totalPrice, 
     }];
@@ -52,21 +55,22 @@ const ShoppingCart = () => {
 
       if (!addressResponse.ok) throw new Error('Failed to add address.');
 
-    
       const purchaseResponse = await fetch('https://user-product-api-nb1x.onrender.com/api/customer/purchase', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({products:orderData}),
+        body: JSON.stringify({ products: orderData }),
       });
 
       if (!purchaseResponse.ok) throw new Error('Failed to place order.');
-
-      toast.success("Order placed successfully!");
-      handleClose(); 
-      // reset();
+     if(purchaseResponse.ok){
+       toast.success("Order placed successfully! You Can Check Your Order From Your Profile");
+       clearCart()
+       handleClose(); 
+      navigate("/user-landing-page")
+     }
     } catch (error) {
       console.error("Failed to place order:", error);
       toast.error("Failed to place order.");
@@ -74,50 +78,57 @@ const ShoppingCart = () => {
   };
 
   return (
-    <Box sx={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <Typography variant="h4" gutterBottom>
-        Shopping Cart
+    <Box sx={{ padding: '20px', maxWidth: '800px',  marginTop:"-5%" }}>
+    <Typography variant="h4" gutterBottom>
+      Shopping Cart
+    </Typography>
+
+    {cart.length === 0 ? (
+      <Typography variant="h6" color="textSecondary">
+        Your cart is empty.
       </Typography>
-
-      {cart.length === 0 ? (
-        <Typography variant="h6" color="textSecondary">
-          Your cart is empty.
-        </Typography>
-      ) : (
-        <>
-          {cart.map((product) => (
-            <Box key={product._id} sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-              <Box
-                component="img"
-                src={`${product.image.image}`}
-                alt={product.name}
-                width="50"
-                height="70"
-                sx={{ borderRadius: '10px', width: 80, height: 100, objectFit:"contain" }}
-                
-              />
-              <Box sx={{ flexGrow: 1, marginLeft: '20px' }}>
-                <Typography variant="h6">{product.name}</Typography>
-                <Typography variant="subtitle1">Price: ₹{product.price.toFixed(2)}</Typography>
-              </Box>
-              <IconButton onClick={() => removeFromCart(product._id)} color="error">
-                <DeleteIcon />
-              </IconButton>
+    ) : (
+      <>
+        {cart.map((product) => (
+          <Box key={product._id} sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+            <Box
+              component="img"
+              src={`${product.image.image}`}
+              alt={product.name}
+              sx={{ borderRadius: '20px', width: 80, height: 100, objectFit: "contain"  }}
+            />
+            <Box sx={{ flexGrow: 1, marginLeft: '20px' }}>
+              <Typography variant="h6">{product.name}</Typography>
+              <Typography variant="subtitle1">Price: ₹{product.price.toFixed(2)}</Typography>
+    
+            <Box sx={{ display: 'flex', alignItems: 'center' , gap:"10px"}}>
+              <RemoveCircleOutlineIcon onClick={() => decrementQty(product._id)} 
+                style={{cursor:"pointer", }}  />
+              <Typography variant="h6">Qty:{product.qty}</Typography>
+              <AddCircleOutlineIcon onClick={() => incrementQty(product._id)} 
+                 style={{cursor:"pointer"}}/>
             </Box>
-          ))}
-          <Divider sx={{ my: 2 }} />
+            </Box>
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
-            <Typography variant="h5">Total: ₹{totalPrice.toFixed(2)}</Typography>
+            <IconButton onClick={() => removeFromCart(product._id)} color="error">
+              <DeleteIcon />
+            </IconButton>
+            <Divider sx={{ my: 2 }} />
           </Box>
+        ))}
+        <Divider sx={{ my: 2 }} />
 
-          <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-            <Button variant="contained" color="primary" onClick={handleClickOpen}>
-              Checkout
-            </Button>
-          </Box>
-        </>
-      )}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
+          <Typography variant="h5">Total: ₹{totalPrice.toFixed(2)}</Typography>
+        </Box>
+
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <Button variant="contained" color="primary" onClick={handleClickOpen}>
+            Checkout
+          </Button>
+        </Box>
+      </>
+    )}
 
       <Dialog open={open} onClose={handleClose} sx={{ '& .MuiDialog-paper': { width: '600px' } }}>
         <DialogTitle>Fill the Address For the Order</DialogTitle>

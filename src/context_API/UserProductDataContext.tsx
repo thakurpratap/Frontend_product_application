@@ -31,7 +31,6 @@ export const UserProductDataProvider = ({ children }:{children:React.ReactNode})
           Authorization:`${localStorage.getItem("token")}`
         }
       });
-   console.log(response)
       return response.data;
     },
   });

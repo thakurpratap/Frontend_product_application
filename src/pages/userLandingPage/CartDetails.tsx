@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom'; 
-import { Box, Grid, Typography, CardContent, CardMedia,CardActions,Button } from '@mui/material';
+import { Box, Grid, Typography, CardContent, CardMedia,CardActions,Button,Rating } from '@mui/material';
 import { useCart } from '../../context_API/CartContext';  
 import UserLandingNavbar from './UserLandingNavbar';
 import UserFooter from './UserFooter';
@@ -29,7 +29,7 @@ const CartDetails = () => {
             component="img"
             image={`${product.image.image}`}
             alt={product.name}
-            sx={{height:"90vh",objectFit:"contain",borderRadius:"20px"}}
+            sx={{height:"90vh",objectFit:"cover",borderRadius:"20px"}}
           />
         </Grid>
 
@@ -43,7 +43,8 @@ const CartDetails = () => {
                 ₹{product.price}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                ⭐{product.rating}
+              <Rating value={product.rating} size="small" readOnly />
+
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ marginTop: 2 }}>
                 {product.description}
@@ -51,21 +52,21 @@ const CartDetails = () => {
               <CardActions>
                 {isInCart(product._id) ? (
                   <Button
-                    size="small"
-                    color="warning"
+                    size="medium"
+                    color="error"
                     variant="contained"
                     onClick={() => removeFromCart(product._id)} 
-                    sx={{ minWidth: "170px" }} 
+                    sx={{ width: "285px" , paddingY:"6px"}} 
                   >
                     Remove from Cart
                   </Button>
                 ) : (
                   <Button
-                    size="small"
+                    size="medium"
                     color="primary"
                     variant="contained"
                     onClick={() => addToCart(product)} 
-                    sx={{ minWidth: "170px" }} 
+                    sx={{ width: "285px",paddingY:"6px" }} 
                   >
                     Add to Cart
                   </Button>
