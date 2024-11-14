@@ -206,7 +206,7 @@ const SignUp = () => {
             <TextField
               {...field}
               fullWidth
-              label="Phone Number *"
+              label="Phone Number "
               type="tel"
               margin="normal"
               error={!!errors.phone}
@@ -227,7 +227,7 @@ const SignUp = () => {
             required: "Address is required",
             pattern: {
               value: /^(?!.*\s{2,})(?!\s)[a-zA-Z0-9\s]{4,30}(?<!\s)$/,
-              message: "Address canot allow more the one sapce",
+              message: "Address canot allow sapce",
             },
             minLength: {
               value: 4,

@@ -3,9 +3,8 @@ import { Box, Typography, Grid, Link } from '@mui/material';
 
 const UserFooter = () => {
   return (
-    <Box sx={{ backgroundColor: '#172337', color: '#fff', py: 4, mt: 5, width:"100vw" }}>
+    <Box sx={{ backgroundColor: '#172337', color: '#fff', width:"100vw" , position:"relative", bottom:0, padding:"20px" }}>
       <Grid container spacing={3} justifyContent="center">
-       
         <Grid item xs={12} sm={6} md={3}>
           <Typography variant="h6" gutterBottom>
             About

@@ -6,9 +6,8 @@ import { useUserProductData } from '../../context_API/UserProductDataContext';
 import { useCart } from '../../context_API/CartContext';
 import { OrbitProgress } from 'react-loading-indicators';
 import { useNavigate } from 'react-router-dom';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { toast } from 'react-toastify';
 
+import UserProfile from "./UserProfile"
 const UserLandingNavbar = () => {
   const { cart } = useCart();
   const { products, isLoading, isError } = useUserProductData();
@@ -42,20 +41,9 @@ const UserLandingNavbar = () => {
     navigate('/cart-details', { state: { product } }); 
   };
 
-  const handleLogOut = () => {
-    const token = localStorage.getItem('token'); 
-    if (token) {
-      localStorage.removeItem('token');         
-      toast.success('Logout successful');             
-      navigate('/');                           
-    } else{
-      toast.success('please SignIn');  
-      navigate('/');
-    }
-  };
   return (
     <>
-      <AppBar position="static" color="primary" sx={{ width: "100vw",marginTop:"-4%"  }}>
+      <AppBar position="static" color="primary" sx={{ width: "100vw",marginTop:"-4%", paddingY:"5px"  }}>
         <Toolbar >
           <Typography variant="h6" component="div" sx={{ flexGrow: 1,cursor: 'pointer' }}
           onClick={()=> navigate("/user-landing-page")}  
@@ -90,17 +78,17 @@ const UserLandingNavbar = () => {
                       {isError && <MenuItem>Error loading products</MenuItem>}
                       {filteredProducts?.length === 0 && searchTerm && <MenuItem>No results found</MenuItem>}
                       {filteredProducts?.map((product) => (
-                        <MenuItem key={product._id} onClick={() => handleImageClick(product)}>
+                        <MenuItem key={product._id} onClick={() => handleImageClick(product)} sx={{width:400}}>
                           <ListItemIcon>
                             <img
-                              src={`https://user-product-api-nb1x.onrender.com/${product.image}`}
+                              src={`${product.image.image}`}
                               alt={product.name}
                               width="40"
                               height="40"
-                              style={{ borderRadius: '4px' , width:40, }}
+                              style={{ borderRadius: '4px' , width:40, objectFit:"contain" }}
                             />
                           </ListItemIcon>
-                          <ListItemText primary={product.name} />
+                          <ListItemText primary={product.name.slice(0,35)} />
                         </MenuItem>
                       ))}
                     </MenuList>
@@ -115,10 +103,7 @@ const UserLandingNavbar = () => {
               <ShoppingCartIcon onClick={()=>navigate("/shopping-cart")} />
             </Badge>
           </IconButton>
-          <IconButton onClick={()=>handleLogOut()}>
-          <LogoutIcon color="inherit"  sx={{marginRight:"10px" , marginLeft:"10px" ,color:"white"}}
-          />
-          </IconButton>
+          <UserProfile/>
         </Toolbar>
       </AppBar>
 
