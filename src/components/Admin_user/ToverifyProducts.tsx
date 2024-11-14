@@ -3,6 +3,11 @@ import axios from "axios";
 import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
+
+interface ImageDetails {
+  image: string; 
+}
+
 interface Product {
   _id: string;
   name: string;
@@ -10,15 +15,16 @@ interface Product {
   price: number;
   rating: number;
   isActive: boolean;
+  image_details?: ImageDetails;
   image?: string;
 }
 
 const Admin_verifyed_Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  console.log(products);
   const [loading, setLoading] = useState<boolean>(true);
   const token = localStorage.getItem("token");
   const apiUrl = "https://user-product-api-nb1x.onrender.com/api/admin";
-  const imageBaseUrl = "https://user-product-api-nb1x.onrender.com"; 
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -44,12 +50,12 @@ const Admin_verifyed_Products = () => {
     {
       field: "image",
       headerName: "Image",
-      width: 70,
+      width: 100,
       renderCell: (params) => (
         <img
-          src={params.value ? `${imageBaseUrl}/${params.value}` : ""}
-          alt="Product"
-          style={{ width: "50px", height: "50px", borderRadius: "5px", objectFit: "cover" }}
+          src={params.row.image_details?.image} 
+          alt={params.row.name}
+          style={{ width: 50, height: 50, objectFit: "cover", borderRadius: "4px" }}
         />
       ),
     },
@@ -72,14 +78,6 @@ const Admin_verifyed_Products = () => {
       <Box m="20px">
         <Box display="flex" alignItems="center" mb={2} justifyContent="space-between">
           <Box>
-            <TextField
-              variant="outlined"
-              label="Search Products"
-              sx={{ marginRight: "8px" }}
-            />
-            <Button variant="contained" color="primary" style={{ height: "6vh" }}>
-              Search
-            </Button>
           </Box>
         </Box>
          <Box mt={3} sx={{ height: 400, width: "100%" }}>
@@ -92,7 +90,15 @@ const Admin_verifyed_Products = () => {
             rows={products}
             columns={columns}
             // checkboxSelection
-            getRowId={(row) => row._id} />
+            getRowId={(row) => row._id} 
+            sx={{
+              "& .MuiTablePagination-displayedRows, & .MuiTablePagination-actions": {
+                margin: 0,
+              },
+              "& .MuiTablePagination-selectLabel": {
+                paddingTop: "1rem", 
+              },
+            }}/>
           )}
         </Box>
       </Box>

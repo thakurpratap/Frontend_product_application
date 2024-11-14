@@ -9,8 +9,9 @@ import {
   DialogTitle,
   IconButton,
   CircularProgress,
+  InputAdornment,
 } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridSearchIcon } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -23,7 +24,7 @@ interface Product {
   price: number;
   rating: number;
   isVerified: boolean;
-  image?: string;
+  image?: {image : string};
 }
 
 interface NewProduct {
@@ -42,6 +43,7 @@ const Dashboard = () => {
   const [selectedProductId, setSelectedProductId] = useState<number | null>(
     null
   );
+  const imageBaseUrl = "https://user-product-api-nb1x.onrender.com"; // Server's base URL
   const [newProduct, setNewProduct] = useState<NewProduct>({
     name: "",
     description: "",
@@ -211,14 +213,23 @@ const Dashboard = () => {
   
 
   const columns: GridColDef<Product>[] = [
-    // { field: "id", headerName: "ID", width: 70 },
-    { field: "image", headerName: "Image", type: "number", flex: 1 },
+    {
+      field: "image",
+      headerName: "Image",
+      width: 100,
+      renderCell: (params) => (
+        <img
+          src={params.row.image?.image} 
+          alt={params.row.name}
+          style={{ width: 50, height: 50, objectFit: "cover", borderRadius: "4px" }}
+        />
+      ),
+    },
     { field: "name", headerName: "Name", flex: 1 },
     { field: "description", headerName: "Description", flex: 1 },
     { field: "price", headerName: "Price", type: "number", flex: 1 },
     { field: "rating", headerName: "Rating", type: "number", flex: 1 },
 
-    // { field: "published", headerName: "Published", flex: 1 },
     {
       field: "actions",
       headerName: "Actions",
@@ -255,21 +266,33 @@ const Dashboard = () => {
           justifyContent="space-between"
         >
           <Box>
-            <TextField
+            {/* <TextField
               variant="outlined"
               label="Search Products"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               sx={{ marginRight: "8px" }}
-            />
-            <Button
+            /> */}
+            {/* <Button
               variant="contained"
               color="primary"
               onClick={handleSearch}
               style={{ height: "6vh" }}
             >
               Search
-            </Button>
+            </Button> */}
+              <TextField
+          size="small"
+          variant="outlined"
+          // onChange={handleChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <GridSearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
           </Box>
           <Button variant="contained" color="primary" onClick={handleClickOpen}>
             Create Product
@@ -305,7 +328,7 @@ const Dashboard = () => {
               variant="filled"
               label="Price"
               name="price"
-              type="number"
+              // type="number"
               value={newProduct.price}
               onChange={handleChange}
             />
@@ -315,7 +338,7 @@ const Dashboard = () => {
               variant="filled"
               label="Rating"
               name="rating"
-              type="number"
+              // type="number"
               value={newProduct.rating}
               onChange={handleChange}
             />
@@ -361,6 +384,14 @@ const Dashboard = () => {
               columns={columns}
               // checkboxSelection
               getRowId={(row) => row._id}
+              sx={{      
+                "& .MuiTablePagination-displayedRows, & .MuiTablePagination-actions": {
+                  margin: 0,
+                },
+                "& .MuiTablePagination-selectLabel": {
+                  paddingTop: "1rem", 
+                },
+              }}
             />
           )}
         </Box>

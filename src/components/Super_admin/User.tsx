@@ -44,7 +44,7 @@ const AdminPage = () => {
   const [editMode, setEditMode] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
 
-  const { control, handleSubmit, reset } = useForm<AdminFormInputs>();
+  const { control, handleSubmit, reset, formState: { errors }, } = useForm<AdminFormInputs>({ mode: 'onChange' });
   const token = localStorage.getItem("token");
   const apiUrl = "https://user-product-api-nb1x.onrender.com/api/admin";
 
@@ -172,21 +172,9 @@ const AdminPage = () => {
           justifyContent="space-between"
         >
           <Box>
-            <TextField
-              variant="outlined"
-              label="Search Products"
-              sx={{ marginRight: "8px" }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ height: "6vh" }}
-            >
-              Search
-            </Button>
           </Box>
           <Button variant="contained" color="primary" onClick={handleOpen}>
-            Create Product
+            Create Admin User
           </Button>
         </Box>
 
@@ -198,16 +186,43 @@ const AdminPage = () => {
                 name="username"
                 control={control}
                 defaultValue=""
+                rules={{
+                  required: "username is required",
+                  pattern: {
+                    value: /^[a-zA-Z]+(?: [a-zA-Z]+)*$/,
+                    message:
+                      "Only alphabets are allowed, and space is allowed only between words",
+                  },
+                  minLength: {
+                    value: 4,
+                    message: "username minimum 4 characters",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "username cannot exceed more than 20 characters",
+                  },
+                }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Username" {...field} />
+                  <TextField fullWidth margin="dense" variant="filled" label="Username" {...field}  error={!!errors.username}
+                  helperText={errors.username?.message || ""} />
                 )}
               />
               <Controller
                 name="email"
                 control={control}
                 defaultValue=""
+                rules={{
+                  required: "Email is required",
+                  validate: {
+                    noSpaces: (value) =>
+                      !/\s/.test(value) || "Email cannot contain spaces",
+                    validEmail: (value) =>
+                      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value) || "This is not a valid email",
+                  },
+                }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Email" {...field} />
+                  <TextField fullWidth margin="dense" variant="filled" label="Email" {...field}  error={!!errors.email}
+                  helperText={errors.email?.message || ""} />
                 )}
               />
               {!editMode && (
@@ -215,8 +230,20 @@ const AdminPage = () => {
                   name="password"
                   control={control}
                   defaultValue=""
+                  rules={{
+                    required: "Password is required",
+                    pattern: {
+                      value: /^\S*$/,
+                      message: "Password cannot contain spaces",
+                    },
+                    minLength: {
+                      value: 8,
+                      message: " minimum Password 8 ",
+                    },
+                  }}
                   render={({ field }) => (
-                    <TextField fullWidth margin="dense" variant="filled" label="Password" type="password" {...field} />
+                    <TextField fullWidth margin="dense" variant="filled" label="Password" type="password" {...field}  error={!!errors.password}
+                    helperText={errors.password?.message || ""}/>
                   )}
                 />
               )}
@@ -224,16 +251,50 @@ const AdminPage = () => {
                 name="phone"
                 control={control}
                 defaultValue=""
+                rules={{
+                  required: "Phone number is required",
+                  validate: {
+                    noSpaces: (value) =>
+                      !/\s/.test(value) || "Phone number cannot contain spaces",
+                    noAlphabets: (value) =>
+                      /^[0-9]*$/.test(value) || "Phone number cannot contain alphabets",
+                  },
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Only numbers are allowed",
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: "Phone number cannot exceed more than 10 digits",
+                  },
+                }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Phone" {...field} />
+                  <TextField fullWidth margin="dense" variant="filled" label="Phone" {...field}  error={!!errors.phone}
+                  helperText={errors.phone?.message || ""} />
                 )}
               />
               <Controller
                 name="address"
                 control={control}
                 defaultValue=""
+                rules={{
+                  required: "Address is required",
+                  pattern: {
+                    value: /^(?!.*\s{2,})(?!\s)[a-zA-Z0-9\s]{4,30}(?<!\s)$/,
+                    message: "Address canot allow more the one sapce",
+                  },
+                  minLength: {
+                    value: 4,
+                    message: "Address is more then 4 characters",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "Address cannot exceed more than 30 characters",
+                  },
+                }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Address" {...field} />
+                  <TextField fullWidth margin="dense" variant="filled" label="Address" {...field}  error={!!errors.address}
+                  helperText={errors.address?.message || ""}/>
                 )}
               />
               <Controller
@@ -262,7 +323,16 @@ const AdminPage = () => {
               <CircularProgress />
             </Box>
           ) : (
-            <DataGrid style={{ height: "70vh" }} columns={columns} rows={admins}  getRowId={(row) => row._id} />
+            <DataGrid style={{ height: "70vh" }} columns={columns} rows={admins}  getRowId={(row) => row._id}
+            sx={{      
+              "& .MuiTablePagination-displayedRows, & .MuiTablePagination-actions": {
+                margin: 0,
+              },
+              "& .MuiTablePagination-selectLabel": {
+                paddingTop: "1rem", 
+              },
+            }}
+            />
           )}
         </Box>
       </Box>
@@ -271,225 +341,3 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
-
-
-
-// import React, { useEffect, useState } from "react";
-// import {
-//   Box,
-//   Button,
-//   TextField,
-//   Dialog,
-//   DialogTitle,
-//   DialogContent,
-//   DialogActions,
-//   CircularProgress,
-//   IconButton,
-// } from "@mui/material";
-// import { DataGrid, GridColDef } from "@mui/x-data-grid";
-// import { useForm, Controller, SubmitHandler } from "react-hook-form";
-// import axios from "axios";
-// import EditIcon from "@mui/icons-material/Edit";
-
-// interface Admin {
-//   _id: string;
-//   username: string;
-//   email: string;
-//   phone: number;
-//   address: string;
-//   role: string;
-//   isActive: boolean;
-//   profileImage: string;
-// }
-
-// interface AdminFormInputs {
-//   username: string;
-//   email: string;
-//   password: string;
-//   phone: string;
-//   address: string;
-//   role: string;
-//   isActive: boolean;
-//   profileImage?: string;
-// }
-
-// const AdminPage = () => {
-//   const [open, setOpen] = useState(false);
-//   const [admins, setAdmins] = useState<Admin[]>([]);
-//   const [loading, setLoading] = useState<boolean>(true);
-
-//   const { control, handleSubmit, reset } = useForm<AdminFormInputs>();
-//   const token = localStorage.getItem("token");
-//   const apiUrl = "https://user-product-api-nb1x.onrender.com/api/admin";
-
-//   const columns: GridColDef[] = [
-//     { field: "username", headerName: "Username", flex: 1 },
-//     { field: "email", headerName: "Email", flex: 1 },
-//     { field: "phone", headerName: "Phone", flex: 1 },
-//     { field: "address", headerName: "Address", flex: 1 },
-//     {
-//       field: "actions",
-//       headerName: "Actions",
-//       width: 150,
-//       renderCell: (params) => (
-//         <>
-//           <IconButton
-//             // onClick={() => handleEditProduct(params.row)}
-//             color="primary"
-//           >ß
-//             <EditIcon />
-//           </IconButton>
-//         </>
-//       ),
-//     },
-//   ];
-
-//   const fetchAdmins = async () => {
-//     setLoading(true);
-    
-//     try {
-//       const response = await axios.get(`${apiUrl}/all-admins`, {
-//         headers: {
-//           Authorization: token,
-//         },
-//       });
-//       setAdmins(response.data);
-//     } catch (error) {
-//       console.error("Error fetching admins:", error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchAdmins();
-//   }, []);
-
-//   const handleOpen = () => setOpen(true);
-//   const handleClose = () => {
-//     reset();
-//     setOpen(false);
-//   };
-
-//   const onSubmit: SubmitHandler<AdminFormInputs> = async (data) => {
-//     try {
-//       const response = await axios.post(
-//         `${apiUrl}/add`,
-//         {
-//           username: data.username,
-//           email: data.email,
-//           password: data.password,
-//           phone: data.phone,
-//           address: data.address,
-//           role: data.role,
-//         },
-//         {
-//           headers: {
-//             Authorization: token,
-//           },
-//         }
-//       );
-//       console.log("Admin Created:", response.data);
-//       fetchAdmins();
-//       handleClose();
-//     } catch (error) {
-//       console.error("Error creating admin:", error);
-//     }
-//   };
-
-//   return (
-//     <div className="card shadow border-0 p-3 mt-5 m-4" style={{ height: "85vh" }}>
-//       <Box m="20px">
-//         <Box display="flex" alignItems="center" mb={2} justifyContent="space-between">
-//           <Box>
-//             <TextField variant="outlined" label="Search Admins" sx={{ marginRight: "8px" }} />
-//             <Button variant="contained" color="primary" style={{ height: "6vh" }}>
-//               Search
-//             </Button>
-//           </Box>
-//           <Box>
-//             <Button variant="contained" color="primary" onClick={handleOpen} style={{ height: "6vh", marginLeft: "10px" }}>
-//               Create Admin_user
-//             </Button>
-//           </Box>
-//         </Box>
-
-//         <Dialog open={open} onClose={handleClose}>
-//           <DialogTitle>Create New Admin_user</DialogTitle>
-//           <form onSubmit={handleSubmit(onSubmit)}>
-//             <DialogContent>
-//               <Controller
-//                 name="username"
-//                 control={control}
-//                 defaultValue=""
-//                 render={({ field }) => (
-//                   <TextField fullWidth margin="dense" variant="filled" label="Username" {...field} />
-//                 )}
-//               />
-//               <Controller
-//                 name="email"
-//                 control={control}
-//                 defaultValue=""
-//                 render={({ field }) => (
-//                   <TextField fullWidth margin="dense" variant="filled" label="Email" {...field} />
-//                 )}
-//               />
-//               <Controller
-//                 name="password"
-//                 control={control}
-//                 defaultValue=""
-//                 render={({ field }) => (
-//                   <TextField fullWidth margin="dense" variant="filled" label="Password" type="password" {...field} />
-//                 )}
-//               />
-//               <Controller
-//                 name="phone"
-//                 control={control}
-//                 defaultValue=""
-//                 render={({ field }) => (
-//                   <TextField fullWidth margin="dense" variant="filled" label="Phone" {...field} />
-//                 )}
-//               />
-//               <Controller
-//                 name="address"
-//                 control={control}
-//                 defaultValue=""
-//                 render={({ field }) => (
-//                   <TextField fullWidth margin="dense" variant="filled" label="Address" {...field} />
-//                 )}
-//               />
-//               <Controller
-//                 name="role"
-//                 control={control}
-//                 defaultValue="ADMIN"
-//                 render={({ field }) => (
-//                   <TextField fullWidth margin="dense" variant="filled" label="Role" {...field} />
-//                 )}
-//               />
-//             </DialogContent>
-//             <DialogActions>
-//               <Button onClick={handleClose} color="primary">
-//                 Cancel
-//               </Button>
-//               <Button type="submit" color="primary">
-//                 Create
-//               </Button>
-//             </DialogActions>
-//           </form>
-//         </Dialog>
-
-//         <Box mt={3} sx={{ height: 400, width: "100%" }}>
-//           {loading ? (
-//             <Box display="flex" justifyContent="center" alignItems="center" style={{ height: "70vh" }}>
-//               <CircularProgress />
-//             </Box>
-//           ) : (
-//             <DataGrid style={{ height: "70vh" }} columns={columns} rows={admins} checkboxSelection getRowId={(row) => row._id} />
-//           )}
-//         </Box>
-//       </Box>
-//     </div>
-//   );
-// };
-
-// export default AdminPage;

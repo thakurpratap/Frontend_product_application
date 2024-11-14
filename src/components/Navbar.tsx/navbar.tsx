@@ -8,6 +8,8 @@ import MenuItem from "@mui/material/MenuItem";
 import logo from "../../assets/img.png";
 import { Link, useNavigate } from "react-router-dom";
 import { MyContext } from "../../App";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -51,8 +53,6 @@ function Header() {
             <div className="col-sm-2 part-1">
               {/* <img src={logo} alt="Logo" style={{ width: "60%" }} /> */}
               {/* <h1>imagine</h1> */}
-            </div>
-            <div className="col-xs-3 d-flex align-items-center part-2 pl-4xss">
               <Button
                 className="rounded-circle mr-3"
                 variant="contained"
@@ -60,8 +60,10 @@ function Header() {
                   context?.setIsToggleSidebar(!context.isToggleSidebar)
                 }
               >
-                {context?.isToggleSidebar ? <MenuIcon /> : <MenuOpenIcon />}
+                {context?.isToggleSidebar ? < ArrowForwardIosIcon/> : <MenuIcon />}
               </Button>
+            </div>
+            <div className="col-xs-3 d-flex align-items-center part-2 pl-4xss">
             </div>
             <div className="col-sm-9 d-flex align-items-center justify-content-end part-3 pl-4">
               <div className="myAccWrapper">

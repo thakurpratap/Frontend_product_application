@@ -54,18 +54,6 @@ const Customer = () => {
 
 
   const columns: GridColDef<Customer>[] = [
-    { 
-      field: "profileImage", 
-      headerName: "Image", 
-      width: 100,
-      renderCell: (params) => (
-        <img
-          src={params.value || "../images/default-profile-picture.jpg"}
-          alt="Profile"
-          style={{ width: "20px", height: "20px", borderRadius: "50%" }}
-        />
-      ),
-    },
     { field: "username", headerName: "Name", flex: 1 },
     { field: "email", headerName: "Email ID", flex: 1 },
     { field: "phone", headerName: "Phone Number", flex: 1 },
@@ -77,14 +65,6 @@ const Customer = () => {
       <Box m="20px">
         <Box display="flex" alignItems="center" mb={2} justifyContent="space-between">
           <Box>
-            <TextField
-              variant="outlined"
-              label="Search Customers"
-              sx={{ marginRight: "8px" }}
-            />
-            <Button variant="contained" color="primary" style={{ height: "6vh" }}>
-              Search
-            </Button>
           </Box>
         </Box>
 
@@ -96,6 +76,14 @@ const Customer = () => {
             getRowId={(row) => row._id}
             loading={loading}
             style={{ height: "70vh" }}
+            sx={{      
+              "& .MuiTablePagination-displayedRows, & .MuiTablePagination-actions": {
+                margin: 0,
+              },
+              "& .MuiTablePagination-selectLabel": {
+                paddingTop: "1rem", 
+              },
+            }}
           />
         </Box>
       </Box>
