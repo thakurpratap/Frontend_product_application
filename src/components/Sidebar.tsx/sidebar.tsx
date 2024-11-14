@@ -93,8 +93,8 @@ function Sidebar() {
             <li>
               <Link to="/admin/products">
                 <Button
-                  className={`w-100 ${activeTab === 2 ? "active" : ""}`}
-                  onClick={() => setActiveTab(2)}
+                  className={`w-100 ${activeTab === 1 ? "active" : ""}`}
+                  onClick={() => setActiveTab(1)}
                 >
                   <span className="icon">
                     <SupportAgentIcon />

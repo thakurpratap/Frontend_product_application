@@ -43,7 +43,7 @@ const Admin_Usermanagement = () => {
   const [editMode, setEditMode] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
 
-  const { control, handleSubmit, reset, formState: { errors } } = useForm<AdminFormInputs>();
+  const { control, handleSubmit, reset, formState: { errors } } = useForm<AdminFormInputs>({ mode: 'onChange' });
   const token = localStorage.getItem("token");
   const apiUrl = "https://user-product-api-nb1x.onrender.com/api/admin";
 
@@ -247,10 +247,10 @@ const Admin_Usermanagement = () => {
                       value: /^\S*$/,
                       message: "Password cannot contain spaces",
                     },
-                    minLength: {
-                      value: 8,
-                      message: " minimum Password 8 ",
-                    },
+                    // minLength: {
+                    //   value: 8,
+                    //   message: " minimum Password 8 ",
+                    // },
                   }}
                   render={({ field }) => (
                     <TextField fullWidth margin="dense" variant="filled" label="Password" type="password" {...field} error={!!errors.password}
