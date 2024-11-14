@@ -3,13 +3,13 @@ import { Card, CardContent, CardMedia, Typography, CardActions, Button, Grid, Bo
 import { useUserProductData } from '../../context_API/UserProductDataContext';
 import { useCart } from '../../context_API/CartContext';  
 import { OrbitProgress } from 'react-loading-indicators';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate, } from 'react-router-dom'; 
 
 const UserHome = () => {
   const { products, isLoading, isError } = useUserProductData();
   const { cart, addToCart, removeFromCart } = useCart();  
   const navigate = useNavigate(); 
-  
+
   if (isLoading) {
     return (
       <Box sx={{ textAlign: "center" }}>
@@ -17,7 +17,7 @@ const UserHome = () => {
       </Box>
     );
   }
-
+ 
   if (isError) {
     return <Typography>Error loading products</Typography>;
   }

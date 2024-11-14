@@ -70,6 +70,7 @@ const ShoppingCart = () => {
        clearCart()
        handleClose(); 
       navigate("/user-landing-page")
+      navigate("/order-details")
      }
     } catch (error) {
       console.error("Failed to place order:", error);
