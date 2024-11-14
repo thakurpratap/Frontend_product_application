@@ -236,10 +236,10 @@ const AdminPage = () => {
                       value: /^\S*$/,
                       message: "Password cannot contain spaces",
                     },
-                    minLength: {
-                      value: 8,
-                      message: " minimum Password 8 ",
-                    },
+                    // minLength: {
+                    //   value: 8,
+                    //   message: " minimum Password 8 ",
+                    // },
                   }}
                   render={({ field }) => (
                     <TextField fullWidth margin="dense" variant="filled" label="Password" type="password" {...field}  error={!!errors.password}

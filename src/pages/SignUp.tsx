@@ -83,7 +83,8 @@ const SignUp = () => {
             pattern: {
               value: /^[a-zA-Z]+(?: [a-zA-Z]+)*$/,
               message:
-                "Only alphabets are allowed, and space is allowed only between words",
+                "Only alphabets are allowed, ",
+                // and space is allowed only between words
             },
             maxLength: {
               value: 20,
