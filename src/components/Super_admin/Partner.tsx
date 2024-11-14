@@ -81,14 +81,6 @@ const Partner = () => {
     <Box m="20px">
     <Box display="flex" alignItems="center" mb={2} justifyContent='space-between'>
       <Box >
-        <TextField
-          variant="outlined"
-          label="Search Products"
-          sx={{ marginRight: "8px" }}
-        />
-        <Button variant="contained" color="primary" style={{ height: "6vh" }}>
-          Search
-        </Button>
         </Box>
       </Box>
 
@@ -99,6 +91,14 @@ const Partner = () => {
         columns={columns}
         // checkboxSelection
         getRowId={(row) => row.id}
+        sx={{      
+          "& .MuiTablePagination-displayedRows, & .MuiTablePagination-actions": {
+            margin: 0,
+          },
+          "& .MuiTablePagination-selectLabel": {
+            paddingTop: "1rem", 
+          },
+        }}
       />
       </Box>
     </Box>

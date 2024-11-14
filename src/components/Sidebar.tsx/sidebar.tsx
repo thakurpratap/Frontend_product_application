@@ -99,7 +99,7 @@ function Sidebar() {
                   <span className="icon">
                     <SupportAgentIcon />
                   </span>
-                  verifyed Products
+                   Product Status
                 </Button>
               </Link>
             </li>

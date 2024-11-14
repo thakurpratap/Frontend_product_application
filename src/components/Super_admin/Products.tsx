@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Button, CircularProgress, TextField } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Box, Button, CircularProgress, InputAdornment, TextField } from "@mui/material";
+import { DataGrid, GridClearIcon, GridColDef, GridSearchIcon } from "@mui/x-data-grid";
 
 interface Product {
   _id: string;
@@ -10,15 +10,15 @@ interface Product {
   price: number;
   rating: number;
   published: boolean;
-  image?: string;
+  image: { image: string };
 }
 
 const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  console.log(products)
   const [loading, setLoading] = useState<boolean>(true);
   const token = localStorage.getItem("token");
   const apiUrl = "https://user-product-api-nb1x.onrender.com/api/admin";
-  const imageBaseUrl = "https://user-product-api-nb1x.onrender.com"; // Server's base URL
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -41,16 +41,15 @@ const Products = () => {
   }, []);
 
   const columns: GridColDef<Product>[] = [
-    // { field: "image", headerName: "Image", width: 70 },
     {
       field: "image",
       headerName: "Image",
-      width: 70,
+      width: 100,
       renderCell: (params) => (
         <img
-          src={params.value ? `${imageBaseUrl}/${params.value}` : ""}
-          alt="Product"
-          style={{ width: "50px", height: "50px", borderRadius: "5px", objectFit: "cover" }}
+          src={params.row.image?.image}
+          alt={params.row.name}
+          style={{ width: 50, height: 50, objectFit: "cover", borderRadius: "4px" }}
         />
       ),
     },
@@ -58,7 +57,6 @@ const Products = () => {
     { field: "description", headerName: "Description", flex: 1 },
     { field: "price", headerName: "Price", type: "number", flex: 1 },
     { field: "rating", headerName: "Rating", type: "number", flex: 1 },
-    { field: "published", headerName: "Published", flex: 1 },
   ];
 
   return (
@@ -66,14 +64,20 @@ const Products = () => {
       <Box m="20px">
         <Box display="flex" alignItems="center" mb={2} justifyContent="space-between">
           <Box>
-            <TextField
-              variant="outlined"
-              label="Search Products"
-              sx={{ marginRight: "8px" }}
-            />
-            <Button variant="contained" color="primary" style={{ height: "6vh" }}>
-              Search
-            </Button>
+               {/* <FormControl className={search}> */}
+        <TextField
+          size="small"
+          variant="outlined"
+          // onChange={handleChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <GridSearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+      {/* </FormControl> */}
           </Box>
         </Box>
          <Box mt={3} sx={{ height: 400, width: "100%" }}>
@@ -86,7 +90,16 @@ const Products = () => {
             rows={products}
             columns={columns}
             // checkboxSelection
-            getRowId={(row) => row._id} />
+            getRowId={(row) => row._id} 
+            sx={{      
+              "& .MuiTablePagination-displayedRows, & .MuiTablePagination-actions": {
+                margin: 0,
+              },
+              "& .MuiTablePagination-selectLabel": {
+                paddingTop: "1rem", 
+              },
+            }}
+            />
           )}
         </Box>
       </Box>
