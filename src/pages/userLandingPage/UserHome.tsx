@@ -13,7 +13,7 @@ const UserHome = () => {
   if (isLoading) {
     return (
       <Box sx={{ textAlign: "center" }}>
-        <OrbitProgress color="blue" size="medium" text="" textColor="" />
+        <OrbitProgress color="blue" size="medium" text=""  />
       </Box>
     );
   }
@@ -43,7 +43,6 @@ const UserHome = () => {
                 component="img"
                 height="200"
                 image={`${product.image.image}`}
-                // src="https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg"
                 alt={product.name}
                 sx={{ objectFit: "cover", width: '100%', cursor: 'pointer' }}
                 onClick={() => handleImageClick(product)}
@@ -80,7 +79,8 @@ const UserHome = () => {
                     color="primary"
                     variant="contained"
                    onClick={() => addToCart({
-                    ...product
+                    ...product,
+                    qty:1
                    })} 
                     sx={{ width: "185px",paddingY:"6px" }} 
                   >
