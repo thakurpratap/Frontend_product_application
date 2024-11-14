@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 interface Product {
   _id: number;
@@ -17,9 +18,8 @@ interface Product {
   address?: string;
 }
 
-const Admin_Verifyed_Products = () => {
+const Admin_Verifying_Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  // console.log(products);
   const [loading, setLoading] = useState<boolean>(true);
   const token = localStorage.getItem("token");
   const apiUrl = "https://user-product-api-nb1x.onrender.com/api/admin"; 
@@ -34,15 +34,24 @@ const Admin_Verifyed_Products = () => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 200,
       renderCell: (params) => (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleVerifyProduct(params.row._id)}
-        >
-          Verify
-        </Button>
+        <Box display="flex" gap={1}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleVerifyProduct(params.row._id)}
+          >
+            Verify
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: "red", color: "white", "&:hover": { backgroundColor: "darkred" } }}
+            onClick={() => handleRejectProduct(params.row._id)}
+          >
+            Reject
+          </Button>
+        </Box>
       ),
     },
   ];
@@ -81,10 +90,37 @@ const Admin_Verifyed_Products = () => {
       );
       console.log("Product verified:", response.data.data);
       fetchProducts();
+      toast.success("Product successfully verified!");
     } catch (error) {
+      // fetchProducts();
       console.error("Error verifying product:", error);
+      toast.error("Failed to verify product.");
     }
   };
+
+    // Function to handle rejecting the product
+    const handleRejectProduct = async (Id: string) => {
+      setLoading(true); 
+      try {
+        const response = await axios.delete(
+          `https://user-product-api-nb1x.onrender.com/api/partner/delete-product/${Id}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        console.log("Product rejected:", response.data);
+        fetchProducts();
+        toast.success("Product rejected!");
+      } catch (error) {
+        console.error("Error rejecting product:", error);
+        toast.error("Failed to reject product.");
+
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
     <div className="card shadow border-0 p-3 mt-5 m-4" style={{ marginTop: "20px" }}>
@@ -106,9 +142,10 @@ const Admin_Verifyed_Products = () => {
           <DataGrid
             rows={products}
             columns={columns}
-            checkboxSelection
+            // checkboxSelection
             getRowId={(row) => row._id}
             loading={loading}
+
           />
         </Box>
       </Box>
@@ -116,7 +153,7 @@ const Admin_Verifyed_Products = () => {
   );
 };
 
-export default Admin_Verifyed_Products;
+export default Admin_Verifying_Products;
 
 
 
