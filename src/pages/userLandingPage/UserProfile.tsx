@@ -21,6 +21,9 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleOrders = () => {
+    navigate("/order-details");
+  };
   const handleLogOut = () => {
     const token = localStorage.getItem('token'); 
     if (token) {
@@ -86,7 +89,12 @@ export default function AccountMenu() {
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      >
+      ><MenuItem onClick={handleOrders}>
+      <ListItemIcon>
+        <Logout fontSize="small" />
+      </ListItemIcon>
+      Orders
+    </MenuItem>
         <MenuItem onClick={handleLogOut}>
           <ListItemIcon>
             <Logout fontSize="small" />
