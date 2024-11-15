@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React  from "react";
 import {
   Card,
   CardContent,
@@ -20,9 +20,6 @@ const UserHome = () => {
   const { products, isLoading, isError } = useUserProductData();
   const { cart, addToCart, removeFromCart } = useCart();
   const navigate = useNavigate();
-
-
- 
 
 
   if (isLoading) {
