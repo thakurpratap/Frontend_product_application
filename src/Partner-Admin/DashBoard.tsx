@@ -58,8 +58,8 @@ const Dashboard = () => {
     queryFn: async () => {
       try {
         const url = searchTerm
-          ? `https://user-product-api-nb1x.onrender.com/api/products/searchProduct?name=${searchTerm}`
-          : `https://user-product-api-nb1x.onrender.com/api/products`;
+          ? `https://user-product-api-gzwy.onrender.com/api/products/searchProduct?name=${searchTerm}`
+          : `https://user-product-api-gzwy.onrender.com/api/products`;
 
         const response = await axios.get<Product[]>(url, {
           headers: {
@@ -84,7 +84,7 @@ const Dashboard = () => {
       formData.append("published", JSON.stringify(product.published));
       formData.append("image", product.image!);
 
-      await axios.post("https://user-product-api-nb1x.onrender.com/api/products/add", formData, {
+      await axios.post("https://user-product-api-gzwy.onrender.com/api/products/add", formData, {
         headers: {
           Authorization: token,
           "Content-Type": "multipart/form-data",
@@ -107,7 +107,7 @@ const Dashboard = () => {
       formData.append("published", JSON.stringify(product.published));
       if (product.image) formData.append("image", product.image);
 
-      await axios.put(`https://user-product-api-nb1x.onrender.com/api/products/${selectedProductId}`, formData, {
+      await axios.put(`https://user-product-api-gzwy.onrender.com/api/products/${selectedProductId}`, formData, {
         headers: {
           Authorization: token,
           "Content-Type": "multipart/form-data",
@@ -122,7 +122,7 @@ const Dashboard = () => {
 
   const deleteProductMutation = useMutation({
     mutationFn: async (id: number) => {
-      await axios.delete(`https://user-product-api-nb1x.onrender.com/api/products/${id}`, {
+      await axios.delete(`https://user-product-api-gzwy.onrender.com/api/products/${id}`, {
         headers: {
           Authorization: token,
         },

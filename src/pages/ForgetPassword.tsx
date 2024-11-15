@@ -15,7 +15,7 @@ const ForgetPassword = () => {
   const onSubmit =async (data: ForgetPasswordData) => {
     setLoading(true);
        try{
-         const response= await fetch("https://user-product-api-nb1x.onrender.com/api/auth/verify-email",{
+         const response= await fetch("https://user-product-api-gzwy.onrender.com/api/auth/verify-email",{
            method:"POST",
            headers:{
             'Content-Type':'application/json'

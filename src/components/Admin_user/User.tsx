@@ -45,7 +45,7 @@ const Admin_Usermanagement = () => {
 
   const { control, handleSubmit, reset, formState: { errors } } = useForm<AdminFormInputs>({ mode: 'onChange' });
   const token = localStorage.getItem("token");
-  const apiUrl = "https://user-product-api-nb1x.onrender.com/api/admin";
+  const apiUrl = "https://user-product-api-gzwy.onrender.com/api/admin";
 
   const columns: GridColDef[] = [
     { field: "username", headerName: "Username", flex: 1 },
@@ -214,7 +214,7 @@ const Admin_Usermanagement = () => {
                   },
                 }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Username" {...field} error={!!errors.username}
+                  <TextField fullWidth margin="dense" variant="filled" label="Username*" {...field} error={!!errors.username}
                   helperText={errors.username?.message || ""}/>
                 )}
               />
@@ -232,7 +232,7 @@ const Admin_Usermanagement = () => {
                   },
                 }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Email" {...field} error={!!errors.email}
+                  <TextField fullWidth margin="dense" variant="filled" label="Email*" {...field} error={!!errors.email}
                   helperText={errors.email?.message || ""} />
                 )}
               />
@@ -247,13 +247,13 @@ const Admin_Usermanagement = () => {
                       value: /^\S*$/,
                       message: "Password cannot contain spaces",
                     },
-                    // minLength: {
-                    //   value: 8,
-                    //   message: " minimum Password 8 ",
-                    // },
+                    minLength: {
+                      value: 8,
+                      message: " minimum Password 8 ",
+                    },
                   }}
                   render={({ field }) => (
-                    <TextField fullWidth margin="dense" variant="filled" label="Password" type="password" {...field} error={!!errors.password}
+                    <TextField fullWidth margin="dense" variant="filled" label="Password*" type="password" {...field} error={!!errors.password}
                     helperText={errors.password?.message || ""}/>
                   )}
                 />
@@ -280,7 +280,7 @@ const Admin_Usermanagement = () => {
                   },
                 }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Phone" {...field} error={!!errors.phone}
+                  <TextField fullWidth margin="dense" variant="filled" label="Phone*" {...field} error={!!errors.phone}
                   helperText={errors.phone?.message || ""} />
                 )}
               />
@@ -304,7 +304,7 @@ const Admin_Usermanagement = () => {
                   },
                 }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Address" {...field} error={!!errors.address}
+                  <TextField fullWidth margin="dense" variant="filled" label="Address*" {...field} error={!!errors.address}
                   helperText={errors.address?.message || ""}/>
                 )}
               />

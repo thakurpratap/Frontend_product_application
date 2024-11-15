@@ -8,6 +8,7 @@ import HandshakeIcon from "@mui/icons-material/Handshake";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import { Button } from "@mui/material";
 import { useSignIn } from "../../context_API/SignInContext";
+import InventoryIcon from '@mui/icons-material/Inventory';
 
 function Sidebar() {
   const [activeTab, setActiveTab] = useState(0);
@@ -97,7 +98,7 @@ function Sidebar() {
                   onClick={() => setActiveTab(1)}
                 >
                   <span className="icon">
-                    <SupportAgentIcon />
+                    <InventoryIcon />
                   </span>
                    Product Status
                 </Button>

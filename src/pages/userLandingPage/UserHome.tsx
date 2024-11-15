@@ -41,7 +41,7 @@ const UserHome = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image={`https://user-product-api-nb1x.onrender.com/${product.image}`}
+                image={`https://user-product-api-gzwy.onrender.com/${product.image}`}
                 alt={product.name}
                 sx={{ objectFit: "contain", width: '100%', cursor: 'pointer' }}
                 onClick={() => handleImageClick(product)}

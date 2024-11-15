@@ -93,7 +93,7 @@ const UserLandingNavbar = () => {
                         <MenuItem key={product._id} onClick={() => handleImageClick(product)}>
                           <ListItemIcon>
                             <img
-                              src={`https://user-product-api-nb1x.onrender.com/${product.image}`}
+                              src={`https://user-product-api-gzwy.onrender.com/${product.image}`}
                               alt={product.name}
                               width="40"
                               height="40"

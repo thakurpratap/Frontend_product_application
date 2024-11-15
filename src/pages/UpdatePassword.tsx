@@ -30,7 +30,7 @@ const UpdatePassword = () => {
     }
 
     try {
-      const response = await fetch('https://user-product-api-nb1x.onrender.com/api/auth/reset-forget-password', {
+      const response = await fetch('hhttps://user-product-api-gzwy.onrender.com/api/auth/reset-forget-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -30,7 +30,7 @@ const Customer = () => {
       }
 
       try {
-        const response = await fetch("https://user-product-api-nb1x.onrender.com/api/admin/all-customers", {
+        const response = await fetch("https://user-product-api-gzwy.onrender.com/api/admin/all-customers", {
           headers: {
             Authorization: token, // Use the token in the Authorization header
           },

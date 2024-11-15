@@ -24,7 +24,7 @@ const Admin_Verifying_Products = () => {
  
   const [loading, setLoading] = useState<boolean>(true);
   const token = localStorage.getItem("token");
-  const apiUrl = "https://user-product-api-nb1x.onrender.com/api/admin"; 
+  const apiUrl = "https://user-product-api-gzwy.onrender.com/api/admin"; 
 
  
   const columns: GridColDef[] = [
