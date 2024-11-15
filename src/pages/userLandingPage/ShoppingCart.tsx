@@ -85,7 +85,7 @@ const ShoppingCart = () => {
       if (!addressResponse.ok) throw new Error("Failed to add address.");
 
       const purchaseResponse = await fetch(
-        "https://user-product-api-nb1x.onrender.com/api/customer/purchase",
+        "https://user-product-api-gzwy.onrender.com/api/customer/purchase",
         {
           method: "POST",
           headers: {
@@ -103,8 +103,7 @@ const ShoppingCart = () => {
         );
         clearCart();
         handleClose();
-        navigate("/user-landing-page");
-        navigate("/order-details");
+         navigate("/order-details");
       }
     } catch (error) {
       console.error("Failed to place order:", error);
@@ -244,151 +243,196 @@ const ShoppingCart = () => {
             >
               <DialogTitle>Fill the Address For the Order</DialogTitle>
               <DialogContent>
-  <form onSubmit={handleSubmit(onSubmit)}>
-    {/* Address Fields */}
-    <Controller
-      name="street"
-      control={control}
-      defaultValue=""
-      rules={{
-        required: "Street is required",
-        minLength: { value: 3, message: "Street must be at least 3 characters" },
-        maxLength: { value: 100, message: "Street must be at most 100 characters" },
-        pattern: {
-          value: /^[A-Za-z0-9]+(?:[ ]{1}[A-Za-z0-9]+)*$/,
-          message: "Street should allow only one space between words",
-        }
-      }}
-      render={({ field }) => (
-        <TextField
-          {...field}
-          label="Street"
-          variant="outlined"
-          fullWidth
-          type="text"
-          error={!!errors.street}
-          helperText={(errors.street && (errors.street.message as string)) || ''}
-          sx={{ mb: 2 }}
-        />
-      )}
-    />
-    <Controller
-      name="city"
-      control={control}
-      defaultValue=""
-      rules={{
-        required: "City is required",
-        minLength: { value: 3, message: "City must be at least 3 characters" },
-        maxLength: { value: 50, message: "City must be at most 50 characters" },
-        pattern: {
-          value: /^[A-Za-z]+$/,
-          message: "City must only contain alphabets and no spaces",
-        }
-      }}
-      render={({ field }) => (
-        <TextField
-          {...field}
-          label="City"
-          variant="outlined"
-          fullWidth
-          type="text"
-          error={!!errors.city}
-          helperText={(errors.city && (errors.city.message as string)) || ''}
-          sx={{ mb: 2 }}
-        />
-      )}
-    />
-    <Controller
-      name="state"
-      control={control}
-      defaultValue=""
-      rules={{
-        required: "State is required",
-        minLength: { value: 3, message: "State must be at least 3 characters" },
-        maxLength: { value: 50, message: "State must be at most 50 characters" },
-        pattern: {
-          value: /^[A-Za-z\s]+$/,
-          message: "State must only contain alphabets and spaces",
-        }
-      }}
-      render={({ field }) => (
-        <TextField
-          {...field}
-          label="State"
-          variant="outlined"
-          fullWidth
-          type="text"
-          error={!!errors.state}
-          helperText={(errors.state && (errors.state.message as string)) || ''}
-          sx={{ mb: 2 }}
-          onChange={(e) => {
-            const sanitizedValue = e.target.value.replace(/\s+/g, ' ').trim();  // Replace multiple spaces with a single space and remove leading/trailing spaces
-            field.onChange(sanitizedValue);  // Update the field value with the sanitized input
-          }}
-        />
-      )}
-    />
-    <Controller
-      name="pincode"
-      control={control}
-      defaultValue=""
-      rules={{
-        required: "Pin code is required",
-        pattern: {
-          value: /^[0-9]{6}$/,
-          message: "Pin code must be exactly 6 digits and no spaces",
-        }
-      }}
-      render={({ field }) => (
-        <TextField
-          {...field}
-          label="Pin Code"
-          variant="outlined"
-          fullWidth
-          type="number"
-          error={!!errors.pincode}
-          helperText={(errors.pincode && (errors.pincode.message as string)) || ''}
-          sx={{ mb: 2 }}
-        />
-      )}
-    />
-    <Controller
-      name="country"
-      control={control}
-      defaultValue=""
-      rules={{
-        required: "Country is required",
-        minLength: { value: 3, message: "Country must be at least 3 characters" },
-        maxLength: { value: 50, message: "Country must be at most 50 characters" },
-        pattern: {
-          value: /^[A-Za-z]+$/,
-          message: "Country must only contain alphabets and no spaces",
-        }
-      }}
-      render={({ field }) => (
-        <TextField
-          {...field}
-          label="Country"
-          variant="outlined"
-          type="text"
-          fullWidth
-          error={!!errors.country}
-          helperText={(errors.country && (errors.country.message as string)) || ''}
-          sx={{ mb: 2 }}
-        />
-      )}
-    />
-    <DialogActions>
-      <Button onClick={handleClose} color="primary">
-        Cancel
-      </Button>
-      <Button type="submit" variant="contained" color="primary">
-        Submit Order
-      </Button>
-    </DialogActions>
-  </form>
-</DialogContent>
-
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  {/* Address Fields */}
+                  <Controller
+                    name="street"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: "Street is required",
+                      minLength: {
+                        value: 3,
+                        message: "Street must be at least 3 characters",
+                      },
+                      maxLength: {
+                        value: 100,
+                        message: "Street must be at most 100 characters",
+                      },
+                      pattern: {
+                        value: /^[A-Za-z0-9, ]+$/,
+                        message: "No special characters allowed",
+                      },
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Street"
+                        variant="outlined"
+                        fullWidth
+                        type="text"
+                        error={!!errors.street}
+                        helperText={
+                          (errors.street &&
+                            (errors.street.message as string)) ||
+                          ""
+                        }
+                        sx={{ mb: 2 }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="city"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: "City is required",
+                      minLength: {
+                        value: 3,
+                        message: "City must be at least 3 characters",
+                      },
+                      maxLength: {
+                        value: 50,
+                        message: "City must be at most 50 characters",
+                      },
+                      pattern: {
+                        value: /^[A-Za-z]+$/,
+                        message:
+                          "City must only contain alphabets and no spaces",
+                      },
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="City"
+                        variant="outlined"
+                        fullWidth
+                        type="text"
+                        error={!!errors.city}
+                        helperText={
+                          (errors.city && (errors.city.message as string)) || ""
+                        }
+                        sx={{ mb: 2 }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="state"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: "State is required",
+                      minLength: {
+                        value: 3,
+                        message: "State must be at least 3 characters",
+                      },
+                      maxLength: {
+                        value: 50,
+                        message: "State must be at most 50 characters",
+                      },
+                      pattern: {
+                        value: /^[A-Za-z\s]+$/,
+                        message: "State must only contain alphabets and spaces",
+                      },
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="State"
+                        variant="outlined"
+                        fullWidth
+                        type="text"
+                        error={!!errors.state}
+                        helperText={
+                          (errors.state && (errors.state.message as string)) ||
+                          ""
+                        }
+                        sx={{ mb: 2 }}
+                        onChange={(e) => {
+                          const sanitizedValue = e.target.value
+                            .replace(/\s+/g, " ")
+                            .trim(); // Replace multiple spaces with a single space and remove leading/trailing spaces
+                          field.onChange(sanitizedValue); // Update the field value with the sanitized input
+                        }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="pincode"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: "Pin code is required",
+                      pattern: {
+                        value: /^[0-9]{6}$/,
+                        message:
+                          "Pin code must be exactly 6 digits and no spaces",
+                      },
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Pin Code"
+                        variant="outlined"
+                        fullWidth
+                        type="number"
+                        error={!!errors.pincode}
+                        helperText={
+                          (errors.pincode &&
+                            (errors.pincode.message as string)) ||
+                          ""
+                        }
+                        sx={{ mb: 2 }}
+                      />
+                    )}
+                  />
+                  <Controller
+                    name="country"
+                    control={control}
+                    defaultValue=""
+                    rules={{
+                      required: "Country is required",
+                      minLength: {
+                        value: 3,
+                        message: "Country must be at least 3 characters",
+                      },
+                      maxLength: {
+                        value: 50,
+                        message: "Country must be at most 50 characters",
+                      },
+                      pattern: {
+                        value: /^[A-Za-z]+$/,
+                        message:
+                          "Country must only contain alphabets and no spaces",
+                      },
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Country"
+                        variant="outlined"
+                        type="text"
+                        fullWidth
+                        error={!!errors.country}
+                        helperText={
+                          (errors.country &&
+                            (errors.country.message as string)) ||
+                          ""
+                        }
+                        sx={{ mb: 2 }}
+                      />
+                    )}
+                  />
+                  <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                      Cancel
+                    </Button>
+                    <Button type="submit" variant="contained" color="primary">
+                      Submit Order
+                    </Button>
+                  </DialogActions>
+                </form>
+              </DialogContent>
             </Dialog>
           </>
         )}
