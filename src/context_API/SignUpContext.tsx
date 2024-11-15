@@ -19,7 +19,7 @@ type SignUpFormData = {
 };
 
 const api = axios.create({
-  baseURL: "https://user-product-api-nb1x.onrender.com/api",
+  baseURL: "https://user-product-api-gzwy.onrender.com/api",
 });
 
 export const SignUpProvider = ({ children } :{children:React.ReactNode}) => {

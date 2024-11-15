@@ -43,7 +43,7 @@ const UserLandingNavbar = () => {
 
   return (
     <>
-      <AppBar position="static" color="primary" sx={{ width: "100vw",marginTop:"-4%", paddingY:"5px"  }}>
+      <AppBar position="static" color="primary" sx={{ width: "100vw", paddingY:"5px" , position:"fixed" }}>
         <Toolbar >
           <Typography variant="h6" component="div" sx={{ flexGrow: 1,cursor: 'pointer' }}
           onClick={()=> navigate("/user-landing-page")}  

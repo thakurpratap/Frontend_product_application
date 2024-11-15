@@ -4,16 +4,17 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Avatar,
   Typography,
   Box,
+  TableHead,
+  Paper,
+  CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import axios from "axios";
 
-// Define interfaces
 interface Address {
   street: string;
   city: string;
@@ -48,83 +49,119 @@ interface Order {
   __v: number;
 }
 
-const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
-  maxWidth: 800,
+const StyledTableContainer = styled(TableContainer)({
   borderRadius: "10px",
-  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-  marginTop: theme.spacing(4),
-}));
+  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+  margin: "auto",
+});
 
-// const StyledTableHead = styled(TableHead)({
-//   backgroundColor: "#1976d2",
-// });
-
-// const StyledTableCell = styled(TableCell)({
-//   color: "#fff",
-//   fontWeight: "bold",
-// });
+const StyledTableCell = styled(TableCell)({
+  fontWeight: "bold",
+  fontSize: "1rem",
+  textAlign: "center",
+  whiteSpace: "nowrap",
+});
 
 const OrderDetails = () => {
   const [OrderDetails, setOrderDetails] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const getAllOrderDetails = async () => {
-    const response = await axios.get(
-      "https://user-product-api-nb1x.onrender.com/api/customer/order-details",
-      {
-        headers: {
-          Authorization: `${localStorage.getItem("token")}`,
-        },
-      }
-    );
-
-    setOrderDetails(response.data.getAllOrderDetails);
+    try {
+      const response = await axios.get(
+        "https://user-product-api-gzwy.onrender.com/api/customer/order-details",
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setOrderDetails(response.data.getAllOrderDetails);
+    } catch (error) {
+      console.error("Error fetching order details:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     getAllOrderDetails();
   }, []);
 
-  console.log("orders", OrderDetails);
-
   return (
     <>
-      <Box display="flex" justifyContent="center" padding={2}>
+    <Box display="flex" justifyContent="center" padding={2} sx={{ width: "100vw", marginTop: "-5%" }}>
+      <Paper elevation={3}>
         <StyledTableContainer>
+          <Typography variant="h4" align="center" gutterBottom>
+            Order Details
+          </Typography>
           <Table>
-            <h1>Order Details</h1>
+            <TableHead sx={{backgroundColor: "#1976D2"  }}>
+              <TableRow>
+                <StyledTableCell style={{ width: "15%", color:"white" }}>Order ID</StyledTableCell>
+                <StyledTableCell style={{ width: "15%", color:"white" }}>Date</StyledTableCell>
+                <StyledTableCell style={{ width: "10%", color:"white" }}>Status</StyledTableCell>
+                <StyledTableCell style={{ width: "30%", color:"white" }}>Product Name</StyledTableCell>
+                <StyledTableCell style={{ width: "10%", color:"white" }}>Quantity</StyledTableCell>
+                <StyledTableCell style={{ width: "10%", color:"white" }}>Price</StyledTableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>
-              {OrderDetails.map((order) => {
-                return order.products.map((product, index) => (
-                  <TableRow>
-                    {product.items.map((item, i) => (
-                      <TableRow key={`${order._id}-${index}-${i}`} hover>
-                        <TableCell>{order._id}</TableCell>
-                        <TableCell>
-                          <Box display="flex" alignItems="center">
-                            <Avatar
-                              src={item.image.image}
-                              alt={item.name}
-                              variant="rounded"
-                              sx={{ width: 50, height: 50, marginRight: 2 }}
-                            />
-                            <Typography variant="body1">
-                              Name {item.name}
-                            </Typography>
-                          </Box>
+              {loading ? (
+                <TableRow>
+                  <TableCell colSpan={6} align="center">
+                    <CircularProgress /> {/* Show spinner in data row */}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                OrderDetails.map((order) =>
+                  order.products.map((product, index) => (
+                    <React.Fragment key={`${order._id}-${index}`}>
+                      <TableRow>
+                        <TableCell rowSpan={product.items.length + 1} align="center">
+                          {order._id}
                         </TableCell>
-                        <TableCell>Price {item.price}</TableCell>
-                        <TableCell>Quantity {item.qty}</TableCell>
+                        <TableCell rowSpan={product.items.length + 1} align="center">
+                          {new Date(order.createdAt).toLocaleString()}
+                        </TableCell>
+                        <TableCell rowSpan={product.items.length + 1} align="center">
+                          Pending
+                        </TableCell>
                       </TableRow>
-                    ))}
-
-                    <TableCell>Total Price {product.totalPrice}</TableCell>
-                  </TableRow>
-                ));
-              })}
+                      {product.items.map((item, i) => (
+                        <TableRow key={`${order._id}-${index}-${i}`} hover>
+                          <TableCell>
+                            <Box display="flex" alignItems="center">
+                              <Avatar
+                                src={item.image.image}
+                                alt={item.name}
+                                variant="rounded"
+                                sx={{ width: 50, height: 50, marginRight: 2 }}
+                              />
+                              <Typography variant="body1" noWrap sx={{ maxWidth: "150px" }}>
+                                {item.name}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          <TableCell align="center">{item.qty}</TableCell>
+                          <TableCell align="center">₹{item.price}</TableCell>
+                        </TableRow>
+                      ))}
+                      <TableRow>
+                        <TableCell colSpan={6} align="right" sx={{ fontWeight: "bold" }}>
+                          Total: ₹{product.totalPrice}
+                        </TableCell>
+                      </TableRow>
+                    </React.Fragment>
+                  ))
+                )
+              )}
             </TableBody>
           </Table>
         </StyledTableContainer>
-      </Box>
+      </Paper>
+    </Box>
     </>
   );
 };

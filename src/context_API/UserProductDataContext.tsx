@@ -26,7 +26,7 @@ export const UserProductDataProvider = ({ children }:{children:React.ReactNode})
   const { data, isLoading, isError }: UseQueryResult<{ published: Product[] }, Error> = useQuery({
     queryKey: ['userProducts'],
     queryFn: async () => {
-      const response = await axios.get<{ published: Product[] }>('https://user-product-api-nb1x.onrender.com/api/customer/products',{
+      const response = await axios.get<{ published: Product[] }>('https://user-product-api-gzwy.onrender.com/api/customer/products',{
         headers:{
           Authorization:`${localStorage.getItem("token")}`
         }
