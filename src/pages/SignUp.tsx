@@ -225,8 +225,8 @@ render={({ field }) => (
 <TextField
 {...field}
 fullWidth
-label="Phone Number"
-type="tel"
+label="Phone Number*"
+type="number"
 margin="normal"
 error={!!errors.phone}
 helperText={errors.phone?.message || ''}

@@ -21,9 +21,9 @@ const UserHome = () => {
   const { cart, addToCart, removeFromCart } = useCart();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log("in use effect");
-  }, [products]);
+
+ 
+
 
   if (isLoading) {
     return (
