@@ -203,7 +203,7 @@ const Admin_Usermanagement = () => {
                   //   value: /^[a-zA-Z]+(?: [a-zA-Z]+)*$/,
                   //   message:
                   //     "Only alphabets are allowed, and space is allowed only between words",
-                  // },
+                  // },                
                   minLength: {
                     value: 4,
                     message: "username minimum 4 characters",
