@@ -237,3 +237,14 @@ padding: 12px 15px !important
 /* .MuiDataGrid-columnHeader {
   pointer-events: none;
 } */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

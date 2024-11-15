@@ -110,7 +110,7 @@ const SignIn = () => {
             },
             minLength: {
               value: 8,
-              message: " minimum Password 8 ",
+              message: "Password must be minimum 8 characters",
             },
           }}
           render={({ field }) => (

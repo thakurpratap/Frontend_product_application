@@ -165,7 +165,7 @@ message: "Password cannot exceed more than 20 characterslong!",
 },
 minLength: {
 value: 8,
-message: " minimum Password 8 ",
+message: " Password must be minimum 8 characters ",
 },
 }}
 render={({ field }) => (
@@ -225,8 +225,8 @@ render={({ field }) => (
 <TextField
 {...field}
 fullWidth
-label="Phone Number"
-type="tel"
+label="Phone Number*"
+type="number"
 margin="normal"
 error={!!errors.phone}
 helperText={errors.phone?.message || ''}
