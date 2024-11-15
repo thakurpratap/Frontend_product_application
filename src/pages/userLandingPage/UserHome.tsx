@@ -1,23 +1,38 @@
-import React from 'react';
-import { Card, CardContent, CardMedia, Typography, CardActions, Button, Grid, Box, Stack, Rating, } from '@mui/material';
-import { useUserProductData } from '../../context_API/UserProductDataContext';
-import { useCart } from '../../context_API/CartContext';  
-import { OrbitProgress } from 'react-loading-indicators';
-import { useNavigate, } from 'react-router-dom'; 
+import React, { useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  CardActions,
+  Button,
+  Grid,
+  Box,
+  Stack,
+  Rating,
+} from "@mui/material";
+import { useUserProductData } from "../../context_API/UserProductDataContext";
+import { useCart } from "../../context_API/CartContext";
+import { OrbitProgress } from "react-loading-indicators";
+import { useNavigate } from "react-router-dom";
 
 const UserHome = () => {
   const { products, isLoading, isError } = useUserProductData();
-  const { cart, addToCart, removeFromCart } = useCart();  
-  const navigate = useNavigate(); 
+  const { cart, addToCart, removeFromCart } = useCart();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("in use effect");
+  }, [products]);
 
   if (isLoading) {
     return (
-      <Box sx={{ textAlign: "center" }}>
-        <OrbitProgress color="blue" size="medium" text=""  />
+      <Box sx={{ textAlign: "center", marginTop:"5%" }}>
+        <OrbitProgress color="blue" size="medium" text="" />
       </Box>
     );
   }
- 
+
   if (isError) {
     return <Typography>Error loading products</Typography>;
   }
@@ -26,25 +41,35 @@ const UserHome = () => {
     return <Typography>No products available</Typography>;
   }
 
-  const isInCart = (productId:any) => cart.some((item) => item._id === productId);
+  const isInCart = (productId: any) =>
+    cart.some((item) => item._id === productId);
 
-
-  const handleImageClick = (product:any) => {
-    navigate('/cart-details', { state: { product } });
+  const handleImageClick = (product: any) => {
+    navigate("/cart-details", { state: { product } });
   };
 
   return (
-    < >
-      <Grid container spacing={1} sx={{width:"100vw",display:"flex",gap:"2px" , justifyContent:"center"}}  >
+    <>
+      <Grid
+        container
+        spacing={1}
+        sx={{
+          width: "100vw",
+          display: "flex",
+          gap: "2px",
+          justifyContent: "center",
+          marginTop: "2%",
+        }}
+      >
         {products.map((product) => (
           <Grid item key={product._id}>
-            <Card sx={{ width: '285px', height: '370px', marginTop: "5px" }}>
+            <Card sx={{ width: "285px", height: "370px", marginTop: "5px" }}>
               <CardMedia
                 component="img"
                 height="200"
                 image={`${product.image.image}`}
                 alt={product.name}
-                sx={{ objectFit: "cover", width: '100%', cursor: 'pointer' }}
+                sx={{ objectFit: "cover", width: "100%", cursor: "pointer" }}
                 onClick={() => handleImageClick(product)}
               />
               <CardContent>
@@ -62,14 +87,14 @@ const UserHome = () => {
                   </Stack>
                 </Stack>
               </CardContent>
-              <CardActions sx={{display:"flex",justifyContent:"center"}}>
+              <CardActions sx={{ display: "flex", justifyContent: "center" }}>
                 {isInCart(product._id) ? (
                   <Button
                     size="small"
                     color="error"
                     variant="contained"
-                    onClick={() => removeFromCart(product._id)} 
-                    sx={{ width: "185px" , paddingY:"6px"}} 
+                    onClick={() => removeFromCart(product._id)}
+                    sx={{ width: "185px", paddingY: "6px" }}
                   >
                     Remove from Cart
                   </Button>
@@ -78,11 +103,13 @@ const UserHome = () => {
                     size="small"
                     color="primary"
                     variant="contained"
-                   onClick={() => addToCart({
-                    ...product,
-                    qty:1
-                   })} 
-                    sx={{ width: "185px",paddingY:"6px" }} 
+                    onClick={() =>
+                      addToCart({
+                        ...product,
+                        qty: 1,
+                      })
+                    }
+                    sx={{ width: "185px", paddingY: "6px" }}
                   >
                     Add to Cart
                   </Button>

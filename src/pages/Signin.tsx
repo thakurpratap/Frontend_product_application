@@ -1,17 +1,32 @@
-import React, { useState } from 'react';
-import { TextField, Button, Typography, Box, Grid, CircularProgress, Divider, IconButton } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
-import { useSignIn } from '../context_API/SignInContext';
-import { Visibility, VisibilityOff } from '@mui/icons-material'; 
+import React, { useState } from "react";
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Grid,
+  CircularProgress,
+  Divider,
+  IconButton,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import { useSignIn } from "../context_API/SignInContext";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const SignIn = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm({ mode: 'onChange' });
-  const { signIn, loading } = useSignIn();  
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+  });
+  const { signIn, loading } = useSignIn();
 
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
   const onSubmit = async (data: any) => {
-    await signIn(data);  
+    await signIn(data);
   };
 
   const togglePasswordVisibility = () => {
@@ -19,10 +34,29 @@ const SignIn = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100vw', background: 'white', marginTop: '-4%' }}>
-      <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)} 
-        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '15%', width: '20%' }}>
-        
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100vw",
+        background: "white",
+        marginTop: "-4%",
+      }}
+    >
+      <Box
+        component="form"
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          marginLeft: "15%",
+          width: "20%",
+        }}
+      >
         <Typography variant="h4" align="center" gutterBottom>
           Sign In
         </Typography>
@@ -35,9 +69,11 @@ const SignIn = () => {
             required: "Email is required",
             validate: {
               noSpaces: (value) =>
-              !/\s/.test(value) || "Email cannot contain spaces",
+                !/\s/.test(value) || "Email cannot contain spaces",
               validEmail: (value) =>
-                /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value) || "This is not a valid email",
+                (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value) &&
+                  !/\.\./.test(value)) ||
+                "This is not a valid email",
             },
           }}
           render={({ field }) => (
@@ -49,7 +85,11 @@ const SignIn = () => {
               margin="normal"
               error={!!errors.email}
               helperText={errors.email ? (errors.email.message as string) : ""}
-              sx={{ '& .MuiInputBase-root': { borderRadius: 2 }}}
+              sx={{
+                "& .MuiInputBase-root": {
+                  borderRadius: 2,
+                },
+              }}
             />
           )}
         />
@@ -78,20 +118,22 @@ const SignIn = () => {
               {...field}
               fullWidth
               label="Password *"
-              type={showPassword ? 'text' : 'password'} 
+              type={showPassword ? "text" : "password"}
               margin="normal"
               error={!!errors.password}
-              helperText={errors.password ? (errors.password.message as string) : ""}
-              sx={{ '& .MuiInputBase-root': { borderRadius: 2 }}}
+              helperText={
+                errors.password ? (errors.password.message as string) : ""
+              }
+              sx={{ "& .MuiInputBase-root": { borderRadius: 2 } }}
               InputProps={{
                 endAdornment: (
                   <IconButton
                     edge="end"
                     onClick={togglePasswordVisibility}
                     aria-label="toggle password visibility"
-                    sx={{ color: 'gray' }}
+                    sx={{ color: "gray" }}
                   >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}  
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 ),
               }}
@@ -99,14 +141,27 @@ const SignIn = () => {
           )}
         />
 
-        <Button type="submit" variant="contained" sx={{ mt: 2, borderRadius: 2, backgroundColor: "#3A5B22" }} fullWidth disabled={loading}>
-          {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ mt: 2, borderRadius: 2, backgroundColor: "#3A5B22" }}
+          fullWidth
+          disabled={loading}
+        >
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Sign In"}
         </Button>
 
         <Grid container justifyContent="center" sx={{ mt: 2 }}>
           <Grid item>
-            Don't have an account? 
-            <Link to="/signup" style={{ textDecoration: 'none', color: 'blue', marginLeft: '10px' }}>
+            Don't have an account?
+            <Link
+              to="/signup"
+              style={{
+                textDecoration: "none",
+                color: "blue",
+                marginLeft: "10px",
+              }}
+            >
               Sign Up
             </Link>
           </Grid>
@@ -116,7 +171,10 @@ const SignIn = () => {
 
         <Grid container justifyContent="center">
           <Grid item>
-            <Link to="/forget-password" style={{ textDecoration: 'none', color: 'blue' }}>
+            <Link
+              to="/forget-password"
+              style={{ textDecoration: "none", color: "blue" }}
+            >
               Forgot Password?
             </Link>
           </Grid>
@@ -128,12 +186,12 @@ const SignIn = () => {
         src="https://images.unsplash.com/photo-1525498128493-380d1990a112?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         alt="signInImage"
         sx={{
-          width: '50vw',
-          height: '100vh',
+          width: "50vw",
+          height: "100vh",
           objectFit: "cover",
-          objectPosition: 'center',
-          borderTopLeftRadius: '30px',  
-          borderBottomLeftRadius: '30px',
+          objectPosition: "center",
+          borderTopLeftRadius: "30px",
+          borderBottomLeftRadius: "30px",
         }}
       />
     </Box>
