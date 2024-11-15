@@ -199,11 +199,11 @@ const Admin_Usermanagement = () => {
                 defaultValue=""
                 rules={{
                   required: "username is required",
-                  pattern: {
-                    value: /^[a-zA-Z]+(?: [a-zA-Z]+)*$/,
-                    message:
-                      "Only alphabets are allowed, and space is allowed only between words",
-                  },
+                  // pattern: {
+                  //   value: /^[a-zA-Z]+(?: [a-zA-Z]+)*$/,
+                  //   message:
+                  //     "Only alphabets are allowed, and space is allowed only between words",
+                  // },
                   minLength: {
                     value: 4,
                     message: "username minimum 4 characters",
@@ -228,7 +228,8 @@ const Admin_Usermanagement = () => {
                     noSpaces: (value) =>
                       !/\s/.test(value) || "Email cannot contain spaces",
                     validEmail: (value) =>
-                      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value) || "This is not a valid email",
+                      /^[a-zA-Z0-9](?!.*\.\.)[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(value) ||
+                      "This is not a valid email",
                   },
                 }}
                 render={({ field }) => (
@@ -251,6 +252,10 @@ const Admin_Usermanagement = () => {
                       value: 8,
                       message: " minimum Password 8 ",
                     },
+                    maxLength: {
+                      value: 8,
+                      message: "Password cannot exceed more than  8 ",
+                    },
                   }}
                   render={({ field }) => (
                     <TextField fullWidth margin="dense" variant="filled" label="Password*" type="password" {...field} error={!!errors.password}
@@ -268,7 +273,11 @@ const Admin_Usermanagement = () => {
                     noSpaces: (value) =>
                       !/\s/.test(value) || "Phone number cannot contain spaces",
                     noAlphabets: (value) =>
-                      /^[0-9]*$/.test(value) || "Phone number cannot contain alphabets",
+                      /^[0-9]*$/.test(value) ||
+                      "Phone number cannot contain alphabets",
+                    startsFromSix: (value) =>
+                      /^[6-9]/.test(value) ||
+                      "Phone number should start from 6 or above",
                   },
                   pattern: {
                     value: /^[0-9]+$/,
@@ -277,6 +286,10 @@ const Admin_Usermanagement = () => {
                   maxLength: {
                     value: 10,
                     message: "Phone number cannot exceed more than 10 digits",
+                  },
+                  minLength: {
+                    value: 10,
+                    message: "Phone number must be more than 10 digits",
                   },
                 }}
                 render={({ field }) => (
@@ -291,16 +304,16 @@ const Admin_Usermanagement = () => {
                 rules={{
                   required: "Address is required",
                   pattern: {
-                    value: /^(?!.*\s{2,})(?!\s)[a-zA-Z0-9\s]{4,30}(?<!\s)$/,
-                    message: "Address canot allow more the one sapce",
+                    value: /^(?!\d+$)(?!.*\s{2,})(?!\s)[a-zA-Z0-9\s,./-]{4,50}$/,
+                    message: "Enter a valid address with allowed characters",
                   },
                   minLength: {
                     value: 4,
-                    message: "Address is more then 4 characters",
+                    message: "Address must be more than 4 characters",
                   },
                   maxLength: {
                     value: 50,
-                    message: "Address cannot exceed more than 30 characters",
+                    message: "Address cannot exceed 50 characters",
                   },
                 }}
                 render={({ field }) => (
