@@ -9,40 +9,38 @@ email: string;
 }
 
 const ForgetPassword = () => {
-const { control, handleSubmit, formState: { errors } } =
-useForm<ForgetPasswordData>({
-mode:"onChange"
-});
-const [loading, setLoading] = useState(false);
-const onSubmit =async (data: ForgetPasswordData) => {
-setLoading(true);
-try{
-const response= await
-fetch("https://user-product-api-gzwy.onrender.com/api/auth/verify-email",{
-method:"POST",
-headers:{
-'Content-Type':'application/json'
-},
-body:JSON.stringify(data)
-})
-const result=await response.json();
-console.log("result",result)
-console.log("result.token",result.token)
-localStorage.setItem("emailToken",result.token)
-console.log(result)
-if(response.ok){
-toast.success("Email sent Successfull. Please check your inbox")
-console.log("Email sent Successfull. Please check your inbox")
-}else{
-toast.error(result.message || "Email is Not Registred")
-console.log(result.message || "Email is Not Registred")
-}
-}catch(error){
-toast.error("SomeThing Wrong")
-}finally{
-setLoading(false)
-}
-};
+  const { control, handleSubmit, formState: { errors } } = useForm<ForgetPasswordData>({
+    mode:"onChange"
+  });
+  const [loading, setLoading] = useState(false);
+  const onSubmit =async (data: ForgetPasswordData) => {
+    setLoading(true);
+       try{
+         const response= await fetch("https://user-product-api-gzwy.onrender.com/api/auth/verify-email",{
+           method:"POST",
+           headers:{
+            'Content-Type':'application/json'
+           },
+           body:JSON.stringify(data)
+         })
+        const result=await response.json();
+         console.log("result",result)
+         console.log("result.token",result.token)
+        localStorage.setItem("emailToken",result.token)
+        console.log(result)
+        if(response.ok){
+          toast.success("Email sent Successfull. Please check your inbox")
+          console.log("Email sent Successfull. Please check your inbox")
+        }else{
+            toast.error(result.message || "Email is Not Registred")
+            console.log(result.message || "Email is Not Registred")
+        }
+       }catch(error){
+          toast.error("SomeThing Wrong")
+       }finally{
+        setLoading(false)
+       }
+  };
 
 return (
 <Box sx={{ display: 'flex', justifyContent: 'space-between',

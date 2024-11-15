@@ -46,7 +46,7 @@ const AdminPage = () => {
 
   const { control, handleSubmit, reset, formState: { errors }, } = useForm<AdminFormInputs>({ mode: 'onChange' });
   const token = localStorage.getItem("token");
-  const apiUrl = "https://user-product-api-nb1x.onrender.com/api/admin";
+  const apiUrl = "https://user-product-api-gzwy.onrender.com/api/admin";
 
   const columns: GridColDef[] = [
     { field: "username", headerName: "Username", flex: 1 },
@@ -203,7 +203,7 @@ const AdminPage = () => {
                   },
                 }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Username" {...field}  error={!!errors.username}
+                  <TextField fullWidth margin="dense" variant="filled" label="Username*" {...field}  error={!!errors.username}
                   helperText={errors.username?.message || ""} />
                 )}
               />
@@ -221,7 +221,7 @@ const AdminPage = () => {
                   },
                 }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Email" {...field}  error={!!errors.email}
+                  <TextField fullWidth margin="dense" variant="filled" label="Email*" {...field}  error={!!errors.email}
                   helperText={errors.email?.message || ""} />
                 )}
               />
@@ -242,7 +242,7 @@ const AdminPage = () => {
                     // },
                   }}
                   render={({ field }) => (
-                    <TextField fullWidth margin="dense" variant="filled" label="Password" type="password" {...field}  error={!!errors.password}
+                    <TextField fullWidth margin="dense" variant="filled" label="Password*" type="password" {...field}  error={!!errors.password}
                     helperText={errors.password?.message || ""}/>
                   )}
                 />
@@ -269,7 +269,7 @@ const AdminPage = () => {
                   },
                 }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Phone" {...field}  error={!!errors.phone}
+                  <TextField fullWidth margin="dense" variant="filled" label="Phone*" {...field}  error={!!errors.phone}
                   helperText={errors.phone?.message || ""} />
                 )}
               />
@@ -293,7 +293,7 @@ const AdminPage = () => {
                   },
                 }}
                 render={({ field }) => (
-                  <TextField fullWidth margin="dense" variant="filled" label="Address" {...field}  error={!!errors.address}
+                  <TextField fullWidth margin="dense" variant="filled" label="Address*" {...field}  error={!!errors.address}
                   helperText={errors.address?.message || ""}/>
                 )}
               />

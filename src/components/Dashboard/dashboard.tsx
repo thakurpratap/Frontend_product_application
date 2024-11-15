@@ -15,6 +15,7 @@ import { DataGrid, GridColDef, GridSearchIcon } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 
 interface Product {
@@ -43,7 +44,18 @@ const Dashboard = () => {
   const [selectedProductId, setSelectedProductId] = useState<number | null>(
     null
   );
-  const imageBaseUrl = "https://user-product-api-nb1x.onrender.com"; // Server's base URL
+  const imageBaseUrl = "https://user-product-api-gzwy.onrender.com/"; 
+  const { control, handleSubmit, reset, formState: { errors } } = useForm<NewProduct>({
+    defaultValues: {
+      name: "",
+      description: "",
+      price: 0,
+      rating: 0,
+      isVerified: false,
+      image: null,
+    },
+  });
+  
   const [newProduct, setNewProduct] = useState<NewProduct>({
     name: "",
     description: "",
@@ -63,8 +75,8 @@ const Dashboard = () => {
       setLoading(true);
       try {
         const url = searchTerm
-          ? `https://user-product-api-nb1x.onrender.com/api/partner/search?name=${searchTerm}`
-          : `https://user-product-api-nb1x.onrender.com/api/partner/`;
+          ? `https://user-product-api-gzwy.onrender.com/api/partner/search?name=${searchTerm}`
+          : `https://user-product-api-gzwy.onrender.com/api/partner/`;
 
         const response = await axios.get<Product[]>(url, {
           headers: {
@@ -92,7 +104,7 @@ const Dashboard = () => {
       formData.append("image", product.image!);
 
       await axios.post(
-        "https://user-product-api-nb1x.onrender.com/api/partner/add-product/",
+        "https://user-product-api-gzwy.onrender.com/api/partner/add-product/",
         formData,
         {
           headers: {
@@ -119,7 +131,7 @@ const Dashboard = () => {
       if (product.image) formData.append("image", product.image);
 
       await axios.put(
-        `https://user-product-api-nb1x.onrender.com/api/partner/updateProduct/${selectedProductId}`,
+        `https://user-product-api-gzwy.onrender.com/api/partner/updateProduct/${selectedProductId}`,
         formData,
         {
           headers: {
@@ -138,7 +150,7 @@ const Dashboard = () => {
   const deleteProductMutation = useMutation({
     mutationFn: async (id: number) => {
       await axios.delete(
-        `https://user-product-api-nb1x.onrender.com/api/partner/delete-product/${id}`,
+        `https://user-product-api-gzwy.onrender.com/api/partner/delete-product/${id}`,
         {
           headers: {
             Authorization: token,

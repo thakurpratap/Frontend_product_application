@@ -67,7 +67,11 @@ const UserHome = () => {
               <CardMedia
                 component="img"
                 height="200"
+
+               
+
                 image={`${product.image.image}`}
+
                 alt={product.name}
                 sx={{ objectFit: "cover", width: "100%", cursor: "pointer" }}
                 onClick={() => handleImageClick(product)}

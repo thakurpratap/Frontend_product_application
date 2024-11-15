@@ -28,6 +28,7 @@ const CartDetails = () => {
           <CardMedia
             component="img"
             image={`${product.image.image}`}
+
             alt={product.name}
             sx={{height:"90vh",objectFit:"cover",borderRadius:"20px"}}
           />

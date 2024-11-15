@@ -128,7 +128,6 @@ const ShoppingCart = () => {
         <Typography variant="h4" gutterBottom>
           Shopping Cart
         </Typography>
-
         {cart.length === 0 ? (
           <Typography variant="h6" color="textSecondary">
             Your cart is empty.
@@ -214,6 +213,7 @@ const ShoppingCart = () => {
                   ))}
                 </TableBody>
               </Table>
+
             </Box>
 
             <Box

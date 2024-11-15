@@ -28,7 +28,7 @@ const fetchPartners = async (): Promise<Partner[]> => {
 
   try {
     const response = await axios.get(
-      "https://user-product-api-nb1x.onrender.com/api/admin/all-partners",
+      "https://user-product-api-gzwy.onrender.com/api/admin/all-partners",
       config
     );
     return response.data; 
