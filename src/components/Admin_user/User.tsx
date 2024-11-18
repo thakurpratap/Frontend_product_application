@@ -141,6 +141,7 @@ const Admin_Usermanagement = () => {
             },
           }
         );
+        console.log("response",response)
         toast.success("Partner updated successfully!");
         console.log("PARTNER Updated:", response.data);
       } else {
@@ -154,6 +155,7 @@ const Admin_Usermanagement = () => {
             },
           }
         );
+        console.log(response)
         toast.success("Partner created successfully!");
         console.log("PARTNER Created:", response.data);
       }
@@ -161,12 +163,14 @@ const Admin_Usermanagement = () => {
       handleClose();
     } catch (error) {
       console.error("Full error object:", error);
-      const err = error as any;
-      // if (err.response?.data?.message === "User already exists") {
-      //   toast.success("This email or phone number is already registered!");
-      // } else {
-      //   toast.success("An unexpected error occurred!");
-      // }
+    
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        const errorMessage = error.response.data.message;
+        console.log("Error message:", errorMessage); 
+        toast.error(errorMessage); 
+      } else {
+        toast.error("An unexpected error occurred!");
+      }
     }
   };
 
