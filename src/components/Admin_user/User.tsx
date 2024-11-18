@@ -259,7 +259,7 @@ const Admin_Usermanagement = () => {
                     },
                     minLength: {
                       value: 8,
-                      message: " minimum Password 8 ",
+                      message: "Password must be minimum 8 character's",
                     },
                     maxLength: {
                       value: 8,
@@ -314,7 +314,7 @@ const Admin_Usermanagement = () => {
                   required: "Address is required",
                   pattern: {
                     value: /^(?!\d+$)(?!.*\s{2,})(?!\s)[a-zA-Z0-9\s,./-]{4,50}$/,
-                    message: "Enter a valid address with allowed characters",
+                    message: "Address should not start from sapce",
                   },
                   minLength: {
                     value: 4,
@@ -327,7 +327,12 @@ const Admin_Usermanagement = () => {
                 }}
                 render={({ field }) => (
                   <TextField fullWidth margin="dense" variant="filled" label="Address*" {...field} error={!!errors.address}
-                  helperText={errors.address?.message || ""}/>
+                  helperText={errors.address?.message || ""}
+                  onChange={(e) => {
+                    // Replace multiple spaces with a single space
+                    const cleanedValue = e.target.value.replace(/\s{2,}/g, " ");
+                    field.onChange(cleanedValue);
+                  }}/>
                 )}
               />
               <Controller

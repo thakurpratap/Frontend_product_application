@@ -204,8 +204,8 @@ const AdminPage = () => {
                   // },
                   
                   minLength: {
-                    value: 4,
-                    message: "username minimum 4 characters",
+                    value: 3,
+                    message: "username must be minimum 3 characters",
                   },
                   maxLength: {
                     value: 20,
@@ -249,11 +249,11 @@ const AdminPage = () => {
                     },
                     minLength: {
                       value: 8,
-                      message: " minimum Password 8 ",
+                      message: " Password must be minimum 8 character's ",
                     },
                     maxLength: {
-                      value: 8,
-                      message: "Password cannot exceed more than  8 ",
+                      value: 16,
+                      message: "Password cannot exceed more than 16 character's ",
                     },
                   }}
                   render={({ field }) => (
@@ -304,7 +304,7 @@ const AdminPage = () => {
                   required: "Address is required",
                   pattern: {
                     value: /^(?!\d+$)(?!.*\s{2,})(?!\s)[a-zA-Z0-9\s,./-]{4,50}$/,
-                    message: "Enter a valid address with allowed characters",
+                    message: "Address should not start from sapce",
                   },
                   minLength: {
                     value: 4,
