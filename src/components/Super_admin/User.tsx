@@ -162,11 +162,13 @@ const AdminPage = () => {
       handleClose();
     }catch (error: any) {
       console.error("Error saving admin:", error);
-        // if (error.response?.data?.message?.includes("email")) {
-        //   toast.error("Email already exists!");
-        // } else if (error.response?.data?.message?.includes("phone")) {
-        //   toast.error("Phone number already exists!");
-        // }
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        const errorMessage = error.response.data.message;
+        console.log("Error message:", errorMessage); 
+        toast.error(errorMessage); 
+      } else {
+        toast.error("An unexpected error occurred!");
+      }
       }
   };
 
