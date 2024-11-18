@@ -16,6 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useForm, Controller } from "react-hook-form";
+import { toast } from "react-toastify";
 import axios from "axios";
 
 interface Product {
@@ -43,6 +44,9 @@ const Dashboard = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [productIdToDelete, setProductIdToDelete] = useState<number | null>(null);
+
   const { control, handleSubmit, reset, formState: { errors, isValid } } = useForm<NewProduct>({
     defaultValues: {
       name: "",
@@ -54,16 +58,6 @@ const Dashboard = () => {
     },
      mode: 'onChange' ,  
   });
-
-  // const [newProduct, setNewProduct] = useState<NewProduct>({
-  //   name: "",
-  //   description: "",
-  //   price: 0,
-  //   rating: 0,
-  //   isVerified: false,
-  //   image: null,
-  // });
-
   const token = localStorage.getItem("token");
 
   const { data: products = [], refetch } = useQuery({
@@ -83,7 +77,6 @@ const Dashboard = () => {
       }
     },
   });
-
   const createProductMutation = useMutation({
     mutationFn: async (product: NewProduct) => {
       const formData = new FormData();
@@ -99,11 +92,11 @@ const Dashboard = () => {
       });
     },
     onSuccess: () => {
+      toast.success("Product Created successfully!");
       refetch();
       handleClose();
     },
   });
-
   const updateProductMutation = useMutation({
     mutationFn: async (product: NewProduct) => {
       const formData = new FormData();
@@ -119,11 +112,11 @@ const Dashboard = () => {
       });
     },
     onSuccess: () => {
+      toast.success("Product Updated successfully!");
       refetch();
       handleClose();
     },
   });
-
   const deleteProductMutation = useMutation({
     mutationFn: async (id: number) => {
       await axios.delete(`https://user-product-api-gzwy.onrender.com/api/partner/delete-product/${id}`, {
@@ -131,26 +124,10 @@ const Dashboard = () => {
       });
     },
     onSuccess: () => {
+      toast.success("Product Deleted successfully!");
       refetch();
     },
   });
-
-  // const handleClickOpen = () => setOpen(true);
-  // const handleClose = () => {
-  //   setOpen(false);
-  //   setIsEditing(false);
-  //   setSelectedProductId(null);
-  //   setNewProduct({
-  //     name: "",
-  //     description: "",
-  //     price: 0,
-  //     rating: 0,
-  //     isVerified: false,
-  //     image: null,
-  //   });
-  // };
-
-
   const handleClickOpen = () => {
     // Reset the form when opening for a new product
     reset({
@@ -171,25 +148,9 @@ const Dashboard = () => {
     setIsEditing(false);
     setSelectedProductId(null);
   };
-
   const handleCreateProduct = (data: NewProduct) => {
     createProductMutation.mutate(data);
   };
-
-  // const handleEditProduct = (product: Product) => {
-  //   setSelectedProductId(product._id);
-  //   setNewProduct({
-  //     name: product.name,
-  //     description: product.description,
-  //     price: product.price,
-  //     rating: product.rating,
-  //     isVerified: product.isVerified,
-  //     image: null,
-  //   });
-  //   setIsEditing(true);
-  //   setOpen(true);
-  // };
-
   const handleEditProduct = (product: Product) => {
     setSelectedProductId(product._id);
     setIsEditing(true); // Set this to true to signify editing mode
@@ -214,9 +175,6 @@ const Dashboard = () => {
     deleteProductMutation.mutate(id);
   };
 
-  // const handleSearch = () => {
-  //   refetch();
-  // };
   const handleSearch = () => {
     const filteredProducts = products.filter(product =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -414,8 +372,7 @@ const Dashboard = () => {
               style={{ height: "70vh" }}
               // rows={products}
               columns={columns}
-      rows={handleSearch()}
-
+             rows={handleSearch()}
               // checkboxSelection
               getRowId={(row) => row._id}
               sx={{      
