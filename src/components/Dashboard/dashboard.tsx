@@ -42,7 +42,8 @@ const Dashboard = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
-  const { control, handleSubmit, reset, formState: { errors } } = useForm<NewProduct>({
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const { control, handleSubmit, reset, formState: { errors, isValid } } = useForm<NewProduct>({
     defaultValues: {
       name: "",
       description: "",
@@ -213,8 +214,14 @@ const Dashboard = () => {
     deleteProductMutation.mutate(id);
   };
 
+  // const handleSearch = () => {
+  //   refetch();
+  // };
   const handleSearch = () => {
-    refetch();
+    const filteredProducts = products.filter(product =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    return filteredProducts;
   };
 
   const columns: GridColDef<Product>[] = [
@@ -262,6 +269,8 @@ const Dashboard = () => {
             <TextField
               size="small"
               variant="outlined"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               // onChange={(e) => setSearchTerm(e.target.value)}
               InputProps={{
                 startAdornment: (
@@ -378,6 +387,7 @@ const Dashboard = () => {
                     variant="filled"
                     label="Image"
                     type="file"
+                    inputProps={{ accept: "image/*" }}
                     // onChange={(e) => field.onChange(e.target.files ? e.target.files[0] : null)}
                     onChange={(e) => {
                       const file = (e.target as HTMLInputElement).files?.[0] || null; // Cast to HTMLInputElement
@@ -390,7 +400,7 @@ const Dashboard = () => {
               />
               <DialogActions>
                 <Button onClick={handleClose} color="primary">Cancel</Button>
-                <Button type="submit" color="primary" variant="contained">
+                <Button type="submit" color="primary" variant="contained" disabled={!isValid}>
                   {isEditing ? "Update" : "Create"}
                 </Button>
               </DialogActions>
@@ -402,8 +412,10 @@ const Dashboard = () => {
       <Box sx={{ height: 400, width: "100%" }}>
       <DataGrid
               style={{ height: "70vh" }}
-              rows={products}
+              // rows={products}
               columns={columns}
+      rows={handleSearch()}
+
               // checkboxSelection
               getRowId={(row) => row._id}
               sx={{      

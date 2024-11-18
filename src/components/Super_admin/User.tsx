@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -141,9 +142,10 @@ const AdminPage = () => {
             },
           }
         );
+        toast.success("Admin updated successfully!");
         console.log("Admin Updated:", response.data);
       } else {
-        // Create mode: Add a new admin
+        // Create : Add a new admin
         const response = await axios.post(
           `${apiUrl}/add`,
           requestData,
@@ -153,17 +155,24 @@ const AdminPage = () => {
             },
           }
         );
+        toast.success("Admin created successfully!");
         console.log("Admin Created:", response.data);
       }
       fetchAdmins();
       handleClose();
-    } catch (error) {
+    }catch (error: any) {
       console.error("Error saving admin:", error);
-    }
+        // if (error.response?.data?.message?.includes("email")) {
+        //   toast.error("Email already exists!");
+        // } else if (error.response?.data?.message?.includes("phone")) {
+        //   toast.error("Phone number already exists!");
+        // }
+      }
   };
 
   return (
     <div className="card shadow border-0 p-3 mt-5 m-4" style={{ height: "85vh" }}>
+      <ToastContainer position="top-right" autoClose={3000} />
       <Box m="20px">
            <Box
           display="flex"
