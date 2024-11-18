@@ -44,7 +44,7 @@ const Admin_Usermanagement = () => {
   const [editMode, setEditMode] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
 
-  const { control, handleSubmit, reset, formState: { errors } } = useForm<AdminFormInputs>({ mode: 'onChange' });
+  const { control, handleSubmit, reset, formState: { errors , isValid} } = useForm<AdminFormInputs>({ mode: 'onChange' });
   const token = localStorage.getItem("token");
   const apiUrl = "https://user-product-api-gzwy.onrender.com/api/admin";
 
@@ -348,7 +348,7 @@ const Admin_Usermanagement = () => {
               <Button onClick={handleClose} color="primary">
                 Cancel
               </Button>
-              <Button type="submit" color="primary">
+              <Button type="submit" color="primary" disabled={!isValid}>
                 {editMode ? "Update" : "Create"}
               </Button>
             </DialogActions>
