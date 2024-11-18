@@ -23,7 +23,6 @@ import "react-toastify/dist/ReactToastify.css";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { useNavigate } from "react-router-dom";
-import UserLandingNavbar from "./UserLandingNavbar";
 const ShoppingCart = () => {
   const { cart, removeFromCart, incrementQty, decrementQty, clearCart } =
     useCart();
@@ -103,7 +102,7 @@ const ShoppingCart = () => {
         );
         clearCart();
         handleClose();
-         navigate("/order-details");
+        navigate("/order-details");
       }
     } catch (error) {
       console.error("Failed to place order:", error);
@@ -113,7 +112,6 @@ const ShoppingCart = () => {
 
   return (
     <>
-      <UserLandingNavbar />
       <Box
         sx={{
           padding: "20px",
@@ -212,7 +210,6 @@ const ShoppingCart = () => {
                   ))}
                 </TableBody>
               </Table>
-
             </Box>
 
             <Box
@@ -297,8 +294,7 @@ const ShoppingCart = () => {
                       },
                       pattern: {
                         value: /^[A-Za-z]+$/,
-                        message:
-                          "City must only contain alphabets and no spaces",
+                        message: "City name can only contain letters",
                       },
                     }}
                     render={({ field }) => (
@@ -332,7 +328,7 @@ const ShoppingCart = () => {
                       },
                       pattern: {
                         value: /^[A-Za-z\s]+$/,
-                        message: "State must only contain alphabets and spaces",
+                        message: "State name can only contain letters",
                       },
                     }}
                     render={({ field }) => (
@@ -403,7 +399,7 @@ const ShoppingCart = () => {
                       pattern: {
                         value: /^[A-Za-z]+$/,
                         message:
-                          "Country must only contain alphabets and no spaces",
+                          "Country name can only contain letters",
                       },
                     }}
                     render={({ field }) => (

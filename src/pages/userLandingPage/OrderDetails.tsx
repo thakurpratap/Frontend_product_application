@@ -14,8 +14,6 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import axios from "axios";
-import UserLandingNavbar from "./UserLandingNavbar";
-
 interface Address {
   street: string;
   city: string;
@@ -91,7 +89,6 @@ const OrderDetails = () => {
 
   return (
     <>
-    <UserLandingNavbar/>
     <Box display="flex" justifyContent="center" padding={2} sx={{ width: "100vw", marginTop: "1%" }}>
       <Paper elevation={3}>
         <StyledTableContainer>
