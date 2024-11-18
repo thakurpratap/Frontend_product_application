@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { toast } from "react-toastify";
 import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -140,9 +141,10 @@ const Admin_Usermanagement = () => {
             },
           }
         );
+        toast.success("Partner updated successfully!");
         console.log("PARTNER Updated:", response.data);
       } else {
-        // Create mode: Add a new admin
+        // Create : Add a new admin
         const response = await axios.post(
           `${apiUrl}/add-partner`,
           requestData,
@@ -152,12 +154,19 @@ const Admin_Usermanagement = () => {
             },
           }
         );
+        toast.success("Partner created successfully!");
         console.log("PARTNER Created:", response.data);
       }
       fetchAdmins();
       handleClose();
     } catch (error) {
-      console.error("Error saving PARTNER:", error);
+      console.error("Full error object:", error);
+      const err = error as any;
+      // if (err.response?.data?.message === "User already exists") {
+      //   toast.success("This email or phone number is already registered!");
+      // } else {
+      //   toast.success("An unexpected error occurred!");
+      // }
     }
   };
 
