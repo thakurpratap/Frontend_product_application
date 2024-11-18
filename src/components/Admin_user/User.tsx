@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -176,6 +176,7 @@ const Admin_Usermanagement = () => {
 
   return (
     <div className="card shadow border-0 p-3 mt-5 m-4" style={{ height: "85vh" }}>
+      <ToastContainer position="top-right" autoClose={2000} />
       <Box m="20px">
            <Box
           display="flex"

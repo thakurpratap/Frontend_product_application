@@ -174,7 +174,7 @@ const AdminPage = () => {
 
   return (
     <div className="card shadow border-0 p-3 mt-5 m-4" style={{ height: "85vh" }}>
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={2000} />
       <Box m="20px">
            <Box
           display="flex"

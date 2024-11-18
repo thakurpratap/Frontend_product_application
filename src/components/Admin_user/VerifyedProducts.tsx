@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 interface Product {
   _id: number;
@@ -157,6 +157,7 @@ const Admin_Verifying_Products = () => {
 
   return (
     <div className="card shadow border-0 p-3 mt-5 m-4" style={{ marginTop: "20px" }}>
+      <ToastContainer position="top-right" autoClose={2000} />
       <Box m="20px">
         <Box mt={3} sx={{ height: 400, width: "100%" }}>
           <DataGrid
