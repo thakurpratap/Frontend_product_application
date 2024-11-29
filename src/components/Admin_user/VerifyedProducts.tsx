@@ -165,6 +165,14 @@ const Admin_Verifying_Products = () => {
             columns={columns}
             getRowId={(row) => row._id}
             loading={loading}
+            sx={{      
+              "& .MuiTablePagination-displayedRows, & .MuiTablePagination-actions": {
+                margin: 0,
+              },
+              "& .MuiTablePagination-selectLabel": {
+                paddingTop: "1rem", 
+              },
+            }}
           />
         </Box>
       </Box>

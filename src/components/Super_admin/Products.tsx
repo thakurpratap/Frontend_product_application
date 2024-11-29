@@ -13,10 +13,12 @@ interface Product {
   image: { image: string };
 }
 
+
 const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
   console.log(products)
   const [loading, setLoading] = useState<boolean>(true);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const token = localStorage.getItem("token");
   const apiUrl = "https://user-product-api-gzwy.onrender.com/api/admin";
 
@@ -39,6 +41,14 @@ const Products = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+
+  const handleSearch = () => {
+    const filteredProducts = products.filter(product =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    return filteredProducts;
+  };
 
   const columns: GridColDef<Product>[] = [
     {
@@ -68,7 +78,8 @@ const Products = () => {
         <TextField
           size="small"
           variant="outlined"
-          // onChange={handleChange}
+          value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -87,7 +98,8 @@ const Products = () => {
             </Box>
           ) : (
             <DataGrid style={{ height: "70vh" }} 
-            rows={products}
+            // rows={products}
+            rows={handleSearch()}
             columns={columns}
             // checkboxSelection
             getRowId={(row) => row._id} 

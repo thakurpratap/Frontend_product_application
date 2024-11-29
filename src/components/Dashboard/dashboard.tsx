@@ -287,7 +287,7 @@ const Dashboard = () => {
                     fullWidth
                     margin="dense"
                     variant="filled"
-                    label="Product Name"
+                    label="Product Name*"
                     {...field}
                     error={!!errors.name}
                     helperText={errors.name?.message}
@@ -308,7 +308,7 @@ const Dashboard = () => {
                     fullWidth
                     margin="dense"
                     variant="filled"
-                    label="Description"
+                    label="Description*"
                     {...field}
                     error={!!errors.description}
                     helperText={errors.description?.message}
@@ -345,7 +345,7 @@ const Dashboard = () => {
                     fullWidth
                     margin="dense"
                     variant="filled"
-                    label="Rating"
+                    label="Rating*"
                     type="number"
                     {...field}
                     error={!!errors.rating}
@@ -362,7 +362,7 @@ const Dashboard = () => {
                     fullWidth
                     margin="dense"
                     variant="filled"
-                    label="Image"
+                    label="Select only Image*"
                     type="file"
                     inputProps={{ accept: "image/*" }}
                     // onChange={(e) => field.onChange(e.target.files ? e.target.files[0] : null)}
@@ -372,6 +372,7 @@ const Dashboard = () => {
                     }}
                     error={!!errors.image}
                     helperText={errors.image?.message}
+                    
                   />
                 )}
               />

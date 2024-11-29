@@ -80,59 +80,14 @@ const SignUp = () => {
         </Typography>
 
         <Controller
-          name="username"
-          control={control}
-          defaultValue=""
-          rules={{
-            required: "Name is required",
-            pattern: {
-              value: /^\s*[a-zA-Z]+( [a-zA-Z]+)*\s*$/, // Allows leading/trailing spaces
-              message: "Only alphabets and single spaces are allowed",
-            },
-            maxLength: {
-              value: 20,
-              message: "Name cannot exceed 20 characters",
-            },
-          }}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              fullWidth
-              label="Name *"
-              margin="normal"
-              onChange={(e) => {
-                // Remove multiple spaces and trim the input
-                const cleanedValue = e.target.value
-                  .replace(/\s{2,}/g, " ") // Replace multiple spaces with a single space
-                  .trim(); // Trim leading/trailing spaces
-
-                // Update field value
-                field.onChange(cleanedValue);
-              }}
-              error={!!errors.username}
-              helperText={errors.username?.message || ""}
-              sx={{
-                "& .MuiInputBase-root": {
-                  borderRadius: 2,
-                },
-              }}
-            />
-          )}
-        />
-
-        <Controller
           name="email"
           control={control}
           defaultValue=""
           rules={{
             required: "Email is required",
-            validate: {
-              noSpaces: (value) =>
-                !/\s/.test(value) || "Email cannot contain spaces",
-              validEmail: (value) =>
-                (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value) &&
-                  !/\.\./.test(value)) ||
-                "This is not a valid email",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, // Matches valid email format
+              message: "This is not a valid email",
             },
           }}
           render={({ field }) => (
@@ -148,6 +103,60 @@ const SignUp = () => {
                 "& .MuiInputBase-root": {
                   borderRadius: 2,
                 },
+              }}
+              inputProps={{
+                // Prevent spaces from being entered at all
+                onKeyDown: (e) => {
+                  if (e.key === " ") {
+                    e.preventDefault(); // Block the spacebar key
+                  }
+                },
+              }}
+            />
+          )}
+        />
+
+        <Controller
+          name="password"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: "Password is required",
+            pattern: {
+              value: /^\S*$/,
+              message: "Password cannot contain spaces",
+            },
+            maxLength: {
+              value: 20,
+              message: "Password cannot exceed more than 20 characterslong!",
+            },
+            minLength: {
+              value: 8,
+              message: " Password must be minimum 8 characters ",
+            },
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              label="Password *"
+              type={showPassword ? "text" : "password"}
+              margin="normal"
+              error={!!errors.password}
+              helperText={errors.password?.message || ""}
+              sx={{
+                "& .MuiInputBase-root": {
+                  borderRadius: 2,
+                },
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleClickShowPassword} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
             />
           )}
